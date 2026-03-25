@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Solicitud {
+  id                String   @id @default(uuid())
+  folio             String   @unique
+  estado            String   @default("borrador") // borrador, enviada, en_revision, aprobada, rechazada
+  pasoActual        Int      @default(1)
+  creadoEn          DateTime @default(now())
+  actualizadoEn     DateTime @updatedAt
+
+  // Paso 1: Información del solicitante
+  solicitanteNombre String?
+  solicitanteArea   String?
+  sucursalId        String?
+  sucursal          CatSucursal? @relation(fields: [sucursalId], references: [id])
+
+  // Paso 2: Datos del acreedor
+  rfc               String?
+  tipoAcreedorId    String?
+  tipoAcreedor      CatTipoAcreedor? @relation(fields: [tipoAcreedorId], references: [id])
+  grupoCuentasId    String?
+  grupoCuentas      CatGrupoCuentas? @relation(fields: [grupoCuentasId], references: [id])
+  cuentaAsociada    String?
+  acreedoresNoEspecializados String?
+  casosEspeciales   String?
+  serviciosEspeciales String?
+  areasSolicitantes String?
+  razonSocial       String?
+  nombreComercial   String?
+  apellidoPaterno   String?
+  nombrePila        String?
+  apellidoMaterno   String?
+  tipoPersona       String?  // moral, fisica
+  type              String?  // 1=Moral, 2=Fisica (campo oculto de control)
+  clasificacionAcreedor String?
+
+  // Pago
+  condicionPagoId   String?
+  condicionPago     CatCondicionPago? @relation(fields: [condicionPagoId], references: [id])
+  monedaPago        String?  // MXN, USD, EUR
+  viaPago           String?
+  cuentaClabe       String?
+  nombreBanco       String?
+  monedaPedido      String?
+
+  // Datos generales (sección 2.4)
+  localizacion      String?  // nacional, extranjero
+
+  // Dirección
+  calle             String?
+  numeroExterior    String?
+  numeroInterior    String?
+  codigoPostal      String?
+  colonia           String?  // CITY2
+  distritoColoniaOpcional String? // distrito_colonia_opcional
+  estado_dir        String?  // REGION
+  municipio         String?  // CITY1
+  regionExt         String?  // region_ext (extranjero)
+  paisExt           String?  // pais_ext (extranjero)
+
+  // Datos generales
+  conceptoBusqueda  String?
+  bienServicio      String?
+  empresaReconocida String?
+
+  // Cobertura
+  cdrCobertura      String?  // JSON array of selected sucursales
+
+  // Contacto del acreedor (multi-row, max 4)
+  contactos         ContactoAcreedor[]
+
+  // Retención (auto-poblados)
+  esquemaResico         String?
+  tipoRetencion         String?
+  indicadorRetencion    String?
+
+  // Cláusula
+  aceptaClausula    Boolean @default(false)
+
+  // Documentos
+  documentos        Documento[]
+}
+
+model ContactoAcreedor {
+  id            String   @id @default(uuid())
+  solicitudId   String
+  solicitud     Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  orden         Int      @default(0)
+  nombre        String
+  correo        String
+  puesto        String
+  telefono      String
+  extension     String?
+  cdr           String
+  creadoEn      DateTime @default(now())
+}
+
+model Documento {
+  id            String   @id @default(uuid())
+  solicitudId   String
+  solicitud     Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  tipoDocumento String   // clave del tipo de documento
+  nombreArchivo String
+  rutaArchivo   String
+  tamanio       Int      // bytes
+  mimeType      String
+  creadoEn      DateTime @default(now())
+}
+
+// --- Usuarios (SSO) ---
+
+model Usuario {
+  id            String   @id @default(uuid())
+  ssoId         String   @unique // ID del usuario en el sistema SSO externo
+  email         String   @unique
+  username      String?
+  nombre        String?
+  roles         String   @default("[]") // JSON array de roles del SSO, ej: ["Administrador","Developer"]
+  rolInterno    String   @default("usuario") // admin, developer, usuario
+  activo        Boolean  @default(true)
+  ultimoAcceso  DateTime?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+}
+
+// --- Catálogos ---
+
+model CatSucursal {
+  id          String   @id @default(uuid())
+  codigo      String   @unique
+  nombre      String
+  activo      Boolean  @default(true)
+  solicitudes Solicitud[]
+}
+
+model CatTipoAcreedor {
+  id          String   @id @default(uuid())
+  clave       String   @unique
+  nombre      String
+  activo      Boolean  @default(true)
+  solicitudes Solicitud[]
+}
+
+model CatGrupoCuentas {
+  id          String   @id @default(uuid())
+  clave       String   @unique
+  nombre      String
+  activo      Boolean  @default(true)
+  cuentasAsociadas CatCuentaAsociada[]
+  solicitudes Solicitud[]
+}
+
+model CatCuentaAsociada {
+  id              String   @id @default(uuid())
+  codigo          String
+  nombre          String
+  grupoCuentasId  String
+  grupoCuentas    CatGrupoCuentas @relation(fields: [grupoCuentasId], references: [id])
+  activo          Boolean  @default(true)
+}
+
+model CatCondicionPago {
+  id          String   @id @default(uuid())
+  clave       String   @unique
+  nombre      String
+  activo      Boolean  @default(true)
+  solicitudes Solicitud[]
+}
+
+model CatTipoDocumento {
+  id              String   @id @default(uuid())
+  clave           String   @unique
+  nombre          String
+  descripcion     String?
+  obligatorio     Boolean  @default(false)
+  condicional     Boolean  @default(false)
+  extensiones     String   // "pdf,jpeg,jpg,png"
+  maxSizeMb       Int      @default(5)
+  maxArchivos     Int      @default(1)
+  orden           Int      @default(0)
+  icono           String?  // material icon name
+  activo          Boolean  @default(true)
+}

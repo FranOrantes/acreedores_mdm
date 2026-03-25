@@ -110,6 +110,70 @@ async function main() {
     prisma.contactoAcreedor.create({ data: { solicitudId: solicitud.id, orden: 4, nombre: 'Roberto Sánchez Díaz', correo: 'roberto.sanchez@dinasa.com', puesto: 'Jefe de Facturación', telefono: '5557891234', extension: '305', cdr: '0088' } }),
   ]);
 
+  // --- Usuarios de prueba ---
+  const usuarios = await Promise.all([
+    prisma.usuario.create({ data: { ssoId: 'sso-admin-001', email: 'admin@empresa.com', username: 'admin', nombre: 'Carlos Mendoza García', rolInterno: 'admin' } }),
+    prisma.usuario.create({ data: { ssoId: 'sso-user-002', email: 'ana.vance@empresa.com', username: 'avance', nombre: 'Ana Vance Rodríguez', rolInterno: 'usuario' } }),
+    prisma.usuario.create({ data: { ssoId: 'sso-user-003', email: 'roberto.diaz@empresa.com', username: 'rdiaz', nombre: 'Roberto Díaz Luna', rolInterno: 'usuario' } }),
+    prisma.usuario.create({ data: { ssoId: 'sso-user-004', email: 'patricia.soto@empresa.com', username: 'psoto', nombre: 'Patricia Soto Flores', rolInterno: 'usuario' } }),
+    prisma.usuario.create({ data: { ssoId: 'sso-user-005', email: 'miguel.herrera@empresa.com', username: 'mherrera', nombre: 'Miguel Herrera Paz', rolInterno: 'usuario' } }),
+  ]);
+
+  // --- Grupo de aprobación ---
+  const grupoFinanzas = await prisma.grupoAprobacion.create({
+    data: { nombre: 'Comité de Finanzas', descripcion: 'Grupo encargado de aprobar solicitudes de alta de acreedores con montos mayores' },
+  });
+  const grupoCompras = await prisma.grupoAprobacion.create({
+    data: { nombre: 'Gerencia de Compras', descripcion: 'Aprobaciones de proveedores del área de compras' },
+  });
+
+  // --- Miembros de grupo ---
+  await Promise.all([
+    prisma.miembroGrupo.create({ data: { grupoId: grupoFinanzas.id, usuarioId: usuarios[0].id } }),
+    prisma.miembroGrupo.create({ data: { grupoId: grupoFinanzas.id, usuarioId: usuarios[1].id } }),
+    prisma.miembroGrupo.create({ data: { grupoId: grupoFinanzas.id, usuarioId: usuarios[2].id } }),
+    prisma.miembroGrupo.create({ data: { grupoId: grupoCompras.id, usuarioId: usuarios[3].id } }),
+    prisma.miembroGrupo.create({ data: { grupoId: grupoCompras.id, usuarioId: usuarios[4].id } }),
+  ]);
+
+  // --- Aprobaciones de prueba ---
+  // Aprobación individual en estado "solicitado"
+  await prisma.aprobacion.create({
+    data: {
+      solicitudId: solicitud.id,
+      aprobadorId: usuarios[0].id,
+      descripcionCorta: 'Validación gerencial de alta de acreedor',
+      estado: 'solicitado',
+    },
+  });
+
+  // Aprobación grupal: 3 aprobaciones (una por miembro del comité de finanzas)
+  await Promise.all(
+    [usuarios[0], usuarios[1], usuarios[2]].map((u) =>
+      prisma.aprobacion.create({
+        data: {
+          solicitudId: solicitud.id,
+          aprobadorId: u.id,
+          descripcionCorta: 'Aprobación del Comité de Finanzas',
+          grupoAsignadoId: grupoFinanzas.id,
+          estado: 'solicitado',
+        },
+      })
+    )
+  );
+
+  // Una aprobación ya aprobada (para tener variedad en la lista)
+  await prisma.aprobacion.create({
+    data: {
+      solicitudId: solicitud.id,
+      aprobadorId: usuarios[3].id,
+      descripcionCorta: 'Revisión de documentación fiscal',
+      estado: 'aprobado',
+      fechaResolucion: new Date(),
+      comentario: 'Todo en orden, documentación completa.',
+    },
+  });
+
   console.log('✅ Seed completed successfully');
 }
 

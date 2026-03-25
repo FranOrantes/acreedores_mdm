@@ -86,6 +86,13 @@ model Solicitud {
 
   // Documentos
   documentos        Documento[]
+
+  // Grupo de asignación (opcional, referencia a GrupoAprobacion)
+  grupoAsignadoId   String?
+  grupoAsignado     GrupoAprobacion? @relation("SolicitudGrupo", fields: [grupoAsignadoId], references: [id])
+
+  // Aprobaciones
+  aprobaciones      Aprobacion[]
 }
 
 model ContactoAcreedor {
@@ -114,6 +121,47 @@ model Documento {
   creadoEn      DateTime @default(now())
 }
 
+// --- Aprobaciones ---
+
+model Aprobacion {
+  id                String   @id @default(uuid())
+  solicitudId       String
+  solicitud         Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  descripcionCorta  String?
+  estado            String   @default("solicitado") // solicitado, no_requerido, aprobado, rechazado
+  grupoAsignadoId   String?  // Opcional: null = aprobación individual
+  grupoAsignado     GrupoAprobacion? @relation(fields: [grupoAsignadoId], references: [id])
+  aprobadorId       String
+  aprobador         Usuario  @relation(fields: [aprobadorId], references: [id])
+  comentario        String?  // Comentario al aprobar/rechazar
+  fechaResolucion   DateTime?
+  creadoEn          DateTime @default(now())
+  actualizadoEn     DateTime @updatedAt
+}
+
+model GrupoAprobacion {
+  id          String   @id @default(uuid())
+  nombre      String   @unique
+  descripcion String?
+  activo      Boolean  @default(true)
+  creadoEn    DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+  miembros    MiembroGrupo[]
+  aprobaciones Aprobacion[]
+  solicitudes  Solicitud[] @relation("SolicitudGrupo")
+}
+
+model MiembroGrupo {
+  id        String   @id @default(uuid())
+  grupoId   String
+  grupo     GrupoAprobacion @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  creadoEn  DateTime @default(now())
+
+  @@unique([grupoId, usuarioId])
+}
+
 // --- Usuarios (SSO) ---
 
 model Usuario {
@@ -128,6 +176,8 @@ model Usuario {
   ultimoAcceso  DateTime?
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
+  aprobaciones  Aprobacion[]
+  membresiaGrupos MiembroGrupo[]
 }
 
 // --- Catálogos ---

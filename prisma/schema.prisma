@@ -149,6 +149,7 @@ model GrupoAprobacion {
   miembros    MiembroGrupo[]
   aprobaciones Aprobacion[]
   solicitudes  Solicitud[] @relation("SolicitudGrupo")
+  tiposAprobacion TipoAprobacion[] @relation("TipoAprobacionGrupo")
 }
 
 model MiembroGrupo {
@@ -178,6 +179,7 @@ model Usuario {
   actualizadoEn DateTime @updatedAt
   aprobaciones  Aprobacion[]
   membresiaGrupos MiembroGrupo[]
+  tiposAprobacionAsignadas TipoAprobacion[] @relation("TipoAprobacionAprobador")
 }
 
 // --- Catálogos ---
@@ -237,4 +239,20 @@ model CatTipoDocumento {
   orden           Int      @default(0)
   icono           String?  // material icon name
   activo          Boolean  @default(true)
+}
+
+// --- Tipos de Aprobación (módulo auxiliar para flujos n8n) ---
+
+model TipoAprobacion {
+  id                  String   @id @default(uuid())
+  nombre              String
+  tipo                String   // "grupal" o "individual"
+  grupoAsignadoId     String?
+  grupoAsignado       GrupoAprobacion? @relation("TipoAprobacionGrupo", fields: [grupoAsignadoId], references: [id])
+  aprobadorAsignadoId String?
+  aprobadorAsignado   Usuario? @relation("TipoAprobacionAprobador", fields: [aprobadorAsignadoId], references: [id])
+  orden               Int      @default(100)
+  activo              Boolean  @default(true)
+  creadoEn            DateTime @default(now())
+  actualizadoEn       DateTime @updatedAt
 }

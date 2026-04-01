@@ -1,5 +1,6 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
+const { registrarCambios, registrarActividad } = require('../lib/auditoria');
 const router = express.Router();
 
 // Listar solicitudes
@@ -73,6 +74,11 @@ router.post('/', async (req, res) => {
         documentos: true,
       },
     });
+    // Registrar actividad de creación
+    await registrarActividad('solicitud', data.id, 'sistema', `Solicitud creada con folio ${data.folio}`, {
+      autorNombre: data.solicitanteNombre,
+    });
+
     res.status(201).json(data);
   } catch (e) {
     console.error('[Solicitudes] Error al crear:', e);
@@ -80,9 +86,13 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar solicitud (parcial)
+// Actualizar solicitud (parcial) — con auditoría
 router.patch('/:id', async (req, res) => {
   try {
+    // Obtener estado anterior para auditoría
+    const anterior = await prisma.solicitud.findUnique({ where: { id: req.params.id } });
+    if (!anterior) return res.status(404).json({ error: 'Solicitud no encontrada' });
+
     const data = await prisma.solicitud.update({
       where: { id: req.params.id },
       data: req.body,
@@ -94,6 +104,13 @@ router.patch('/:id', async (req, res) => {
         documentos: true,
       },
     });
+
+    // Registrar cambios de campo
+    await registrarCambios('solicitud', req.params.id, anterior, data, {
+      autorNombre: req.body._autorNombre || anterior.solicitanteNombre,
+      autorEmail: req.body._autorEmail || null,
+    });
+
     res.json(data);
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -103,10 +120,19 @@ router.patch('/:id', async (req, res) => {
 // Enviar solicitud
 router.post('/:id/enviar', async (req, res) => {
   try {
+    const anterior = await prisma.solicitud.findUnique({ where: { id: req.params.id } });
     const data = await prisma.solicitud.update({
       where: { id: req.params.id },
       data: { estado: 'enviada' },
     });
+
+    await registrarActividad('solicitud', req.params.id, 'cambio_estado', `Estado: ${anterior?.estado || 'borrador'} → enviada`, {
+      campoModificado: 'Estado',
+      valorAnterior: anterior?.estado || 'borrador',
+      valorNuevo: 'enviada',
+      autorNombre: anterior?.solicitanteNombre,
+    });
+
     res.json(data);
   } catch (e) {
     res.status(400).json({ error: e.message });

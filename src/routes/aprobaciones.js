@@ -1,5 +1,6 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
+const { registrarActividad } = require('../lib/auditoria');
 const router = express.Router();
 
 // Listar todas las aprobaciones (con filtros opcionales)
@@ -183,6 +184,18 @@ router.post('/:id/aprobar', async (req, res) => {
       });
     }
 
+    // Registrar actividad de aprobación
+    const aprobador = await prisma.usuario.findUnique({ where: { id: aprobacion.aprobadorId }, select: { nombre: true, email: true } });
+    await registrarActividad('aprobacion', req.params.id, 'cambio_estado',
+      `La aprobación ha sido aprobada${aprobacion.grupoAsignadoId ? ' (grupal)' : ''}.${comentario ? ' Comentario: ' + comentario : ''}`,
+      { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email, campoModificado: 'Estado', valorAnterior: 'solicitado', valorNuevo: 'aprobado' }
+    );
+    // Also log on the solicitud
+    await registrarActividad('solicitud', aprobacion.solicitudId, 'sistema',
+      `La aprobación de ${aprobacion.grupoAsignadoId ? 'grupo' : 'usuario'} ha sido aprobada por ${aprobador?.nombre || aprobador?.email || 'el aprobador'}${comentario ? '. Comentario: ' + comentario : ''}.`,
+      { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
+    );
+
     res.json(updated);
   } catch (e) {
     console.error('[Aprobaciones] Error al aprobar:', e);
@@ -211,6 +224,17 @@ router.post('/:id/rechazar', async (req, res) => {
         fechaResolucion: new Date(),
       },
     });
+
+    // Registrar actividad de rechazo
+    const aprobador = await prisma.usuario.findUnique({ where: { id: aprobacion.aprobadorId }, select: { nombre: true, email: true } });
+    await registrarActividad('aprobacion', req.params.id, 'cambio_estado',
+      `La aprobación ha sido rechazada.${comentario ? ' Comentario: ' + comentario : ''}`,
+      { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email, campoModificado: 'Estado', valorAnterior: 'solicitado', valorNuevo: 'rechazado' }
+    );
+    await registrarActividad('solicitud', aprobacion.solicitudId, 'sistema',
+      `La aprobación de ${aprobacion.grupoAsignadoId ? 'grupo' : 'usuario'} ha sido rechazada por ${aprobador?.nombre || aprobador?.email || 'el aprobador'}${comentario ? '. Comentario: ' + comentario : ''}.`,
+      { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
+    );
 
     res.json(updated);
   } catch (e) {

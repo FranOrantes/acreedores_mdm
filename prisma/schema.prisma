@@ -241,6 +241,25 @@ model CatTipoDocumento {
   activo          Boolean  @default(true)
 }
 
+// --- Historial de Comunicación / Auditoría ---
+
+model Actividad {
+  id              String   @id @default(uuid())
+  entidadTipo     String   // "solicitud", "aprobacion"
+  entidadId       String
+  tipo            String   // "comentario", "cambio_campo", "cambio_estado", "sistema"
+  contenido       String?  // texto del comentario o descripción
+  campoModificado String?  // nombre del campo para auditoría
+  valorAnterior   String?  // valor anterior (stringify)
+  valorNuevo      String?  // valor nuevo (stringify)
+  visibleCliente  Boolean  @default(false)
+  autorNombre     String?
+  autorEmail      String?
+  creadoEn        DateTime @default(now())
+
+  @@index([entidadTipo, entidadId])
+}
+
 // --- Tipos de Aprobación (módulo auxiliar para flujos n8n) ---
 
 model TipoAprobacion {

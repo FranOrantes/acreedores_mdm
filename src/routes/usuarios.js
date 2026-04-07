@@ -9,6 +9,8 @@ router.get('/', async (req, res) => {
       orderBy: { nombre: 'asc' },
       include: {
         _count: { select: { aprobaciones: true, membresiaGrupos: true } },
+        manager: { select: { id: true, nombre: true, email: true } },
+        ubicacion: { select: { id: true, nombre: true } },
       },
     });
     res.json(data);
@@ -27,6 +29,8 @@ router.get('/:id', async (req, res) => {
         membresiaGrupos: {
           include: { grupo: { select: { id: true, nombre: true } } },
         },
+        manager: { select: { id: true, nombre: true, email: true } },
+        ubicacion: { select: { id: true, nombre: true } },
         _count: { select: { aprobaciones: true } },
       },
     });
@@ -40,7 +44,7 @@ router.get('/:id', async (req, res) => {
 // Crear usuario
 router.post('/', async (req, res) => {
   try {
-    const { email, nombre, username, rolInterno } = req.body;
+    const { email, nombre, username, rolInterno, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId } = req.body;
     if (!email || !nombre) {
       return res.status(400).json({ error: 'email y nombre son requeridos' });
     }
@@ -54,6 +58,12 @@ router.post('/', async (req, res) => {
         nombre,
         username: username || email.split('@')[0],
         rolInterno: rolInterno || 'usuario',
+        areaHumana: areaHumana || null,
+        linea: linea || null,
+        managerId: managerId || null,
+        employeeNumber: employeeNumber || null,
+        contrasena: contrasena || null,
+        ubicacionId: ubicacionId || null,
       },
     });
     res.status(201).json(data);
@@ -69,7 +79,7 @@ router.post('/', async (req, res) => {
 // Actualizar usuario
 router.patch('/:id', async (req, res) => {
   try {
-    const { nombre, email, username, rolInterno, activo } = req.body;
+    const { nombre, email, username, rolInterno, activo, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId } = req.body;
     const data = await prisma.usuario.update({
       where: { id: req.params.id },
       data: {
@@ -78,6 +88,12 @@ router.patch('/:id', async (req, res) => {
         ...(username !== undefined && { username }),
         ...(rolInterno !== undefined && { rolInterno }),
         ...(activo !== undefined && { activo }),
+        ...(areaHumana !== undefined && { areaHumana: areaHumana || null }),
+        ...(linea !== undefined && { linea: linea || null }),
+        ...(managerId !== undefined && { managerId: managerId || null }),
+        ...(employeeNumber !== undefined && { employeeNumber: employeeNumber || null }),
+        ...(contrasena !== undefined && { contrasena: contrasena || null }),
+        ...(ubicacionId !== undefined && { ubicacionId: ubicacionId || null }),
       },
     });
     res.json(data);

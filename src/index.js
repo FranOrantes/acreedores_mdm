@@ -15,6 +15,7 @@ const usuariosRouter = require('./routes/usuarios');
 const adminCatalogosRouter = require('./routes/adminCatalogos');
 const tiposAprobacionRouter = require('./routes/tiposAprobacion');
 const actividadesRouter = require('./routes/actividades');
+const ubicacionesRouter = require('./routes/ubicaciones');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 
 const app = express();
@@ -51,6 +52,7 @@ app.use('/api/usuarios', usuariosRouter);
 app.use('/api/admin/catalogos', adminCatalogosRouter);
 app.use('/api/tipos-aprobacion', tiposAprobacionRouter);
 app.use('/api/actividades', actividadesRouter);
+app.use('/api/ubicaciones', ubicacionesRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

@@ -177,9 +177,46 @@ model Usuario {
   ultimoAcceso  DateTime?
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
+
+  // Campos adicionales
+  areaHumana      String?
+  linea           String?
+  employeeNumber  String?  @unique
+  contrasena      String?
+  managerId       String?
+  manager         Usuario?    @relation("UsuarioManager", fields: [managerId], references: [id])
+  subordinados    Usuario[]   @relation("UsuarioManager")
+  ubicacionId     String?
+  ubicacion       Ubicacion?  @relation("UsuarioUbicacion", fields: [ubicacionId], references: [id])
+
   aprobaciones  Aprobacion[]
   membresiaGrupos MiembroGrupo[]
   tiposAprobacionAsignadas TipoAprobacion[] @relation("TipoAprobacionAprobador")
+  ubicacionesGerenciadas Ubicacion[] @relation("UbicacionBranchManager")
+}
+
+// --- Ubicaciones ---
+
+model Ubicacion {
+  id                    String   @id @default(uuid())
+  nombre                String   @unique
+  calle                 String?
+  ciudad                String?
+  estadoProvincia       String?
+  codigoPostal          String?
+  pais                  String?  @default("MX")
+  ventaNarcoticos       Boolean  @default(false)
+  telefono              String?
+  latitud               Float?
+  longitud              Float?
+  branchOffice          String?
+  branchOfficeManagerId String?
+  branchOfficeManager   Usuario? @relation("UbicacionBranchManager", fields: [branchOfficeManagerId], references: [id])
+  supplyCenter          String?
+  activo                Boolean  @default(true)
+  creadoEn              DateTime @default(now())
+  actualizadoEn         DateTime @updatedAt
+  usuarios              Usuario[] @relation("UsuarioUbicacion")
 }
 
 // --- Catálogos ---

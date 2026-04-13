@@ -49,6 +49,79 @@ function generarToken(usuario) {
 }
 
 // ──────────────────────────────────────────────────
+// POST /api/auth/login
+// Login local con username/email + contraseña
+// ──────────────────────────────────────────────────
+router.post('/login', async (req, res) => {
+  try {
+    const { usuario: loginInput, contrasena } = req.body;
+
+    if (!loginInput || !contrasena) {
+      return res.status(400).json({ error: 'Usuario/email y contraseña son requeridos' });
+    }
+
+    // Buscar por email o username
+    const usuarioDB = await prisma.usuario.findFirst({
+      where: {
+        OR: [
+          { email: loginInput },
+          { username: loginInput },
+        ],
+      },
+    });
+
+    if (!usuarioDB) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    if (!usuarioDB.activo) {
+      return res.status(401).json({ error: 'Usuario desactivado. Contacte al administrador.' });
+    }
+
+    if (!usuarioDB.contrasena) {
+      return res.status(401).json({ error: 'Este usuario no tiene contraseña configurada. Contacte al administrador.' });
+    }
+
+    // Comparación directa (en producción usar bcrypt)
+    if (usuarioDB.contrasena !== contrasena) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    // Actualizar último acceso
+    await prisma.usuario.update({
+      where: { id: usuarioDB.id },
+      data: { ultimoAcceso: new Date() },
+    });
+
+    // Generar JWT
+    const jwtToken = generarToken(usuarioDB);
+
+    // Enviar como httpOnly cookie
+    res.cookie('auth_token', jwtToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    console.log('[Auth] Login local exitoso:', usuarioDB.email);
+    res.json({
+      ok: true,
+      user: {
+        id: usuarioDB.id,
+        email: usuarioDB.email,
+        nombre: usuarioDB.nombre,
+        rolInterno: usuarioDB.rolInterno,
+      },
+    });
+  } catch (error) {
+    console.error('[Auth] Error en login local:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ──────────────────────────────────────────────────
 // GET /api/auth/sso/login
 // Redirige al usuario al servidor SSO para autenticarse
 // ──────────────────────────────────────────────────
@@ -250,6 +323,11 @@ router.get('/me', async (req, res) => {
       nombre: usuario.nombre,
       roles: JSON.parse(usuario.roles),
       rolInterno: usuario.rolInterno,
+      areaHumana: usuario.areaHumana,
+      linea: usuario.linea,
+      employeeNumber: usuario.employeeNumber,
+      managerId: usuario.managerId,
+      ubicacionId: usuario.ubicacionId,
     });
   } catch (error) {
     if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {

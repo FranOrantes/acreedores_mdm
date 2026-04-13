@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
-// [SSO DESACTIVADO TEMPORALMENTE] const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth');
 const catalogosRouter = require('./routes/catalogos');
 const solicitudesRouter = require('./routes/solicitudes');
 const documentosRouter = require('./routes/documentos');
@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // ── Rutas públicas (no requieren autenticación) ──
-// [SSO DESACTIVADO TEMPORALMENTE] app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });

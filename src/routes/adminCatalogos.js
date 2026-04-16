@@ -4,12 +4,20 @@ const router = express.Router();
 
 // ── Mapa de modelos Prisma por nombre de catálogo ──
 const CATALOGS = {
-  sucursales:        { model: 'catSucursal',       fields: ['codigo', 'nombre'],                                         label: 'Sucursales' },
-  'tipos-acreedor':  { model: 'catTipoAcreedor',   fields: ['clave', 'nombre'],                                          label: 'Tipos de Acreedor' },
-  'grupos-cuentas':  { model: 'catGrupoCuentas',    fields: ['clave', 'nombre'],                                          label: 'Grupos de Cuentas' },
-  'cuentas-asociadas':{ model: 'catCuentaAsociada', fields: ['codigo', 'nombre', 'grupoCuentasId'],                       label: 'Cuentas Asociadas' },
-  'condiciones-pago':{ model: 'catCondicionPago',   fields: ['clave', 'nombre'],                                          label: 'Condiciones de Pago' },
-  'tipos-documento': { model: 'catTipoDocumento',   fields: ['clave', 'nombre', 'descripcion', 'obligatorio', 'condicional', 'extensiones', 'maxSizeMb', 'maxArchivos', 'orden', 'icono'], label: 'Tipos de Documento' },
+  sucursales:              { model: 'catSucursal',              fields: ['codigo', 'nombre'],                                         label: 'Sucursales' },
+  'tipos-acreedor':        { model: 'catTipoAcreedor',          fields: ['clave', 'nombre'],                                          label: 'Tipos de Acreedor' },
+  'grupos-cuentas':        { model: 'catGrupoCuentas',           fields: ['clave', 'nombre'],                                          label: 'Grupos de Cuentas' },
+  'cuentas-asociadas':     { model: 'catCuentaAsociada',         fields: ['codigo', 'nombre', 'grupoCuentasId'],                       label: 'Cuentas Asociadas' },
+  'condiciones-pago':      { model: 'catCondicionPago',          fields: ['clave', 'nombre'],                                          label: 'Condiciones de Pago' },
+  'tipos-documento':       { model: 'catTipoDocumento',          fields: ['clave', 'nombre', 'descripcion', 'obligatorio', 'condicional', 'extensiones', 'maxSizeMb', 'maxArchivos', 'orden', 'icono'], label: 'Tipos de Documento' },
+  'servicios-especiales':  { model: 'catServiciosEspeciales',    fields: ['clave', 'nombre'],                                          label: 'Servicios Especiales' },
+  'casos-especiales':      { model: 'catCasosEspeciales',        fields: ['clave', 'nombre'],                                          label: 'Casos Especiales' },
+  'moneda-pago':           { model: 'catMonedaPago',             fields: ['clave', 'nombre'],                                          label: 'Moneda de Pago' },
+  'via-pago':              { model: 'catViaPago',                fields: ['clave', 'nombre'],                                          label: 'Vía de Pago' },
+  'moneda-pedido':         { model: 'catMonedaPedido',           fields: ['clave', 'nombre'],                                          label: 'Moneda Pedido' },
+  'clasificacion-acreedor':{ model: 'catClasificacionAcreedor',  fields: ['clave', 'nombre'],                                          label: 'Clasificación del Acreedor' },
+  localizacion:            { model: 'catLocalizacion',           fields: ['clave', 'nombre'],                                          label: 'Localización' },
+  bancos:                  { model: 'catBanco',                  fields: ['clave', 'nombre'],                                          label: 'Bancos' },
 };
 
 // GET /api/admin/catalogos — lista de catálogos disponibles

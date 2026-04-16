@@ -35,4 +35,44 @@ router.get('/tipos-documento', async (req, res) => {
   res.json(data);
 });
 
+router.get('/servicios-especiales', async (req, res) => {
+  const data = await prisma.catServiciosEspeciales.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/casos-especiales', async (req, res) => {
+  const data = await prisma.catCasosEspeciales.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/moneda-pago', async (req, res) => {
+  const data = await prisma.catMonedaPago.findMany({ where: { activo: true }, orderBy: { clave: 'asc' } });
+  res.json(data);
+});
+
+router.get('/via-pago', async (req, res) => {
+  const data = await prisma.catViaPago.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/moneda-pedido', async (req, res) => {
+  const data = await prisma.catMonedaPedido.findMany({ where: { activo: true }, orderBy: { clave: 'asc' } });
+  res.json(data);
+});
+
+router.get('/clasificacion-acreedor', async (req, res) => {
+  const data = await prisma.catClasificacionAcreedor.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/localizacion', async (req, res) => {
+  const data = await prisma.catLocalizacion.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/bancos', async (req, res) => {
+  const data = await prisma.catBanco.findMany({ where: { activo: true }, orderBy: { clave: 'asc' } });
+  res.json(data);
+});
+
 module.exports = router;

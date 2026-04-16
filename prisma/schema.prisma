@@ -278,6 +278,62 @@ model CatTipoDocumento {
   activo          Boolean  @default(true)
 }
 
+model CatServiciosEspeciales {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatCasosEspeciales {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatMonedaPago {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatViaPago {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatMonedaPedido {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatClasificacionAcreedor {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatLocalizacion {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatBanco {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
 // --- Historial de Comunicación / Auditoría ---
 
 model Actividad {

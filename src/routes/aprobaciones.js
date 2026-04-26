@@ -1,6 +1,7 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
 const { registrarActividad } = require('../lib/auditoria');
+const { notificarN8N } = require('../lib/n8n');
 const router = express.Router();
 
 // Listar todas las aprobaciones (con filtros opcionales)
@@ -196,6 +197,18 @@ router.post('/:id/aprobar', async (req, res) => {
       { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
     );
 
+    // ── Notificar a n8n (fire-and-forget) ──
+    notificarN8N('aprobacionAprobada', {
+      aprobacionId: aprobacion.id,
+      solicitudId: aprobacion.solicitudId,
+      estado: 'aprobado',
+      aprobadorNombre: aprobador?.nombre,
+      aprobadorEmail: aprobador?.email,
+      grupoAsignadoId: aprobacion.grupoAsignadoId,
+      comentario: comentario || null,
+      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
+    });
+
     res.json(updated);
   } catch (e) {
     console.error('[Aprobaciones] Error al aprobar:', e);
@@ -235,6 +248,18 @@ router.post('/:id/rechazar', async (req, res) => {
       `La aprobación de ${aprobacion.grupoAsignadoId ? 'grupo' : 'usuario'} ha sido rechazada por ${aprobador?.nombre || aprobador?.email || 'el aprobador'}${comentario ? '. Comentario: ' + comentario : ''}.`,
       { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
     );
+
+    // ── Notificar a n8n (fire-and-forget) ──
+    notificarN8N('aprobacionRechazada', {
+      aprobacionId: aprobacion.id,
+      solicitudId: aprobacion.solicitudId,
+      estado: 'rechazado',
+      aprobadorNombre: aprobador?.nombre,
+      aprobadorEmail: aprobador?.email,
+      grupoAsignadoId: aprobacion.grupoAsignadoId,
+      comentario: comentario || null,
+      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
+    });
 
     res.json(updated);
   } catch (e) {

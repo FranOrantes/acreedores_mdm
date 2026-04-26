@@ -1,7 +1,35 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
 const { registrarCambios, registrarActividad } = require('../lib/auditoria');
+const { notificarN8N } = require('../lib/n8n');
 const router = express.Router();
+
+// Campos válidos del modelo Solicitud en Prisma (whitelist)
+const SOLICITUD_FIELDS = new Set([
+  'tipo', 'movimientoRealizar', 'acreedorReferencia', 'acreedorNumero',
+  'solicitanteNombre', 'solicitanteArea', 'sucursalId',
+  'rfc', 'tipoAcreedorId', 'grupoCuentasId', 'cuentaAsociada',
+  'acreedoresNoEspecializados', 'casosEspeciales', 'serviciosEspeciales',
+  'areasSolicitantes', 'razonSocial', 'nombreComercial',
+  'apellidoPaterno', 'nombrePila', 'apellidoMaterno',
+  'tipoPersona', 'type', 'clasificacionAcreedor',
+  'condicionPagoId', 'monedaPago', 'viaPago', 'cuentaClabe',
+  'nombreBanco', 'monedaPedido', 'localizacion',
+  'calle', 'numeroExterior', 'numeroInterior', 'codigoPostal',
+  'colonia', 'distritoColoniaOpcional', 'estado_dir', 'municipio',
+  'regionExt', 'paisExt', 'conceptoBusqueda', 'bienServicio',
+  'empresaReconocida', 'cdrCobertura', 'esquemaResico',
+  'tipoRetencion', 'indicadorRetencion', 'aceptaClausula',
+  'grupoAsignadoId', 'estado', 'pasoActual',
+]);
+
+function sanitize(obj) {
+  const clean = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (SOLICITUD_FIELDS.has(k)) clean[k] = v;
+  }
+  return clean;
+}
 
 // Listar solicitudes
 router.get('/', async (req, res) => {
@@ -37,9 +65,11 @@ router.get('/:id', async (req, res) => {
 // Crear solicitud nueva (con contactos embebidos)
 router.post('/', async (req, res) => {
   try {
-    const { contactos, ...solicitudData } = req.body;
+    const { contactos, ...rawData } = req.body;
+    const solicitudData = sanitize(rawData);
     const count = await prisma.solicitud.count();
-    const folio = `SOL-${new Date().getFullYear()}-${String(count + 1).padStart(4, '0')}`;
+    const prefix = solicitudData.tipo === 'actualizacion' ? 'ACT' : 'SOL';
+    const folio = `${prefix}-${new Date().getFullYear()}-${String(count + 1).padStart(4, '0')}`;
 
     // Limpiar campos de relación vacíos para evitar errores de FK
     const fkFields = ['sucursalId', 'tipoAcreedorId', 'grupoCuentasId', 'condicionPagoId'];
@@ -79,6 +109,19 @@ router.post('/', async (req, res) => {
       autorNombre: data.solicitanteNombre,
     });
 
+    // ── Notificar a n8n (fire-and-forget) ──
+    notificarN8N('solicitudCreada', {
+      solicitudId: data.id,
+      folio: data.folio,
+      estado: data.estado,
+      solicitanteNombre: data.solicitanteNombre,
+      rfc: data.rfc,
+      razonSocial: data.razonSocial,
+      grupo_cuentas: data.grupoCuentas?.nombre || '',
+      tipo_acreedor: data.tipoAcreedor?.clave || '',
+      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
+    });
+
     res.status(201).json(data);
   } catch (e) {
     console.error('[Solicitudes] Error al crear:', e);
@@ -93,9 +136,10 @@ router.patch('/:id', async (req, res) => {
     const anterior = await prisma.solicitud.findUnique({ where: { id: req.params.id } });
     if (!anterior) return res.status(404).json({ error: 'Solicitud no encontrada' });
 
+    const updateData = sanitize(req.body);
     const data = await prisma.solicitud.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: updateData,
       include: {
         sucursal: true,
         tipoAcreedor: true,

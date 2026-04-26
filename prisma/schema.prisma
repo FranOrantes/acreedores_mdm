@@ -10,10 +10,16 @@ datasource db {
 model Solicitud {
   id                String   @id @default(uuid())
   folio             String   @unique
+  tipo              String   @default("alta") // alta, actualizacion
   estado            String   @default("borrador") // borrador, enviada, en_revision, aprobada, rechazada
   pasoActual        Int      @default(1)
   creadoEn          DateTime @default(now())
   actualizadoEn     DateTime @updatedAt
+
+  // Campos específicos de actualización
+  movimientoRealizar  String?  // tipo de movimiento (banco, domicilio, razon_social, documentos)
+  acreedorReferencia  String?  // nombre/razón social del acreedor a actualizar
+  acreedorNumero      String?  // número/ID SAP del acreedor
 
   // Paso 1: Información del solicitante
   solicitanteNombre String?

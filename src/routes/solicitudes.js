@@ -117,7 +117,7 @@ router.post('/', async (req, res) => {
       solicitanteNombre: data.solicitanteNombre,
       rfc: data.rfc,
       razonSocial: data.razonSocial,
-      grupo_cuentas: data.grupoCuentas?.nombre || '',
+      grupo_cuentas: data.grupoCuentas?.clave || '',
       tipo_acreedor: data.tipoAcreedor?.clave || '',
       // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
     });

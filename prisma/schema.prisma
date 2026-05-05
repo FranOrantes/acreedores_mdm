@@ -11,7 +11,7 @@ model Solicitud {
   id                String   @id @default(uuid())
   folio             String   @unique
   tipo              String   @default("alta") // alta, actualizacion
-  estado            String   @default("borrador") // borrador, enviada, en_revision, aprobada, rechazada
+  estado            String   @default("borrador") // borrador, enviada, en_revision, aprobada, rechazada, registrado
   pasoActual        Int      @default(1)
   creadoEn          DateTime @default(now())
   actualizadoEn     DateTime @updatedAt
@@ -26,6 +26,9 @@ model Solicitud {
   solicitanteArea   String?
   sucursalId        String?
   sucursal          CatSucursal? @relation(fields: [sucursalId], references: [id])
+
+  // BP Partner (ID externo)
+  bpPartner         String?
 
   // Paso 2: Datos del acreedor
   rfc               String?
@@ -87,6 +90,16 @@ model Solicitud {
   tipoRetencion         String?
   indicadorRetencion    String?
 
+  // Datos nuevos de actualización (JSON con campos específicos por movimiento)
+  datosActualizacion String?  // JSON: {n_calle, n_numero_exterior, ...} según movimiento
+
+  // Justificación (requerido en actualización)
+  justificacion     String?
+
+  // Bloqueo/Desbloqueo
+  bloqueoContabilizacionActual Boolean?
+  bloqueoContabilizacionNuevo  Boolean?
+
   // Cláusula
   aceptaClausula    Boolean @default(false)
 
@@ -116,15 +129,29 @@ model ContactoAcreedor {
 }
 
 model Documento {
-  id            String   @id @default(uuid())
-  solicitudId   String
-  solicitud     Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
-  tipoDocumento String   // clave del tipo de documento
-  nombreArchivo String
-  rutaArchivo   String
-  tamanio       Int      // bytes
-  mimeType      String
-  creadoEn      DateTime @default(now())
+  id              String   @id @default(uuid())
+  solicitudId     String
+  solicitud       Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  tipoDocumento   String   // clave del tipo de documento
+  nombreArchivo   String
+  rutaArchivo     String?  // legacy file path (optional)
+  contenidoBase64 String?  // base64 encoded content
+  tamanio         Int      // bytes
+  mimeType        String
+  creadoEn        DateTime @default(now())
+}
+
+model DocumentoTemporal {
+  id              String   @id @default(uuid())
+  sessionKey      String   // unique key per form session
+  tipoDocumento   String
+  nombreArchivo   String
+  contenidoBase64 String   // base64 encoded content
+  tamanio         Int
+  mimeType        String
+  creadoEn        DateTime @default(now())
+
+  @@index([sessionKey])
 }
 
 // --- Aprobaciones ---
@@ -199,6 +226,8 @@ model Usuario {
   membresiaGrupos MiembroGrupo[]
   tiposAprobacionAsignadas TipoAprobacion[] @relation("TipoAprobacionAprobador")
   ubicacionesGerenciadas Ubicacion[] @relation("UbicacionBranchManager")
+  incidentesReportados Incidente[] @relation("IncidenteReportador")
+  incidentesAsignados  Incidente[] @relation("IncidenteAsignado")
 }
 
 // --- Ubicaciones ---
@@ -241,6 +270,7 @@ model CatTipoAcreedor {
   nombre      String
   activo      Boolean  @default(true)
   solicitudes Solicitud[]
+  cuentasAsociadas CatCuentaAsociada[]
 }
 
 model CatGrupoCuentas {
@@ -258,6 +288,8 @@ model CatCuentaAsociada {
   nombre          String
   grupoCuentasId  String
   grupoCuentas    CatGrupoCuentas @relation(fields: [grupoCuentasId], references: [id])
+  tipoAcreedorId  String?
+  tipoAcreedor    CatTipoAcreedor? @relation(fields: [tipoAcreedorId], references: [id])
   activo          Boolean  @default(true)
 }
 
@@ -281,6 +313,7 @@ model CatTipoDocumento {
   maxArchivos     Int      @default(1)
   orden           Int      @default(0)
   icono           String?  // material icon name
+  condiciones     String?  // JSON: [{"campo":"tipo","operador":"==","valor":"actualizacion"},{"campo":"movimientoRealizar","operador":"==","valor":"banco"}]
   activo          Boolean  @default(true)
 }
 
@@ -357,6 +390,29 @@ model Actividad {
   creadoEn        DateTime @default(now())
 
   @@index([entidadTipo, entidadId])
+}
+
+// --- Incidentes ---
+
+model Incidente {
+  id          String   @id @default(uuid())
+  folio       String   @unique  // INC-YYYY-XXXX
+  categoria   String   // error_sistema, acceso, rendimiento, datos, funcionalidad, otro
+  prioridad   String   @default("media") // baja, media, alta, critica
+  modulo      String?  // solicitudes, aprobaciones, directorio, catalogos, usuarios, otro
+  descripcion String
+  estado      String   @default("nuevo") // nuevo, en_progreso, en_espera_info, resuelto, cerrado, cancelado
+
+  reportadoPorId String
+  reportadoPor   Usuario @relation("IncidenteReportador", fields: [reportadoPorId], references: [id])
+
+  asignadoAId    String?
+  asignadoA      Usuario? @relation("IncidenteAsignado", fields: [asignadoAId], references: [id])
+
+  comentarioResolucion String?
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
 }
 
 // --- Tipos de Aprobación (módulo auxiliar para flujos n8n) ---

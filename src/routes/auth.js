@@ -339,6 +339,44 @@ router.get('/me', async (req, res) => {
 });
 
 // ──────────────────────────────────────────────────
+// PATCH /api/auth/profile
+// Actualizar perfil del usuario autenticado (nombre)
+// ──────────────────────────────────────────────────
+router.patch('/profile', async (req, res) => {
+  try {
+    const token = req.cookies?.auth_token;
+    if (!token) return res.status(401).json({ error: 'No autenticado' });
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { nombre } = req.body;
+    if (nombre === undefined) return res.status(400).json({ error: 'Nombre es requerido' });
+
+    const usuario = await prisma.usuario.update({
+      where: { id: decoded.userId },
+      data: { nombre },
+    });
+
+    // Regenerar JWT con nombre actualizado
+    const jwtToken = generarToken(usuario);
+    res.cookie('auth_token', jwtToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    res.json({ ok: true, nombre: usuario.nombre });
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token inválido o expirado' });
+    }
+    console.error('[Auth] Error en profile update:', error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+// ──────────────────────────────────────────────────
 // POST /api/auth/logout
 // Cierra la sesión eliminando la cookie
 // ──────────────────────────────────────────────────

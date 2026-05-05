@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Campos válidos del modelo Solicitud en Prisma (whitelist)
 const SOLICITUD_FIELDS = new Set([
-  'tipo', 'movimientoRealizar', 'acreedorReferencia', 'acreedorNumero',
+  'tipo', 'movimientoRealizar', 'acreedorReferencia', 'acreedorNumero', 'bpPartner',
   'solicitanteNombre', 'solicitanteArea', 'sucursalId',
   'rfc', 'tipoAcreedorId', 'grupoCuentasId', 'cuentaAsociada',
   'acreedoresNoEspecializados', 'casosEspeciales', 'serviciosEspeciales',
@@ -19,8 +19,9 @@ const SOLICITUD_FIELDS = new Set([
   'colonia', 'distritoColoniaOpcional', 'estado_dir', 'municipio',
   'regionExt', 'paisExt', 'conceptoBusqueda', 'bienServicio',
   'empresaReconocida', 'cdrCobertura', 'esquemaResico',
-  'tipoRetencion', 'indicadorRetencion', 'aceptaClausula',
-  'grupoAsignadoId', 'estado', 'pasoActual',
+  'tipoRetencion', 'indicadorRetencion', 'datosActualizacion', 'justificacion',
+  'bloqueoContabilizacionActual', 'bloqueoContabilizacionNuevo',
+  'aceptaClausula', 'grupoAsignadoId', 'estado', 'pasoActual',
 ]);
 
 function sanitize(obj) {

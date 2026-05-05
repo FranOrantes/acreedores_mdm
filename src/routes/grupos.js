@@ -77,6 +77,17 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+// Eliminar grupo
+router.delete('/:id', async (req, res) => {
+  try {
+    await prisma.grupoAprobacion.delete({ where: { id: req.params.id } });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('[Grupos] Error al eliminar:', e);
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // Agregar miembro al grupo
 router.post('/:id/miembros', async (req, res) => {
   try {

@@ -430,3 +430,21 @@ model TipoAprobacion {
   creadoEn            DateTime @default(now())
   actualizadoEn       DateTime @updatedAt
 }
+
+// --- Reglas de Visibilidad de Campos (UI Policies) ---
+
+model ReglaVisibilidadCampo {
+  id            String   @id @default(uuid())
+  campo         String   // nombre del campo del formulario (ej: "razonSocial", "cuentaClabe")
+  condiciones   String   // JSON array de reglas: [{ campo, operador, valor }]
+  accion        String   @default("mostrar") // "mostrar" = visible si condiciones se cumplen, "ocultar" = oculto si se cumplen
+  obligatorio   Boolean  @default(false) // si true, el campo es required cuando es visible
+  formulario    String   @default("alta") // "alta", "actualizacion", "ambos"
+  orden         Int      @default(0)
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([formulario])
+  @@index([campo])
+}

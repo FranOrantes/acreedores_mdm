@@ -19,6 +19,7 @@ const ubicacionesRouter = require('./routes/ubicaciones');
 const incidentesRouter = require('./routes/incidentes');
 const documentosBase64Router = require('./routes/documentosBase64');
 const cargaMasivaRouter = require('./routes/cargaMasiva');
+const reglasVisibilidadRouter = require('./routes/reglasVisibilidad');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 
 const app = express();
@@ -59,6 +60,7 @@ app.use('/api/ubicaciones', ubicacionesRouter);
 app.use('/api/incidentes', incidentesRouter);
 app.use('/api/docs', documentosBase64Router);
 app.use('/api/carga-masiva', cargaMasivaRouter);
+app.use('/api/reglas-visibilidad', reglasVisibilidadRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

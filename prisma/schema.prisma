@@ -241,6 +241,7 @@ model Ubicacion {
   codigoPostal          String?
   pais                  String?  @default("MX")
   ventaNarcoticos       Boolean  @default(false)
+  esSucursal            Boolean  @default(false)
   telefono              String?
   latitud               Float?
   longitud              Float?
@@ -286,11 +287,25 @@ model CatCuentaAsociada {
   id              String   @id @default(uuid())
   codigo          String
   nombre          String
+  valorSap        String?
   grupoCuentasId  String
   grupoCuentas    CatGrupoCuentas @relation(fields: [grupoCuentasId], references: [id])
   tipoAcreedorId  String?
   tipoAcreedor    CatTipoAcreedor? @relation(fields: [tipoAcreedorId], references: [id])
   activo          Boolean  @default(true)
+  retenciones     CatRetencion[]
+}
+
+model CatRetencion {
+  id                        String   @id @default(uuid())
+  cuentaAsociadaId          String
+  cuentaAsociada            CatCuentaAsociada @relation(fields: [cuentaAsociadaId], references: [id])
+  esquemaResico             String?  @db.Text
+  tipoRetencion             String?  @db.Text
+  indicadorRetencionCuentas String?  @db.Text
+  aplicaFisica              Boolean  @default(false)
+  aplicaMoral               Boolean  @default(false)
+  activo                    Boolean  @default(true)
 }
 
 model CatCondicionPago {

@@ -7,7 +7,8 @@ const CATALOGS = {
   sucursales:              { model: 'catSucursal',              fields: ['codigo', 'nombre'],                                         label: 'Sucursales' },
   'tipos-acreedor':        { model: 'catTipoAcreedor',          fields: ['clave', 'nombre'],                                          label: 'Tipos de Acreedor' },
   'grupos-cuentas':        { model: 'catGrupoCuentas',           fields: ['clave', 'nombre'],                                          label: 'Grupos de Cuentas' },
-  'cuentas-asociadas':     { model: 'catCuentaAsociada',         fields: ['codigo', 'nombre', 'grupoCuentasId', 'tipoAcreedorId'],    label: 'Cuentas Asociadas' },
+  'cuentas-asociadas':     { model: 'catCuentaAsociada',         fields: ['codigo', 'nombre', 'valorSap', 'grupoCuentasId', 'tipoAcreedorId'],    label: 'Cuentas Asociadas' },
+  retenciones:               { model: 'catRetencion',              fields: ['cuentaAsociadaId', 'esquemaResico', 'tipoRetencion', 'indicadorRetencionCuentas', 'aplicaFisica', 'aplicaMoral'], label: 'Retenciones', include: { cuentaAsociada: true } },
   'condiciones-pago':      { model: 'catCondicionPago',          fields: ['clave', 'nombre'],                                          label: 'Condiciones de Pago' },
   'tipos-documento':       { model: 'catTipoDocumento',          fields: ['clave', 'nombre', 'descripcion', 'obligatorio', 'condicional', 'extensiones', 'maxSizeMb', 'maxArchivos', 'orden', 'icono', 'condiciones'], label: 'Tipos de Documento' },
   'servicios-especiales':  { model: 'catServiciosEspeciales',    fields: ['clave', 'nombre'],                                          label: 'Servicios Especiales' },
@@ -31,7 +32,9 @@ router.get('/:catalog', async (req, res) => {
   const cfg = CATALOGS[req.params.catalog];
   if (!cfg) return res.status(404).json({ error: 'Catálogo no encontrado' });
   try {
-    const data = await prisma[cfg.model].findMany({ orderBy: { id: 'asc' } });
+    const query = { orderBy: { id: 'asc' } };
+    if (cfg.include) query.include = cfg.include;
+    const data = await prisma[cfg.model].findMany(query);
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.message });

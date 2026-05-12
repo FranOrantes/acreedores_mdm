@@ -19,6 +19,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Listar solo ubicaciones que son sucursales (para cobertura)
+router.get('/sucursales', async (req, res) => {
+  try {
+    const data = await prisma.ubicacion.findMany({
+      where: { activo: true, esSucursal: true },
+      orderBy: { nombre: 'asc' },
+      select: { id: true, nombre: true },
+    });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Obtener ubicación por ID
 router.get('/:id', async (req, res) => {
   try {
@@ -39,7 +53,7 @@ router.get('/:id', async (req, res) => {
 // Crear ubicación
 router.post('/', async (req, res) => {
   try {
-    const { nombre, calle, ciudad, estadoProvincia, codigoPostal, pais, ventaNarcoticos, telefono, latitud, longitud, branchOffice, branchOfficeManagerId, supplyCenter } = req.body;
+    const { nombre, calle, ciudad, estadoProvincia, codigoPostal, pais, ventaNarcoticos, esSucursal, telefono, latitud, longitud, branchOffice, branchOfficeManagerId, supplyCenter } = req.body;
     if (!nombre) {
       return res.status(400).json({ error: 'nombre es requerido' });
     }
@@ -52,6 +66,7 @@ router.post('/', async (req, res) => {
         codigoPostal: codigoPostal || null,
         pais: pais || 'MX',
         ventaNarcoticos: ventaNarcoticos || false,
+        esSucursal: esSucursal || false,
         telefono: telefono || null,
         latitud: latitud ? parseFloat(latitud) : null,
         longitud: longitud ? parseFloat(longitud) : null,
@@ -73,7 +88,7 @@ router.post('/', async (req, res) => {
 // Actualizar ubicación
 router.patch('/:id', async (req, res) => {
   try {
-    const { nombre, calle, ciudad, estadoProvincia, codigoPostal, pais, ventaNarcoticos, telefono, latitud, longitud, branchOffice, branchOfficeManagerId, supplyCenter, activo } = req.body;
+    const { nombre, calle, ciudad, estadoProvincia, codigoPostal, pais, ventaNarcoticos, esSucursal, telefono, latitud, longitud, branchOffice, branchOfficeManagerId, supplyCenter, activo } = req.body;
     const data = await prisma.ubicacion.update({
       where: { id: req.params.id },
       data: {
@@ -84,6 +99,7 @@ router.patch('/:id', async (req, res) => {
         ...(codigoPostal !== undefined && { codigoPostal: codigoPostal || null }),
         ...(pais !== undefined && { pais: pais || null }),
         ...(ventaNarcoticos !== undefined && { ventaNarcoticos }),
+        ...(esSucursal !== undefined && { esSucursal }),
         ...(telefono !== undefined && { telefono: telefono || null }),
         ...(latitud !== undefined && { latitud: latitud ? parseFloat(latitud) : null }),
         ...(longitud !== undefined && { longitud: longitud ? parseFloat(longitud) : null }),

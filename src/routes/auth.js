@@ -306,14 +306,29 @@ router.get('/me', async (req, res) => {
     // Verificar y decodificar el JWT
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Obtener datos actualizados del usuario desde la BD
+    // Obtener datos actualizados del usuario desde la BD (incluir grupos con roles)
     const usuario = await prisma.usuario.findUnique({
       where: { id: decoded.userId },
+      include: {
+        membresiaGrupos: {
+          include: { grupo: { select: { id: true, nombre: true, roles: true, activo: true } } },
+        },
+      },
     });
 
     if (!usuario || !usuario.activo) {
       return res.status(401).json({ error: 'Usuario no encontrado o inactivo' });
     }
+
+    // Calcular roles efectivos heredados de grupos activos
+    const rolesEfectivos = new Set();
+    (usuario.membresiaGrupos || []).forEach((m) => {
+      if (!m.grupo?.activo) return;
+      try {
+        const gr = JSON.parse(m.grupo.roles || '[]');
+        gr.forEach((r) => rolesEfectivos.add(r));
+      } catch {}
+    });
 
     res.json({
       id: usuario.id,
@@ -323,6 +338,7 @@ router.get('/me', async (req, res) => {
       nombre: usuario.nombre,
       roles: JSON.parse(usuario.roles),
       rolInterno: usuario.rolInterno,
+      rolesEfectivos: [...rolesEfectivos],
       areaHumana: usuario.areaHumana,
       linea: usuario.linea,
       employeeNumber: usuario.employeeNumber,

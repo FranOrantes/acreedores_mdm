@@ -46,11 +46,11 @@ router.get('/:id', async (req, res) => {
 // Crear grupo
 router.post('/', async (req, res) => {
   try {
-    const { nombre, descripcion } = req.body;
+    const { nombre, descripcion, roles } = req.body;
     if (!nombre) return res.status(400).json({ error: 'El nombre del grupo es requerido' });
 
     const data = await prisma.grupoAprobacion.create({
-      data: { nombre, descripcion: descripcion || null },
+      data: { nombre, descripcion: descripcion || null, roles: roles || '[]' },
     });
     res.status(201).json(data);
   } catch (e) {
@@ -62,13 +62,14 @@ router.post('/', async (req, res) => {
 // Actualizar grupo
 router.patch('/:id', async (req, res) => {
   try {
-    const { nombre, descripcion, activo } = req.body;
+    const { nombre, descripcion, activo, roles } = req.body;
     const data = await prisma.grupoAprobacion.update({
       where: { id: req.params.id },
       data: {
         ...(nombre !== undefined && { nombre }),
         ...(descripcion !== undefined && { descripcion }),
         ...(activo !== undefined && { activo }),
+        ...(roles !== undefined && { roles }),
       },
     });
     res.json(data);
@@ -128,6 +129,28 @@ router.get('/usuarios/lista', async (req, res) => {
       orderBy: { nombre: 'asc' },
     });
     res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Obtener roles efectivos de un usuario (heredados de sus grupos)
+router.get('/usuarios/:usuarioId/roles-efectivos', async (req, res) => {
+  try {
+    const membresías = await prisma.miembroGrupo.findMany({
+      where: { usuarioId: req.params.usuarioId },
+      include: { grupo: { select: { roles: true, activo: true, nombre: true } } },
+    });
+    const rolesSet = new Set();
+    const detalle = [];
+    membresías.forEach((m) => {
+      if (!m.grupo.activo) return;
+      let grupoRoles = [];
+      try { grupoRoles = JSON.parse(m.grupo.roles || '[]'); } catch { grupoRoles = []; }
+      grupoRoles.forEach((r) => rolesSet.add(r));
+      if (grupoRoles.length > 0) detalle.push({ grupo: m.grupo.nombre, roles: grupoRoles });
+    });
+    res.json({ roles: [...rolesSet], detalle });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

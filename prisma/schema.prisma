@@ -176,6 +176,7 @@ model GrupoAprobacion {
   id          String   @id @default(uuid())
   nombre      String   @unique
   descripcion String?
+  roles       String   @default("[]") // JSON array: ["aprobador","admin","owner","solicitante"]
   activo      Boolean  @default(true)
   creadoEn    DateTime @default(now())
   actualizadoEn DateTime @updatedAt

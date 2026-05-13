@@ -11,6 +11,9 @@ router.get('/', async (req, res) => {
         _count: { select: { aprobaciones: true, membresiaGrupos: true } },
         manager: { select: { id: true, nombre: true, email: true } },
         ubicacion: { select: { id: true, nombre: true } },
+        membresiaGrupos: {
+          include: { grupo: { select: { id: true, nombre: true, roles: true, activo: true } } },
+        },
       },
     });
     res.json(data);

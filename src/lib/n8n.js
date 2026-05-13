@@ -3,7 +3,7 @@ const axios = require('axios');
 // ── URLs de webhooks de n8n ──
 // TODO: Mover a variables de entorno (.env) en producción
 const N8N_WEBHOOKS = {
-  solicitudCreada:      process.env.N8N_WEBHOOK_SOLICITUD_CREADA      || 'https://acreedores-flow.app.n8n.cloud/webhook/40058344-3366-4216-8fa6-3a4d5fe9b97d',
+  solicitudCreada:      process.env.N8N_WEBHOOK_SOLICITUD_CREADA      || 'https://acreedores-flujo.app.n8n.cloud/webhook/40058344-3366-4216-8fa6-3a4d5fe9b97d',
   aprobacionAprobada:   process.env.N8N_WEBHOOK_APROBACION_APROBADA   || 'https://TU_INSTANCIA_N8N.com/webhook/aprobacion-aprobada',
   aprobacionRechazada:  process.env.N8N_WEBHOOK_APROBACION_RECHAZADA  || 'https://TU_INSTANCIA_N8N.com/webhook/aprobacion-rechazada',
 };

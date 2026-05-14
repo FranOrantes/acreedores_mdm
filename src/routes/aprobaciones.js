@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const prisma = require('../lib/prisma');
 const { registrarActividad } = require('../lib/auditoria');
 const { notificarN8N } = require('../lib/n8n');
@@ -84,13 +85,19 @@ router.get('/:id', async (req, res) => {
 // Crear aprobación: grupal (grupoAsignadoId) O individual (aprobadorId)
 router.post('/', async (req, res) => {
   try {
-    const { solicitudId, aprobadorId, descripcionCorta, grupoAsignadoId } = req.body;
+    const { solicitudId, aprobadorId, descripcionCorta, grupoAsignadoId, resume_url } = req.body;
 
     if (!solicitudId) {
       return res.status(400).json({ error: 'solicitudId es requerido' });
     }
     if (!grupoAsignadoId && !aprobadorId) {
       return res.status(400).json({ error: 'Debe enviar grupoAsignadoId o aprobadorId' });
+    }
+
+    // Verificar que la solicitud exista
+    const solicitud = await prisma.solicitud.findUnique({ where: { id: solicitudId }, select: { id: true } });
+    if (!solicitud) {
+      return res.status(404).json({ error: `La solicitud con id "${solicitudId}" no existe` });
     }
 
     // Si hay grupoAsignadoId → crear N aprobaciones (una por miembro del grupo)
@@ -112,6 +119,7 @@ router.post('/', async (req, res) => {
               aprobadorId: m.usuarioId,
               descripcionCorta: descripcionCorta || null,
               grupoAsignadoId,
+              resumeUrl: resume_url || null,
               estado: 'solicitado',
             },
             include: {
@@ -131,6 +139,7 @@ router.post('/', async (req, res) => {
         solicitudId,
         aprobadorId,
         descripcionCorta: descripcionCorta || null,
+        resumeUrl: resume_url || null,
         estado: 'solicitado',
       },
       include: {
@@ -206,8 +215,24 @@ router.post('/:id/aprobar', async (req, res) => {
       aprobadorEmail: aprobador?.email,
       grupoAsignadoId: aprobacion.grupoAsignadoId,
       comentario: comentario || null,
-      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
     });
+
+    // ── Llamar resume_url de n8n (Wait on Webhook) ──
+    if (aprobacion.resumeUrl) {
+      try {
+        await axios.post(aprobacion.resumeUrl, {
+          aprobacionId: aprobacion.id,
+          solicitudId: aprobacion.solicitudId,
+          estado: 'aprobado',
+          aprobadorNombre: aprobador?.nombre,
+          aprobadorEmail: aprobador?.email,
+          comentario: comentario || null,
+        }, { timeout: 10000 });
+        console.log(`[n8n] resume_url llamada OK para aprobación ${aprobacion.id}`);
+      } catch (err) {
+        console.error(`[n8n] Error al llamar resume_url para aprobación ${aprobacion.id}:`, err.message);
+      }
+    }
 
     res.json(updated);
   } catch (e) {
@@ -258,8 +283,24 @@ router.post('/:id/rechazar', async (req, res) => {
       aprobadorEmail: aprobador?.email,
       grupoAsignadoId: aprobacion.grupoAsignadoId,
       comentario: comentario || null,
-      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
     });
+
+    // ── Llamar resume_url de n8n (Wait on Webhook) ──
+    if (aprobacion.resumeUrl) {
+      try {
+        await axios.post(aprobacion.resumeUrl, {
+          aprobacionId: aprobacion.id,
+          solicitudId: aprobacion.solicitudId,
+          estado: 'rechazado',
+          aprobadorNombre: aprobador?.nombre,
+          aprobadorEmail: aprobador?.email,
+          comentario: comentario || null,
+        }, { timeout: 10000 });
+        console.log(`[n8n] resume_url llamada OK para aprobación ${aprobacion.id}`);
+      } catch (err) {
+        console.error(`[n8n] Error al llamar resume_url para aprobación ${aprobacion.id}:`, err.message);
+      }
+    }
 
     res.json(updated);
   } catch (e) {

@@ -166,6 +166,7 @@ model Aprobacion {
   grupoAsignado     GrupoAprobacion? @relation(fields: [grupoAsignadoId], references: [id])
   aprobadorId       String
   aprobador         Usuario  @relation(fields: [aprobadorId], references: [id])
+  resumeUrl         String?  // URL de callback para n8n (Wait on Webhook)
   comentario        String?  // Comentario al aprobar/rechazar
   fechaResolucion   DateTime?
   creadoEn          DateTime @default(now())

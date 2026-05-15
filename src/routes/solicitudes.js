@@ -112,6 +112,7 @@ router.post('/', async (req, res) => {
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('solicitudCreada', {
+      solicitanteId: data.solicitanteId,
       solicitudId: data.id,
       folio: data.folio,
       estado: data.estado,

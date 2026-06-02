@@ -112,6 +112,26 @@ model Solicitud {
 
   // Aprobaciones
   aprobaciones      Aprobacion[]
+
+  // Tareas del flujo (timeline reactivo desde n8n)
+  tareas            TareaSolicitud[]
+}
+
+// --- Tareas del Flujo (Timeline controlado por n8n) ---
+
+model TareaSolicitud {
+  id            String   @id @default(uuid())
+  solicitudId   String
+  solicitud     Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  titulo        String   // Ej: "Solicitud Enviada", "Aprobación Gerencial"
+  estado        String   @default("pendiente") // completado, activo, pendiente
+  detalle       String?  // Ej: "Enviada el 21 may", "Pendiente"
+  subtexto      String?  // Ej: "Folio asignado: SOL-2026-0029"
+  orden         Int      @default(0)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([solicitudId])
 }
 
 model ContactoAcreedor {

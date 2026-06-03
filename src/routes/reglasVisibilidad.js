@@ -36,7 +36,7 @@ router.get('/all', async (req, res) => {
 // POST /api/reglas-visibilidad — crear regla
 router.post('/', async (req, res) => {
   try {
-    const { campo, condiciones, accion, obligatorio, formulario, orden } = req.body;
+    const { campo, condiciones, logica, accion, obligatorio, formulario, orden } = req.body;
     if (!campo || !condiciones) {
       return res.status(400).json({ error: 'campo y condiciones son requeridos' });
     }
@@ -44,6 +44,7 @@ router.post('/', async (req, res) => {
       data: {
         campo,
         condiciones,
+        logica: logica || 'AND',
         accion: accion || 'mostrar',
         obligatorio: obligatorio || false,
         formulario: formulario || 'alta',
@@ -60,10 +61,11 @@ router.post('/', async (req, res) => {
 // PATCH /api/reglas-visibilidad/:id — actualizar regla
 router.patch('/:id', async (req, res) => {
   try {
-    const { campo, condiciones, accion, obligatorio, formulario, orden, activo } = req.body;
+    const { campo, condiciones, logica, accion, obligatorio, formulario, orden, activo } = req.body;
     const updateData = {};
     if (campo !== undefined) updateData.campo = campo;
     if (condiciones !== undefined) updateData.condiciones = condiciones;
+    if (logica !== undefined) updateData.logica = logica;
     if (accion !== undefined) updateData.accion = accion;
     if (obligatorio !== undefined) updateData.obligatorio = obligatorio;
     if (formulario !== undefined) updateData.formulario = formulario;

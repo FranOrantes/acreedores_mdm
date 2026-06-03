@@ -488,6 +488,7 @@ model ReglaVisibilidadCampo {
   id            String   @id @default(uuid())
   campo         String   // nombre del campo del formulario (ej: "razonSocial", "cuentaClabe")
   condiciones   String   // JSON array de reglas: [{ campo, operador, valor }]
+  logica        String   @default("AND") // "AND" = todas deben cumplirse, "OR" = al menos una
   accion        String   @default("mostrar") // "mostrar" = visible si condiciones se cumplen, "ocultar" = oculto si se cumplen
   obligatorio   Boolean  @default(false) // si true, el campo es required cuando es visible
   formulario    String   @default("alta") // "alta", "actualizacion", "ambos"

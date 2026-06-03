@@ -13,6 +13,8 @@ const CATALOGS = {
   'tipos-documento':       { model: 'catTipoDocumento',          fields: ['clave', 'nombre', 'descripcion', 'obligatorio', 'condicional', 'extensiones', 'maxSizeMb', 'maxArchivos', 'orden', 'icono', 'condiciones'], label: 'Tipos de Documento' },
   'servicios-especiales':  { model: 'catServiciosEspeciales',    fields: ['clave', 'nombre'],                                          label: 'Servicios Especiales' },
   'casos-especiales':      { model: 'catCasosEspeciales',        fields: ['clave', 'nombre'],                                          label: 'Casos Especiales' },
+  'areas-solicitantes':    { model: 'catAreaSolicitante',         fields: ['clave', 'nombre'],                                          label: 'Áreas Solicitantes' },
+  'acreedores-no-especializados': { model: 'catAcreedorNoEspecializado', fields: ['clave', 'nombre'],                                   label: 'Acreedores No Especializados' },
   'moneda-pago':           { model: 'catMonedaPago',             fields: ['clave', 'nombre'],                                          label: 'Moneda de Pago' },
   'via-pago':              { model: 'catViaPago',                fields: ['clave', 'nombre'],                                          label: 'Vía de Pago' },
   'moneda-pedido':         { model: 'catMonedaPedido',           fields: ['clave', 'nombre'],                                          label: 'Moneda Pedido' },

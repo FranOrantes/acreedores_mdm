@@ -368,6 +368,20 @@ model CatCasosEspeciales {
   activo Boolean @default(true)
 }
 
+model CatAreaSolicitante {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
+model CatAcreedorNoEspecializado {
+  id     String  @id @default(uuid())
+  clave  String  @unique
+  nombre String
+  activo Boolean @default(true)
+}
+
 model CatMonedaPago {
   id     String  @id @default(uuid())
   clave  String  @unique

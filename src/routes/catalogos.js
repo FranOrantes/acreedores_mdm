@@ -51,6 +51,16 @@ router.get('/casos-especiales', async (req, res) => {
   res.json(data);
 });
 
+router.get('/areas-solicitantes', async (req, res) => {
+  const data = await prisma.catAreaSolicitante.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
+router.get('/acreedores-no-especializados', async (req, res) => {
+  const data = await prisma.catAcreedorNoEspecializado.findMany({ where: { activo: true }, orderBy: { nombre: 'asc' } });
+  res.json(data);
+});
+
 router.get('/moneda-pago', async (req, res) => {
   const data = await prisma.catMonedaPago.findMany({ where: { activo: true }, orderBy: { clave: 'asc' } });
   res.json(data);

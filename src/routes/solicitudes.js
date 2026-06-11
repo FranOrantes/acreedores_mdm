@@ -185,4 +185,88 @@ router.post('/:id/enviar', async (req, res) => {
   }
 });
 
+// ── Error SAP (llamada desde n8n) ──
+// POST /api/solicitudes/:id/error-sap
+// Body: { error: "mensaje de error de SAP", detalle?: "info adicional" }
+router.post('/:id/error-sap', async (req, res) => {
+  try {
+    const { error, detalle } = req.body;
+    if (!error) return res.status(400).json({ error: 'El campo "error" es requerido' });
+
+    const anterior = await prisma.solicitud.findUnique({ where: { id: req.params.id } });
+    if (!anterior) return res.status(404).json({ error: 'Solicitud no encontrada' });
+
+    // Cambiar estado a error_sap
+    const data = await prisma.solicitud.update({
+      where: { id: req.params.id },
+      data: { estado: 'error_sap' },
+    });
+
+    // Registrar nota de error SAP en el historial (visible para el cliente)
+    const contenidoNota = `⚠️ Error en SAP: ${error}${detalle ? '\n\nDetalle: ' + detalle : ''}`;
+    await registrarActividad('solicitud', req.params.id, 'sistema', contenidoNota, {
+      autorNombre: 'SAP / n8n',
+      visibleCliente: true,
+      campoModificado: 'Estado',
+      valorAnterior: anterior.estado,
+      valorNuevo: 'error_sap',
+    });
+
+    console.log(`[SAP] Error registrado para solicitud ${anterior.folio}: ${error}`);
+    res.json({ ok: true, folio: anterior.folio, estado: 'error_sap' });
+  } catch (e) {
+    console.error('[Solicitudes] Error en error-sap:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Reenvío a SAP (botón manual del admin) ──
+// POST /api/solicitudes/:id/reenviar-sap
+router.post('/:id/reenviar-sap', async (req, res) => {
+  try {
+    const solicitud = await prisma.solicitud.findUnique({
+      where: { id: req.params.id },
+      include: { tipoAcreedor: true, grupoCuentas: true },
+    });
+    if (!solicitud) return res.status(404).json({ error: 'Solicitud no encontrada' });
+    if (solicitud.estado !== 'error_sap') {
+      return res.status(400).json({ error: 'Solo se puede reenviar a SAP cuando la solicitud está en estado "error_sap"' });
+    }
+
+    // Cambiar estado a en_revision mientras se procesa
+    await prisma.solicitud.update({
+      where: { id: req.params.id },
+      data: { estado: 'en_revision' },
+    });
+
+    await registrarActividad('solicitud', req.params.id, 'sistema',
+      'Solicitud reenviada a SAP manualmente por un administrador.',
+      {
+        autorNombre: req.body._autorNombre || 'Administrador',
+        campoModificado: 'Estado',
+        valorAnterior: 'error_sap',
+        valorNuevo: 'en_revision',
+      }
+    );
+
+    // Notificar a n8n para reintentar
+    notificarN8N('solicitudCreada', {
+      solicitudId: solicitud.id,
+      folio: solicitud.folio,
+      estado: 'en_revision',
+      solicitanteNombre: solicitud.solicitanteNombre,
+      rfc: solicitud.rfc,
+      razonSocial: solicitud.razonSocial,
+      grupo_cuentas: solicitud.grupoCuentas?.clave || '',
+      tipo_acreedor: solicitud.tipoAcreedor?.clave || '',
+      reenvio: true,
+    });
+
+    res.json({ ok: true, folio: solicitud.folio, estado: 'en_revision' });
+  } catch (e) {
+    console.error('[Solicitudes] Error en reenviar-sap:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;

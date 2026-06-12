@@ -80,12 +80,39 @@ router.get('/:id', async (req, res) => {
 
 // Crear tarea de flujo (llamada desde n8n)
 // Body: { solicitudId, titulo, descripcion?, grupoAsignadoId?, miembroAsignadoId?, resumeUrl? }
+// Si ya existe una tarea para la misma solicitud+grupo, se retorna la existente (idempotente)
 router.post('/', async (req, res) => {
   try {
     const { solicitudId, titulo, descripcion, grupoAsignadoId, miembroAsignadoId, resumeUrl } = req.body;
 
     if (!solicitudId || !titulo) {
       return res.status(400).json({ error: 'solicitudId y titulo son requeridos' });
+    }
+
+    // Verificar si ya existe una tarea para esta solicitud+grupo (evitar duplicados)
+    if (grupoAsignadoId) {
+      const existente = await prisma.tareaFlujo.findUnique({
+        where: { solicitudId_grupoAsignadoId: { solicitudId, grupoAsignadoId } },
+        include: {
+          solicitud: { select: { folio: true } },
+          grupoAsignado: { select: { nombre: true } },
+        },
+      });
+      if (existente) {
+        // Si existe, actualizar resumeUrl si cambió y retornar la existente
+        if (resumeUrl && resumeUrl !== existente.resumeUrl) {
+          const updated = await prisma.tareaFlujo.update({
+            where: { id: existente.id },
+            data: { resumeUrl },
+            include: {
+              solicitud: { select: { folio: true } },
+              grupoAsignado: { select: { nombre: true } },
+            },
+          });
+          return res.json(updated);
+        }
+        return res.json(existente);
+      }
     }
 
     const tarea = await prisma.tareaFlujo.create({

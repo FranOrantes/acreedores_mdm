@@ -31,5 +31,8 @@ ALTER TABLE "TareaFlujo" ADD CONSTRAINT "TareaFlujo_grupoAsignadoId_fkey" FOREIG
 -- AddForeignKey
 ALTER TABLE "TareaFlujo" ADD CONSTRAINT "TareaFlujo_miembroAsignadoId_fkey" FOREIGN KEY ("miembroAsignadoId") REFERENCES "Usuario"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- CreateIndex (unique constraint: one task per solicitud+grupo)
+CREATE UNIQUE INDEX "TareaFlujo_solicitudId_grupoAsignadoId_key" ON "TareaFlujo"("solicitudId", "grupoAsignadoId");
+
 -- AddForeignKey
 ALTER TABLE "TareaFlujo" ADD CONSTRAINT "TareaFlujo_aprobadorId_fkey" FOREIGN KEY ("aprobadorId") REFERENCES "Usuario"("id") ON DELETE SET NULL ON UPDATE CASCADE;

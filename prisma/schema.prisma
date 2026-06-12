@@ -140,6 +140,7 @@ model TareaFlujo {
   creadoEn          DateTime @default(now())
   actualizadoEn     DateTime @updatedAt
 
+  @@unique([solicitudId, grupoAsignadoId])
   @@index([solicitudId])
   @@index([estado])
 }

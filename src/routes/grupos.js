@@ -23,6 +23,30 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Buscar grupo por nombre (query param ?nombre=)
+router.get('/buscar', async (req, res) => {
+  try {
+    const { nombre } = req.query;
+    if (!nombre) return res.status(400).json({ error: 'El parámetro "nombre" es requerido' });
+
+    const data = await prisma.grupoAprobacion.findFirst({
+      where: { nombre: { equals: nombre, mode: 'insensitive' } },
+      include: {
+        miembros: {
+          include: {
+            usuario: { select: { id: true, nombre: true, email: true, username: true } },
+          },
+        },
+      },
+    });
+    if (!data) return res.status(404).json({ error: `Grupo "${nombre}" no encontrado` });
+    res.json(data);
+  } catch (e) {
+    console.error('[Grupos] Error al buscar por nombre:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Obtener grupo por ID
 router.get('/:id', async (req, res) => {
   try {

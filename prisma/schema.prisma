@@ -115,9 +115,36 @@ model Solicitud {
 
   // Tareas del flujo (timeline reactivo desde n8n)
   tareas            TareaSolicitud[]
+
+  // Tareas de flujo (asignación de aprobador)
+  tareasFlujo       TareaFlujo[] @relation("TareasFlujoSolicitud")
 }
 
-// --- Tareas del Flujo (Timeline controlado por n8n) ---
+// --- Tareas del Flujo (asignación de aprobador por usuario) ---
+
+model TareaFlujo {
+  id                String   @id @default(uuid())
+  solicitudId       String
+  solicitud         Solicitud @relation("TareasFlujoSolicitud", fields: [solicitudId], references: [id], onDelete: Cascade)
+  titulo            String   // Ej: "Asignar aprobador gerencial"
+  descripcion       String?  // Instrucciones adicionales
+  estado            String   @default("abierta") // abierta, cerrada
+  grupoAsignadoId   String?  // Grupo de aprobación predefinido por n8n
+  grupoAsignado     GrupoAprobacion? @relation("TareaFlujoGrupo", fields: [grupoAsignadoId], references: [id])
+  miembroAsignadoId String?  // Miembro del grupo al que se asigna la tarea
+  miembroAsignado   Usuario? @relation("TareaFlujoMiembro", fields: [miembroAsignadoId], references: [id])
+  aprobadorId       String?  // Aprobador seleccionado por el usuario al cerrar la tarea
+  aprobador         Usuario? @relation("TareaFlujoAprobador", fields: [aprobadorId], references: [id])
+  resumeUrl         String?  // URL de callback para n8n (Wait on Webhook)
+  fechaCierre       DateTime?
+  creadoEn          DateTime @default(now())
+  actualizadoEn     DateTime @updatedAt
+
+  @@index([solicitudId])
+  @@index([estado])
+}
+
+// --- Tareas del Flujo Timeline (Timeline controlado por n8n) ---
 
 model TareaSolicitud {
   id            String   @id @default(uuid())
@@ -205,6 +232,7 @@ model GrupoAprobacion {
   aprobaciones Aprobacion[]
   solicitudes  Solicitud[] @relation("SolicitudGrupo")
   tiposAprobacion TipoAprobacion[] @relation("TipoAprobacionGrupo")
+  tareasFlujo TareaFlujo[] @relation("TareaFlujoGrupo")
 }
 
 model MiembroGrupo {
@@ -250,6 +278,8 @@ model Usuario {
   ubicacionesGerenciadas Ubicacion[] @relation("UbicacionBranchManager")
   incidentesReportados Incidente[] @relation("IncidenteReportador")
   incidentesAsignados  Incidente[] @relation("IncidenteAsignado")
+  tareasFlujoMiembro   TareaFlujo[] @relation("TareaFlujoMiembro")
+  tareasFlujoAprobador TareaFlujo[] @relation("TareaFlujoAprobador")
 }
 
 // --- Ubicaciones ---

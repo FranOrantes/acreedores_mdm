@@ -21,6 +21,7 @@ const documentosBase64Router = require('./routes/documentosBase64');
 const cargaMasivaRouter = require('./routes/cargaMasiva');
 const reglasFormularioRouter = require('./routes/reglasFormulario');
 const tareasSolicitudRouter = require('./routes/tareasSolicitud');
+const tareasFlujoRouter = require('./routes/tareasFlujo');
 const sepomexRouter = require('./routes/sepomex');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 
@@ -65,6 +66,7 @@ app.use('/api/carga-masiva', cargaMasivaRouter);
 app.use('/api/reglas-formulario', reglasFormularioRouter);
 app.use('/api/reglas-visibilidad', reglasFormularioRouter); // backward compat
 app.use('/api/tareas-solicitud', tareasSolicitudRouter);
+app.use('/api/tareas-flujo', tareasFlujoRouter);
 app.use('/api/sepomex', sepomexRouter);
 
 app.listen(PORT, () => {

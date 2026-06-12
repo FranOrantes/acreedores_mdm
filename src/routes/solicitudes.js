@@ -66,7 +66,7 @@ router.get('/:id', async (req, res) => {
 // Crear solicitud nueva (con contactos embebidos)
 router.post('/', async (req, res) => {
   try {
-    const { contactos, ...rawData } = req.body;
+    const { contactos, solicitanteId, ...rawData } = req.body;
     const solicitudData = sanitize(rawData);
     const count = await prisma.solicitud.count();
     const prefix = solicitudData.tipo === 'actualizacion' ? 'ACT' : 'SOL';
@@ -112,7 +112,7 @@ router.post('/', async (req, res) => {
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('solicitudCreada', {
-      solicitanteId: data.solicitanteId,
+      solicitanteId: solicitanteId || null,
       solicitudId: data.id,
       folio: data.folio,
       estado: data.estado,

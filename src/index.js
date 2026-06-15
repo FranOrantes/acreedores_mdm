@@ -22,7 +22,6 @@ const cargaMasivaRouter = require('./routes/cargaMasiva');
 const reglasFormularioRouter = require('./routes/reglasFormulario');
 const tareasSolicitudRouter = require('./routes/tareasSolicitud');
 const tareasFlujoRouter = require('./routes/tareasFlujo');
-const sepomexRouter = require('./routes/sepomex');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 
 const app = express();
@@ -67,7 +66,6 @@ app.use('/api/reglas-formulario', reglasFormularioRouter);
 app.use('/api/reglas-visibilidad', reglasFormularioRouter); // backward compat
 app.use('/api/tareas-solicitud', tareasSolicitudRouter);
 app.use('/api/tareas-flujo', tareasFlujoRouter);
-app.use('/api/sepomex', sepomexRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

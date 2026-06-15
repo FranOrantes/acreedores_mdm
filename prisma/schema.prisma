@@ -293,7 +293,6 @@ model Ubicacion {
   estadoProvincia       String?
   codigoPostal          String?
   pais                  String?  @default("MX")
-  ventaNarcoticos       Boolean  @default(false)
   esSucursal            Boolean  @default(false)
   telefono              String?
   latitud               Float?

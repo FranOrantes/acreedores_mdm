@@ -10,6 +10,7 @@ datasource db {
 model Solicitud {
   id                String   @id @default(uuid())
   folio             String   @unique
+  modulo            String   @default("acreedores") // "acreedores" | "proveedores"
   tipo              String   @default("alta") // alta, actualizacion
   estado            String   @default("borrador") // borrador, enviada, en_revision, aprobada, rechazada, registrado, error_sap
   pasoActual        Int      @default(1)
@@ -99,6 +100,81 @@ model Solicitud {
   // Bloqueo/Desbloqueo
   bloqueoContabilizacionActual Boolean?
   bloqueoContabilizacionNuevo  Boolean?
+
+  // ═══════════════════════════════════════════════════════════
+  // Campos exclusivos de PROVEEDORES (modulo = "proveedores")
+  // ═══════════════════════════════════════════════════════════
+
+  // Asignación negociador / comprador
+  compradorJr        String?
+  negociadorAsignado String?
+  dga                String?
+
+  // Dirección fiscal extra (proveedor)
+  numDepartamento   String?
+  piso              String?
+  pais              String?
+
+  // Contacto fiscal
+  contactoFiscalNombre    String?
+  contactoFiscalExtension String?
+  contactoFiscalTelefono  String?
+  contactoFiscalCorreo    String?
+
+  // Convenio comercial
+  descuentosFee           String?
+  descuentosRrrp          String?
+  porcentajeNoDevolucion  String?
+  comentarioDescuento     String?
+  modalidad               String?
+  tipoEntrega             String?
+  escalaEntrega           String?
+  plazoPago               String?
+  cuentaBancaria          String?
+
+  // Devolución
+  mercanciaVencida        String?
+  mercanciaDeteriorada    String?
+  mercanciaBuenEstado     String?
+  penalizacion            String?
+
+  // Contactos de organización — KAM
+  nombreKam         String?
+  telefonoKam       String?
+  correoKam         String?
+  // Ejecutivo de cuenta
+  nombreEjecutivo   String?
+  telefonoEjecutivo String?
+  correoEjecutivo   String?
+  // Gerente comercial
+  nombreGerente     String?
+  telefonoGerente   String?
+  correoGerente     String?
+  // Director comercial
+  nombreDirector    String?
+  telefonoDirector  String?
+  correoDirector    String?
+  // Cuentas por pagar
+  nombreCuentasPagar   String?
+  telefonoCuentasPagar String?
+  correoCuentasPagar   String?
+  // Representante legal
+  nombreRepresentante   String?
+  telefonoRepresentante String?
+  correoRepresentante   String?
+  // Responsable de calidad
+  nombreRCalidad    String?
+  telefonoRCalidad  String?
+  correoRCalidad    String?
+  // Responsable sanitario
+  nombreRSanitario  String?
+  telefonoRSanitario String?
+  correoRSanitario  String?
+
+  // Términos y condiciones (proveedor)
+  aceptaTerminos    String?
+
+  // ═══════════════════════════════════════════════════════════
 
   // Cláusula
   aceptaClausula    Boolean @default(false)
@@ -381,6 +457,7 @@ model CatTipoDocumento {
   orden           Int      @default(0)
   icono           String?  // material icon name
   condiciones     String?  // JSON: [{"campo":"tipo","operador":"==","valor":"actualizacion"},{"campo":"movimientoRealizar","operador":"==","valor":"banco"}]
+  modulo          String   @default("acreedores") // "acreedores", "proveedores", "ambos"
   activo          Boolean  @default(true)
 }
 
@@ -524,6 +601,7 @@ model ReglaFormularioCampo {
   accionReadOnly    String   @default("no_cambiar") // "solo_lectura", "editable", "no_cambiar"
   reverseIfFalse    Boolean  @default(false) // si true, aplica la acción inversa cuando NO se cumplen las condiciones
   formulario        String   @default("alta") // "alta", "actualizacion", "ambos"
+  modulo            String   @default("acreedores") // "acreedores", "proveedores", "ambos"
   orden             Int      @default(0)
   activo            Boolean  @default(true)
   creadoEn          DateTime @default(now())
@@ -532,4 +610,5 @@ model ReglaFormularioCampo {
   @@map("ReglaVisibilidadCampo")
   @@index([formulario])
   @@index([campo])
+  @@index([modulo])
 }

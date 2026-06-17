@@ -37,7 +37,11 @@ router.get('/condiciones-pago', async (req, res) => {
 });
 
 router.get('/tipos-documento', async (req, res) => {
-  const data = await prisma.catTipoDocumento.findMany({ where: { activo: true }, orderBy: { orden: 'asc' } });
+  const where = { activo: true };
+  if (req.query.modulo) {
+    where.modulo = { in: [req.query.modulo, 'ambos'] };
+  }
+  const data = await prisma.catTipoDocumento.findMany({ where, orderBy: { orden: 'asc' } });
   res.json(data);
 });
 

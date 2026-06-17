@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Campos válidos del modelo Solicitud en Prisma (whitelist)
 const SOLICITUD_FIELDS = new Set([
-  'tipo', 'movimientoRealizar', 'acreedorReferencia', 'acreedorNumero', 'bpPartner',
+  'modulo', 'tipo', 'movimientoRealizar', 'acreedorReferencia', 'acreedorNumero', 'bpPartner',
   'solicitanteNombre', 'solicitanteArea', 'sucursalId',
   'rfc', 'tipoAcreedorId', 'grupoCuentasId', 'cuentaAsociada',
   'acreedoresNoEspecializados', 'casosEspeciales', 'serviciosEspeciales',
@@ -21,6 +21,22 @@ const SOLICITUD_FIELDS = new Set([
   'empresaReconocida', 'cdrCobertura', 'esquemaResico',
   'tipoRetencion', 'indicadorRetencion', 'datosActualizacion', 'justificacion',
   'bloqueoContabilizacionActual', 'bloqueoContabilizacionNuevo',
+  // Proveedor-specific fields
+  'compradorJr', 'negociadorAsignado', 'dga',
+  'numDepartamento', 'piso', 'pais',
+  'contactoFiscalNombre', 'contactoFiscalExtension', 'contactoFiscalTelefono', 'contactoFiscalCorreo',
+  'descuentosFee', 'descuentosRrrp', 'porcentajeNoDevolucion', 'comentarioDescuento',
+  'modalidad', 'tipoEntrega', 'escalaEntrega', 'plazoPago', 'cuentaBancaria',
+  'mercanciaVencida', 'mercanciaDeteriorada', 'mercanciaBuenEstado', 'penalizacion',
+  'nombreKam', 'telefonoKam', 'correoKam',
+  'nombreEjecutivo', 'telefonoEjecutivo', 'correoEjecutivo',
+  'nombreGerente', 'telefonoGerente', 'correoGerente',
+  'nombreDirector', 'telefonoDirector', 'correoDirector',
+  'nombreCuentasPagar', 'telefonoCuentasPagar', 'correoCuentasPagar',
+  'nombreRepresentante', 'telefonoRepresentante', 'correoRepresentante',
+  'nombreRCalidad', 'telefonoRCalidad', 'correoRCalidad',
+  'nombreRSanitario', 'telefonoRSanitario', 'correoRSanitario',
+  'aceptaTerminos',
   'aceptaClausula', 'grupoAsignadoId', 'estado', 'pasoActual',
 ]);
 
@@ -32,9 +48,14 @@ function sanitize(obj) {
   return clean;
 }
 
-// Listar solicitudes
+// Listar solicitudes (filtrable por modulo via query param)
 router.get('/', async (req, res) => {
+  const where = {};
+  if (req.query.modulo) {
+    where.modulo = req.query.modulo;
+  }
   const data = await prisma.solicitud.findMany({
+    where,
     orderBy: { creadoEn: 'desc' },
     include: {
       sucursal: true,
@@ -69,7 +90,10 @@ router.post('/', async (req, res) => {
     const { contactos, solicitanteId, ...rawData } = req.body;
     const solicitudData = sanitize(rawData);
     const count = await prisma.solicitud.count();
-    const prefix = solicitudData.tipo === 'actualizacion' ? 'ACT' : 'SOL';
+    const modulo = solicitudData.modulo || 'acreedores';
+    let prefix = 'SOL';
+    if (solicitudData.tipo === 'actualizacion') prefix = 'ACT';
+    else if (modulo === 'proveedores') prefix = 'PV';
     const folio = `${prefix}-${new Date().getFullYear()}-${String(count + 1).padStart(4, '0')}`;
 
     // Limpiar campos de relación vacíos para evitar errores de FK
@@ -112,6 +136,7 @@ router.post('/', async (req, res) => {
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('solicitudCreada', {
+      modulo: data.modulo,
       solicitanteId: solicitanteId || null,
       solicitudId: data.id,
       folio: data.folio,
@@ -121,7 +146,6 @@ router.post('/', async (req, res) => {
       razonSocial: data.razonSocial,
       grupo_cuentas: data.grupoCuentas?.clave || '',
       tipo_acreedor: data.tipoAcreedor?.clave || '',
-      // TODO: agrega aquí los campos adicionales que necesites enviar a n8n
     });
 
     res.status(201).json(data);

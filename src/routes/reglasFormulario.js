@@ -5,10 +5,20 @@ const router = express.Router();
 // GET /api/reglas-formulario — listar reglas activas (para el formulario)
 router.get('/', async (req, res) => {
   try {
-    const { formulario } = req.query;
+    const { formulario, modulo } = req.query;
     const where = { activo: true };
     if (formulario) {
       where.OR = [{ formulario }, { formulario: 'ambos' }];
+    }
+    if (modulo) {
+      // Combine with existing OR using AND
+      const moduloFilter = { modulo: { in: [modulo, 'ambos'] } };
+      if (where.OR) {
+        where.AND = [{ OR: where.OR }, moduloFilter];
+        delete where.OR;
+      } else {
+        Object.assign(where, moduloFilter);
+      }
     }
     const data = await prisma.reglaFormularioCampo.findMany({
       where,
@@ -36,7 +46,7 @@ router.get('/all', async (req, res) => {
 // POST /api/reglas-formulario — crear regla
 router.post('/', async (req, res) => {
   try {
-    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, orden } = req.body;
+    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden } = req.body;
     if (!campo || !condiciones) {
       return res.status(400).json({ error: 'campo y condiciones son requeridos' });
     }
@@ -50,6 +60,7 @@ router.post('/', async (req, res) => {
         accionReadOnly: accionReadOnly || 'no_cambiar',
         reverseIfFalse: reverseIfFalse || false,
         formulario: formulario || 'alta',
+        modulo: modulo || 'acreedores',
         orden: orden || 0,
       },
     });
@@ -63,7 +74,7 @@ router.post('/', async (req, res) => {
 // PATCH /api/reglas-formulario/:id — actualizar regla
 router.patch('/:id', async (req, res) => {
   try {
-    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, orden, activo } = req.body;
+    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden, activo } = req.body;
     const updateData = {};
     if (campo !== undefined) updateData.campo = campo;
     if (condiciones !== undefined) updateData.condiciones = condiciones;
@@ -73,6 +84,7 @@ router.patch('/:id', async (req, res) => {
     if (accionReadOnly !== undefined) updateData.accionReadOnly = accionReadOnly;
     if (reverseIfFalse !== undefined) updateData.reverseIfFalse = reverseIfFalse;
     if (formulario !== undefined) updateData.formulario = formulario;
+    if (modulo !== undefined) updateData.modulo = modulo;
     if (orden !== undefined) updateData.orden = orden;
     if (activo !== undefined) updateData.activo = activo;
 

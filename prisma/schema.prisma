@@ -46,6 +46,7 @@ model CampoFormulario {
   id            String   @id @default(uuid())
   dominioId     String
   dominio       Dominio  @relation(fields: [dominioId], references: [id], onDelete: Cascade)
+  modulo        String   @default("todos") // "acreedores" | "proveedores" | "materiales" | "todos"
   formulario    String   @default("alta") // "alta" | "actualizacion"
   seccion       String   @default("custom") // "datos_generales", "direccion", "custom"
   clave         String // slug único por dominio, ej: "nro_proveedor"

@@ -31,6 +31,7 @@ ALTER TABLE "UsuarioDominio" ADD CONSTRAINT "UsuarioDominio_dominioId_fkey" FORE
 CREATE TABLE IF NOT EXISTS "CampoFormulario" (
     "id" TEXT NOT NULL,
     "dominioId" TEXT NOT NULL,
+    "modulo" TEXT NOT NULL DEFAULT 'todos',
     "formulario" TEXT NOT NULL DEFAULT 'alta',
     "seccion" TEXT NOT NULL DEFAULT 'custom',
     "clave" TEXT NOT NULL,

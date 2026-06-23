@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
     if (req.query.seccion) {
       where.seccion = req.query.seccion;
     }
+    if (req.query.modulo) {
+      where.modulo = { in: [req.query.modulo, 'todos'] };
+    }
     const data = await prisma.campoFormulario.findMany({
       where,
       orderBy: [{ seccion: 'asc' }, { orden: 'asc' }],
@@ -61,7 +64,7 @@ router.post('/', async (req, res) => {
     if (!req.dominioId) {
       return res.status(400).json({ error: 'Se requiere un dominio activo para crear campos' });
     }
-    const { formulario, seccion, clave, etiqueta, tipo, requerido, orden, opciones, validacion, placeholder, tooltip } = req.body;
+    const { modulo, formulario, seccion, clave, etiqueta, tipo, requerido, orden, opciones, validacion, placeholder, tooltip } = req.body;
     if (!clave || !etiqueta) {
       return res.status(400).json({ error: 'clave y etiqueta son requeridos' });
     }
@@ -69,6 +72,7 @@ router.post('/', async (req, res) => {
     const data = await prisma.campoFormulario.create({
       data: {
         dominioId: req.dominioId,
+        modulo: modulo || 'todos',
         formulario: formulario || 'alta',
         seccion: seccion || 'custom',
         clave,
@@ -95,10 +99,11 @@ router.post('/', async (req, res) => {
 // PATCH /api/campos-formulario/:id — actualizar campo
 router.patch('/:id', async (req, res) => {
   try {
-    const { formulario, seccion, clave, etiqueta, tipo, requerido, orden, opciones, validacion, placeholder, tooltip, activo } = req.body;
+    const { modulo, formulario, seccion, clave, etiqueta, tipo, requerido, orden, opciones, validacion, placeholder, tooltip, activo } = req.body;
     const data = await prisma.campoFormulario.update({
       where: { id: req.params.id },
       data: {
+        ...(modulo !== undefined && { modulo }),
         ...(formulario !== undefined && { formulario }),
         ...(seccion !== undefined && { seccion }),
         ...(clave !== undefined && { clave }),

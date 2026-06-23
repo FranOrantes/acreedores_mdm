@@ -20,7 +20,17 @@ router.get('/', async (req, res) => {
         Object.assign(where, moduloFilter);
       }
     }
-    if (req.dominioId) where.dominioId = req.dominioId;
+    if (req.dominioId) {
+      const dominioFilter = { OR: [{ dominioId: req.dominioId }, { dominioId: null }] };
+      if (where.AND) {
+        where.AND.push(dominioFilter);
+      } else if (where.OR) {
+        where.AND = [{ OR: where.OR }, dominioFilter];
+        delete where.OR;
+      } else {
+        Object.assign(where, dominioFilter);
+      }
+    }
     const data = await prisma.reglaFormularioCampo.findMany({
       where,
       orderBy: [{ campo: 'asc' }, { orden: 'asc' }],
@@ -36,7 +46,9 @@ router.get('/', async (req, res) => {
 router.get('/all', async (req, res) => {
   try {
     const where = {};
-    if (req.dominioId) where.dominioId = req.dominioId;
+    if (req.dominioId) {
+      where.OR = [{ dominioId: req.dominioId }, { dominioId: null }];
+    }
     const data = await prisma.reglaFormularioCampo.findMany({
       where,
       orderBy: [{ campo: 'asc' }, { orden: 'asc' }],
@@ -66,6 +78,7 @@ router.post('/', async (req, res) => {
         formulario: formulario || 'alta',
         modulo: modulo || 'acreedores',
         orden: orden || 0,
+        ...(req.dominioId && { dominioId: req.dominioId }),
       },
     });
     res.status(201).json(data);

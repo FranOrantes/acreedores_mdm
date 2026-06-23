@@ -38,6 +38,7 @@ const SOLICITUD_FIELDS = new Set([
   'nombreRSanitario', 'telefonoRSanitario', 'correoRSanitario',
   'aceptaTerminos',
   'aceptaClausula', 'grupoAsignadoId', 'estado', 'pasoActual',
+  'camposExtra',
 ]);
 
 function sanitize(obj) {
@@ -48,11 +49,14 @@ function sanitize(obj) {
   return clean;
 }
 
-// Listar solicitudes (filtrable por modulo via query param)
+// Listar solicitudes (filtrable por modulo via query param + domain scope)
 router.get('/', async (req, res) => {
   const where = {};
   if (req.query.modulo) {
     where.modulo = req.query.modulo;
+  }
+  if (req.dominioId) {
+    where.dominioId = req.dominioId;
   }
   const data = await prisma.solicitud.findMany({
     where,
@@ -107,6 +111,7 @@ router.post('/', async (req, res) => {
         folio,
         estado: 'enviada',
         pasoActual: 4,
+        ...(req.dominioId ? { dominioId: req.dominioId } : {}),
         ...solicitudData,
         contactos: contactos && contactos.length > 0 ? {
           create: contactos.map((c, idx) => ({
@@ -137,6 +142,7 @@ router.post('/', async (req, res) => {
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('solicitudCreada', {
       modulo: data.modulo,
+      dominioId: data.dominioId || null,
       solicitanteId: solicitanteId || null,
       solicitudId: data.id,
       folio: data.folio,

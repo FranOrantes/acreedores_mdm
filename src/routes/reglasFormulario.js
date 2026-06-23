@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
         Object.assign(where, moduloFilter);
       }
     }
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.reglaFormularioCampo.findMany({
       where,
       orderBy: [{ campo: 'asc' }, { orden: 'asc' }],
@@ -34,7 +35,10 @@ router.get('/', async (req, res) => {
 // GET /api/reglas-formulario/all — listar TODAS (admin, incluye inactivas)
 router.get('/all', async (req, res) => {
   try {
+    const where = {};
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.reglaFormularioCampo.findMany({
+      where,
       orderBy: [{ campo: 'asc' }, { orden: 'asc' }],
     });
     res.json(data);

@@ -22,7 +22,10 @@ const cargaMasivaRouter = require('./routes/cargaMasiva');
 const reglasFormularioRouter = require('./routes/reglasFormulario');
 const tareasSolicitudRouter = require('./routes/tareasSolicitud');
 const tareasFlujoRouter = require('./routes/tareasFlujo');
+const dominiosRouter = require('./routes/dominios');
+const camposFormularioRouter = require('./routes/camposFormulario');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
+const { domainScope } = require('./middleware/domainScope');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -41,6 +44,9 @@ app.use('/api/auth', authRouter);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// ── Middleware de dominio (inyecta req.dominioId en todas las rutas protegidas) ──
+app.use('/api', domainScope);
 
 // ── Rutas protegidas (requieren autenticación SSO) ──
 // [SSO DESACTIVADO TEMPORALMENTE] Descomentar requireAuth cuando se reactive el SSO:
@@ -66,6 +72,8 @@ app.use('/api/reglas-formulario', reglasFormularioRouter);
 app.use('/api/reglas-visibilidad', reglasFormularioRouter); // backward compat
 app.use('/api/tareas-solicitud', tareasSolicitudRouter);
 app.use('/api/tareas-flujo', tareasFlujoRouter);
+app.use('/api/dominios', dominiosRouter);
+app.use('/api/campos-formulario', camposFormularioRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

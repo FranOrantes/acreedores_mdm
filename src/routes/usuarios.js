@@ -253,7 +253,7 @@ router.post('/', async (req, res) => {
 // Actualizar usuario
 router.patch('/:id', async (req, res) => {
   try {
-    const { nombre, email, username, rolInterno, activo, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId } = req.body;
+    const { nombre, email, username, rolInterno, activo, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId, dominioActualId, esSuperAdmin } = req.body;
     const data = await prisma.usuario.update({
       where: { id: req.params.id },
       data: {
@@ -268,6 +268,8 @@ router.patch('/:id', async (req, res) => {
         ...(employeeNumber !== undefined && { employeeNumber: employeeNumber || null }),
         ...(contrasena !== undefined && { contrasena: contrasena || null }),
         ...(ubicacionId !== undefined && { ubicacionId: ubicacionId || null }),
+        ...(dominioActualId !== undefined && { dominioActualId: dominioActualId || null }),
+        ...(esSuperAdmin !== undefined && { esSuperAdmin }),
       },
     });
     res.json(data);

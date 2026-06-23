@@ -5,7 +5,10 @@ const router = express.Router();
 // Listar grupos
 router.get('/', async (req, res) => {
   try {
+    const where = {};
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.grupoAprobacion.findMany({
+      where,
       orderBy: { nombre: 'asc' },
       include: {
         miembros: {
@@ -74,7 +77,7 @@ router.post('/', async (req, res) => {
     if (!nombre) return res.status(400).json({ error: 'El nombre del grupo es requerido' });
 
     const data = await prisma.grupoAprobacion.create({
-      data: { nombre, descripcion: descripcion || null, roles: roles || '[]' },
+      data: { nombre, descripcion: descripcion || null, roles: roles || '[]', ...(req.dominioId ? { dominioId: req.dominioId } : {}) },
     });
     res.status(201).json(data);
   } catch (e) {

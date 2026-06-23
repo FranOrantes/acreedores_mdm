@@ -306,12 +306,15 @@ router.get('/me', async (req, res) => {
     // Verificar y decodificar el JWT
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Obtener datos actualizados del usuario desde la BD (incluir grupos con roles)
+    // Obtener datos actualizados del usuario desde la BD (incluir grupos con roles + dominios)
     const usuario = await prisma.usuario.findUnique({
       where: { id: decoded.userId },
       include: {
         membresiaGrupos: {
           include: { grupo: { select: { id: true, nombre: true, roles: true, activo: true } } },
+        },
+        dominios: {
+          include: { dominio: { select: { id: true, clave: true, nombre: true, logoUrl: true, activo: true } } },
         },
       },
     });
@@ -330,6 +333,11 @@ router.get('/me', async (req, res) => {
       } catch {}
     });
 
+    // Mapear dominios del usuario
+    const dominiosUsuario = (usuario.dominios || [])
+      .filter((ud) => ud.dominio?.activo)
+      .map((ud) => ({ ...ud.dominio, rol: ud.rol }));
+
     res.json({
       id: usuario.id,
       ssoId: usuario.ssoId,
@@ -344,6 +352,9 @@ router.get('/me', async (req, res) => {
       employeeNumber: usuario.employeeNumber,
       managerId: usuario.managerId,
       ubicacionId: usuario.ubicacionId,
+      dominioActualId: usuario.dominioActualId,
+      esSuperAdmin: usuario.esSuperAdmin,
+      dominios: dominiosUsuario,
     });
   } catch (error) {
     if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {

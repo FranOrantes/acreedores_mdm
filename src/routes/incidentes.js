@@ -27,6 +27,7 @@ router.get('/', async (req, res) => {
     }
 
     if (req.query.estado) where.estado = req.query.estado;
+    if (req.dominioId) where.dominioId = req.dominioId;
 
     const data = await prisma.incidente.findMany({
       where,

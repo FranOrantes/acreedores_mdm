@@ -5,7 +5,10 @@ const router = express.Router();
 // GET /api/tipos-aprobacion — listar todos (con relaciones)
 router.get('/', async (req, res) => {
   try {
+    const where = {};
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.tipoAprobacion.findMany({
+      where,
       include: {
         grupoAsignado: { select: { id: true, nombre: true } },
         aprobadorAsignado: { select: { id: true, nombre: true, email: true } },

@@ -5,7 +5,10 @@ const router = express.Router();
 // Listar ubicaciones
 router.get('/', async (req, res) => {
   try {
+    const where = {};
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.ubicacion.findMany({
+      where,
       orderBy: { nombre: 'asc' },
       include: {
         branchOfficeManager: { select: { id: true, nombre: true, email: true } },
@@ -54,8 +57,10 @@ router.get('/buscar-cp/:cp', async (req, res) => {
 // Listar solo ubicaciones que son sucursales (para cobertura)
 router.get('/sucursales', async (req, res) => {
   try {
+    const where = { activo: true, esSucursal: true };
+    if (req.dominioId) where.dominioId = req.dominioId;
     const data = await prisma.ubicacion.findMany({
-      where: { activo: true, esSucursal: true },
+      where,
       orderBy: { nombre: 'asc' },
       select: { id: true, nombre: true },
     });

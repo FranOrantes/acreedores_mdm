@@ -52,6 +52,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS "CampoFormulario_dominioId_clave_key" ON "Camp
 CREATE INDEX IF NOT EXISTS "CampoFormulario_dominioId_formulario_idx" ON "CampoFormulario"("dominioId", "formulario");
 ALTER TABLE "CampoFormulario" ADD CONSTRAINT "CampoFormulario_dominioId_fkey" FOREIGN KEY ("dominioId") REFERENCES "Dominio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- 3b. Add modulo column to CampoFormulario (in case table was created before this column existed)
+ALTER TABLE "CampoFormulario" ADD COLUMN IF NOT EXISTS "modulo" TEXT NOT NULL DEFAULT 'todos';
+
 -- 4. Add dominioId columns to existing tables (nullable to avoid breaking existing data)
 ALTER TABLE "Solicitud" ADD COLUMN IF NOT EXISTS "dominioId" TEXT;
 ALTER TABLE "Solicitud" ADD COLUMN IF NOT EXISTS "camposExtra" JSONB;

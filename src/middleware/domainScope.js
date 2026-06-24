@@ -43,6 +43,8 @@ async function domainScope(req, res, next) {
 
     const headerDominio = req.headers['x-dominio-id'];
 
+    req.userId = decoded.userId;
+
     if (usuario.esSuperAdmin && !headerDominio) {
       // Super admin sin header específico → ve todo
       req.dominioId = null;

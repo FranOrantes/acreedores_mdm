@@ -1,5 +1,6 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
+const { enviarPushAUsuario } = require('../lib/pushNotifications');
 const router = express.Router();
 
 // GET /api/actividades?entidadTipo=solicitud&entidadId=xxx
@@ -37,6 +38,27 @@ router.post('/', async (req, res) => {
         autorEmail: autorEmail || null,
       },
     });
+
+    // Push: notificar al solicitante cuando alguien comenta en su solicitud
+    if (entidadTipo === 'solicitud') {
+      try {
+        const solicitud = await prisma.solicitud.findUnique({ where: { id: entidadId }, select: { solicitanteNombre: true, folio: true } });
+        if (solicitud?.solicitanteNombre) {
+          const solicitante = await prisma.usuario.findFirst({ where: { nombre: { contains: solicitud.solicitanteNombre } }, select: { id: true } });
+          if (solicitante && solicitante.id !== req.userId) {
+            enviarPushAUsuario(solicitante.id, {
+              title: `Nuevo comentario en ${solicitud.folio}`,
+              body: contenido.substring(0, 100),
+              url: `/solicitudes/${entidadId}`,
+              tag: `comentario-${entidadId}`,
+            });
+          }
+        }
+      } catch (pushErr) {
+        console.error('[Push] Error en comentario:', pushErr.message);
+      }
+    }
+
     res.status(201).json(actividad);
   } catch (e) {
     res.status(400).json({ error: e.message });

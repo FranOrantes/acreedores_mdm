@@ -3,6 +3,7 @@ const axios = require('axios');
 const prisma = require('../lib/prisma');
 const { registrarActividad } = require('../lib/auditoria');
 const { notificarN8N } = require('../lib/n8n');
+const { enviarPushAUsuario, enviarPushAUsuarios } = require('../lib/pushNotifications');
 const router = express.Router();
 
 // Listar todas las aprobaciones (con filtros opcionales)
@@ -130,6 +131,17 @@ router.post('/', async (req, res) => {
         )
       );
 
+      // Push: notificar a cada miembro del grupo
+      enviarPushAUsuarios(
+        miembros.map((m) => m.usuarioId),
+        {
+          title: 'Nueva aprobación pendiente',
+          body: descripcionCorta || 'Tienes una nueva aprobación por revisar',
+          url: `/aprobaciones/${aprobaciones[0]?.id}`,
+          tag: `aprobacion-${solicitudId}`,
+        }
+      );
+
       return res.status(201).json(aprobaciones);
     }
 
@@ -146,6 +158,14 @@ router.post('/', async (req, res) => {
         aprobador: { select: { id: true, nombre: true, email: true } },
         solicitud: { select: { id: true, folio: true } },
       },
+    });
+
+    // Push: notificar al aprobador individual
+    enviarPushAUsuario(aprobadorId, {
+      title: 'Nueva aprobación pendiente',
+      body: descripcionCorta || 'Tienes una nueva aprobación por revisar',
+      url: `/aprobaciones/${data.id}`,
+      tag: `aprobacion-${solicitudId}`,
     });
 
     res.status(201).json(data);
@@ -205,6 +225,19 @@ router.post('/:id/aprobar', async (req, res) => {
       `La aprobación de ${aprobacion.grupoAsignadoId ? 'grupo' : 'usuario'} ha sido aprobada por ${aprobador?.nombre || aprobador?.email || 'el aprobador'}${comentario ? '. Comentario: ' + comentario : ''}.`,
       { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
     );
+
+    // Push: notificar al creador de la solicitud que fue aprobada
+    const solicitudAprobada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true } });
+    // Buscar usuario solicitante por nombre (best effort)
+    const solicitanteUser = await prisma.usuario.findFirst({ where: { nombre: { contains: solicitudAprobada?.solicitanteNombre || '' } }, select: { id: true } });
+    if (solicitanteUser) {
+      enviarPushAUsuario(solicitanteUser.id, {
+        title: 'Solicitud aprobada',
+        body: `Tu solicitud ${solicitudAprobada?.folio || ''} ha sido aprobada`,
+        url: `/solicitudes/${aprobacion.solicitudId}`,
+        tag: `solicitud-${aprobacion.solicitudId}`,
+      });
+    }
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('aprobacionAprobada', {
@@ -273,6 +306,18 @@ router.post('/:id/rechazar', async (req, res) => {
       `La aprobación de ${aprobacion.grupoAsignadoId ? 'grupo' : 'usuario'} ha sido rechazada por ${aprobador?.nombre || aprobador?.email || 'el aprobador'}${comentario ? '. Comentario: ' + comentario : ''}.`,
       { autorNombre: aprobador?.nombre, autorEmail: aprobador?.email }
     );
+
+    // Push: notificar al creador de la solicitud que fue rechazada
+    const solicitudRechazada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true } });
+    const solicitanteUserR = await prisma.usuario.findFirst({ where: { nombre: { contains: solicitudRechazada?.solicitanteNombre || '' } }, select: { id: true } });
+    if (solicitanteUserR) {
+      enviarPushAUsuario(solicitanteUserR.id, {
+        title: 'Solicitud rechazada',
+        body: `Tu solicitud ${solicitudRechazada?.folio || ''} ha sido rechazada${comentario ? ': ' + comentario : ''}`,
+        url: `/solicitudes/${aprobacion.solicitudId}`,
+        tag: `solicitud-${aprobacion.solicitudId}`,
+      });
+    }
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('aprobacionRechazada', {

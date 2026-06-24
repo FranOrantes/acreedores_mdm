@@ -430,6 +430,7 @@ model Usuario {
   incidentesAsignados      Incidente[]      @relation("IncidenteAsignado")
   tareasFlujoMiembro       TareaFlujo[]     @relation("TareaFlujoMiembro")
   tareasFlujoAprobador     TareaFlujo[]     @relation("TareaFlujoAprobador")
+  pushSubscriptions        PushSubscription[]
 }
 
 // --- Ubicaciones ---
@@ -694,4 +695,19 @@ model ReglaFormularioCampo {
   @@index([modulo])
   @@index([dominioId])
   @@map("ReglaVisibilidadCampo")
+}
+
+// --- Push Notifications (PWA) ---
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  activo    Boolean  @default(true)
+  creadoEn  DateTime @default(now())
+
+  @@index([usuarioId])
 }

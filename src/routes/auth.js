@@ -404,6 +404,142 @@ router.patch('/profile', async (req, res) => {
 });
 
 // ──────────────────────────────────────────────────
+// POST /api/auth/impersonate
+// Permite a admin/owner iniciar sesión como otro usuario
+// ──────────────────────────────────────────────────
+router.post('/impersonate', async (req, res) => {
+  try {
+    const token = req.cookies?.auth_token;
+    if (!token) return res.status(401).json({ error: 'No autenticado' });
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Verificar que el usuario actual es admin u owner
+    const adminUser = await prisma.usuario.findUnique({
+      where: { id: decoded.userId },
+      select: { id: true, rolInterno: true, esSuperAdmin: true },
+    });
+
+    if (!adminUser) return res.status(401).json({ error: 'Usuario no encontrado' });
+
+    const isAllowed = adminUser.rolInterno === 'admin' || adminUser.esSuperAdmin;
+    if (!isAllowed) {
+      return res.status(403).json({ error: 'No tienes permisos para impersonar usuarios' });
+    }
+
+    // Buscar usuario objetivo por email o ID
+    const { usuario: targetInput } = req.body;
+    if (!targetInput) {
+      return res.status(400).json({ error: 'Debes especificar el usuario (email o id)' });
+    }
+
+    const targetUser = await prisma.usuario.findFirst({
+      where: {
+        OR: [
+          { email: targetInput },
+          { id: targetInput },
+          { username: targetInput },
+        ],
+      },
+    });
+
+    if (!targetUser) {
+      return res.status(404).json({ error: 'Usuario objetivo no encontrado' });
+    }
+
+    if (!targetUser.activo) {
+      return res.status(400).json({ error: 'El usuario objetivo está desactivado' });
+    }
+
+    // Guardar el token original del admin en una cookie separada
+    res.cookie('auth_token_original', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    // Generar JWT como el usuario objetivo
+    const impersonateToken = generarToken(targetUser);
+
+    res.cookie('auth_token', impersonateToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    // Enviar cookie non-httpOnly para que el frontend sepa que está impersonando
+    res.cookie('impersonating', JSON.stringify({
+      targetId: targetUser.id,
+      targetNombre: targetUser.nombre || targetUser.email,
+      adminId: adminUser.id,
+    }), {
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    console.log(`[Auth] Impersonación: ${decoded.email} → ${targetUser.email}`);
+    res.json({
+      ok: true,
+      impersonating: {
+        id: targetUser.id,
+        email: targetUser.email,
+        nombre: targetUser.nombre,
+      },
+    });
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token inválido o expirado' });
+    }
+    console.error('[Auth] Error en impersonate:', error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+// ──────────────────────────────────────────────────
+// POST /api/auth/stop-impersonate
+// Restaura la sesión original del admin
+// ──────────────────────────────────────────────────
+router.post('/stop-impersonate', (req, res) => {
+  try {
+    const originalToken = req.cookies?.auth_token_original;
+    if (!originalToken) {
+      return res.status(400).json({ error: 'No hay sesión de impersonación activa' });
+    }
+
+    // Verificar que el token original es válido
+    jwt.verify(originalToken, JWT_SECRET);
+
+    // Restaurar el token original
+    res.cookie('auth_token', originalToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 8 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    // Limpiar cookies de impersonación
+    res.clearCookie('auth_token_original', { httpOnly: true, secure: false, sameSite: 'lax', path: '/' });
+    res.clearCookie('impersonating', { httpOnly: false, secure: false, sameSite: 'lax', path: '/' });
+
+    console.log('[Auth] Impersonación finalizada');
+    res.json({ ok: true, message: 'Sesión restaurada' });
+  } catch (error) {
+    // Si el token original expiró, limpiar todo
+    res.clearCookie('auth_token_original', { httpOnly: true, secure: false, sameSite: 'lax', path: '/' });
+    res.clearCookie('impersonating', { httpOnly: false, secure: false, sameSite: 'lax', path: '/' });
+    return res.status(401).json({ error: 'Token original expirado. Inicia sesión de nuevo.' });
+  }
+});
+
+// ──────────────────────────────────────────────────
 // POST /api/auth/logout
 // Cierra la sesión eliminando la cookie
 // ──────────────────────────────────────────────────
@@ -414,6 +550,8 @@ router.post('/logout', (req, res) => {
     sameSite: 'lax',
     path: '/',
   });
+  res.clearCookie('auth_token_original', { httpOnly: true, secure: false, sameSite: 'lax', path: '/' });
+  res.clearCookie('impersonating', { httpOnly: false, secure: false, sameSite: 'lax', path: '/' });
   console.log('[Auth] Sesión cerrada');
   res.json({ ok: true, message: 'Sesión cerrada correctamente' });
 });

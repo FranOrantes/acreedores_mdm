@@ -711,3 +711,50 @@ model PushSubscription {
 
   @@index([usuarioId])
 }
+
+// --- Logs del Sistema ---
+
+model LogSistema {
+  id          String   @id @default(uuid())
+  tipo        String   // login, impersonacion, sap_respuesta, error, admin_accion
+  accion      String   // descripción corta de la acción
+  detalle     String?  @db.Text // descripción detallada o JSON con datos adicionales
+  nivel       String   @default("info") // info, warn, error
+  usuarioId   String?  // quién ejecutó la acción (puede ser null para eventos del sistema)
+  usuarioEmail String?
+  usuarioNombre String?
+  ipAddress   String?
+  userAgent   String?  @db.Text
+  entidadTipo String?  // solicitud, aprobacion, usuario, etc.
+  entidadId   String?  // ID de la entidad afectada
+  metadata    String?  @db.Text // JSON libre para datos adicionales (ej: respuesta SAP, payload, etc.)
+  creadoEn    DateTime @default(now())
+
+  @@index([tipo])
+  @@index([usuarioId])
+  @@index([creadoEn])
+  @@index([nivel])
+  @@index([entidadTipo, entidadId])
+}
+
+model LogEmail {
+  id            String   @id @default(uuid())
+  asunto        String
+  destinatarios String   @db.Text // JSON array de emails
+  cc            String?  @db.Text // JSON array de emails en copia
+  cco           String?  @db.Text // JSON array de emails en copia oculta
+  bodyHtml      String?  @db.Text // contenido HTML del email
+  bodyTexto     String?  @db.Text // contenido texto plano
+  remitente     String?  // email del remitente
+  estado        String   @default("enviado") // enviado, fallido, pendiente
+  error         String?  @db.Text // mensaje de error si falló
+  solicitudId   String?  // referencia opcional a solicitud relacionada
+  usuarioId     String?  // quién disparó el envío
+  metadata      String?  @db.Text // JSON: templateId, proveedor (smtp/sendgrid), messageId, etc.
+  creadoEn      DateTime @default(now())
+
+  @@index([estado])
+  @@index([solicitudId])
+  @@index([usuarioId])
+  @@index([creadoEn])
+}

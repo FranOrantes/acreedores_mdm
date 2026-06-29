@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const prisma = require('../lib/prisma');
+const { logSistema, reqInfo } = require('../lib/logger');
 const router = express.Router();
 
 // ── Configuración desde variables de entorno ──
@@ -79,11 +80,15 @@ router.post('/login', async (req, res) => {
     }
 
     if (!usuarioDB.contrasena) {
+      logSistema('login', `Login fallido (sin contraseña): ${loginInput}`, { nivel: 'warn', ...reqInfo(req) });
       return res.status(401).json({ error: 'Este usuario no tiene contraseña configurada. Contacte al administrador.' });
     }
 
     // Comparación directa (en producción usar bcrypt)
     if (usuarioDB.contrasena !== contrasena) {
+      logSistema('login', `Login fallido (contraseña incorrecta): ${loginInput}`, {
+        nivel: 'warn', usuarioId: usuarioDB.id, usuarioEmail: usuarioDB.email, ...reqInfo(req),
+      });
       return res.status(401).json({ error: 'Credenciales incorrectas' });
     }
 
@@ -106,6 +111,14 @@ router.post('/login', async (req, res) => {
     });
 
     console.log('[Auth] Login local exitoso:', usuarioDB.email);
+
+    logSistema('login', `Login local: ${usuarioDB.email}`, {
+      usuarioId: usuarioDB.id,
+      usuarioEmail: usuarioDB.email,
+      usuarioNombre: usuarioDB.nombre,
+      ...reqInfo(req),
+    });
+
     res.json({
       ok: true,
       user: {
@@ -285,6 +298,14 @@ router.get('/sso/callback', async (req, res) => {
     });
 
     console.log('[SSO] Login exitoso, redirigiendo al frontend...');
+
+    logSistema('login', `Login SSO: ${usuario.email}`, {
+      usuarioId: usuario.id,
+      usuarioEmail: usuario.email,
+      usuarioNombre: usuario.nombre,
+      ...reqInfo(req),
+    });
+
     res.redirect(`${FRONTEND_URL}/auth/callback?success=true`);
   } catch (error) {
     console.error('[SSO] Error en callback:', error);
@@ -485,6 +506,16 @@ router.post('/impersonate', async (req, res) => {
     });
 
     console.log(`[Auth] Impersonación: ${decoded.email} → ${targetUser.email}`);
+
+    logSistema('impersonacion', `${decoded.email} impersonó a ${targetUser.email}`, {
+      usuarioId: adminUser.id,
+      usuarioEmail: decoded.email,
+      entidadTipo: 'usuario',
+      entidadId: targetUser.id,
+      ...reqInfo(req),
+      metadata: { adminId: adminUser.id, targetId: targetUser.id, targetEmail: targetUser.email },
+    });
+
     res.json({
       ok: true,
       impersonating: {

@@ -96,7 +96,8 @@ router.get('/descargar/:id', async (req, res) => {
     if (doc.contenidoBase64) {
       const buffer = Buffer.from(doc.contenidoBase64, 'base64');
       res.set('Content-Type', doc.mimeType);
-      res.set('Content-Disposition', `attachment; filename="${doc.nombreArchivo}"`);
+      const disposition = req.query.preview === '1' ? 'inline' : 'attachment';
+      res.set('Content-Disposition', `${disposition}; filename="${doc.nombreArchivo}"`);
       return res.send(buffer);
     }
 

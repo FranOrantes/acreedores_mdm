@@ -281,6 +281,7 @@ router.post('/:id/reenviar-sap', async (req, res) => {
 
     // Notificar a n8n para reintentar
     notificarN8N('solicitudCreada', {
+      modulo: solicitud.modulo || 'acreedores',
       solicitudId: solicitud.id,
       folio: solicitud.folio,
       estado: 'en_revision',

@@ -227,7 +227,7 @@ router.post('/:id/aprobar', async (req, res) => {
     );
 
     // Push: notificar al creador de la solicitud que fue aprobada
-    const solicitudAprobada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true } });
+    const solicitudAprobada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true, modulo: true } });
     // Buscar usuario solicitante por nombre (best effort)
     const solicitanteUser = await prisma.usuario.findFirst({ where: { nombre: { contains: solicitudAprobada?.solicitanteNombre || '' } }, select: { id: true } });
     if (solicitanteUser) {
@@ -241,8 +241,10 @@ router.post('/:id/aprobar', async (req, res) => {
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('aprobacionAprobada', {
+      modulo: solicitudAprobada?.modulo || 'acreedores',
       aprobacionId: aprobacion.id,
       solicitudId: aprobacion.solicitudId,
+      folio: solicitudAprobada?.folio || null,
       estado: 'aprobado',
       aprobadorNombre: aprobador?.nombre,
       aprobadorEmail: aprobador?.email,
@@ -308,7 +310,7 @@ router.post('/:id/rechazar', async (req, res) => {
     );
 
     // Push: notificar al creador de la solicitud que fue rechazada
-    const solicitudRechazada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true } });
+    const solicitudRechazada = await prisma.solicitud.findUnique({ where: { id: aprobacion.solicitudId }, select: { folio: true, solicitanteNombre: true, modulo: true } });
     const solicitanteUserR = await prisma.usuario.findFirst({ where: { nombre: { contains: solicitudRechazada?.solicitanteNombre || '' } }, select: { id: true } });
     if (solicitanteUserR) {
       enviarPushAUsuario(solicitanteUserR.id, {
@@ -321,8 +323,10 @@ router.post('/:id/rechazar', async (req, res) => {
 
     // ── Notificar a n8n (fire-and-forget) ──
     notificarN8N('aprobacionRechazada', {
+      modulo: solicitudRechazada?.modulo || 'acreedores',
       aprobacionId: aprobacion.id,
       solicitudId: aprobacion.solicitudId,
+      folio: solicitudRechazada?.folio || null,
       estado: 'rechazado',
       aprobadorNombre: aprobador?.nombre,
       aprobadorEmail: aprobador?.email,

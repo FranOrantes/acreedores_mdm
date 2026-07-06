@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const prisma = require('../lib/prisma');
+const { parsearIntencion, ejecutarReporte } = require('../lib/reportEngine');
 const router = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -314,6 +315,26 @@ router.get('/prediccion-aprobacion/:solicitudId', async (req, res) => {
     });
   } catch (error) {
     console.error('[IA/Prediccion] Error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ══════════════════════════════════════════════════
+// POST /api/ia/reporte
+// Generador de reportes por lenguaje natural
+// ══════════════════════════════════════════════════
+router.post('/reporte', async (req, res) => {
+  try {
+    const { mensaje } = req.body;
+    if (!mensaje) return res.status(400).json({ error: 'mensaje es requerido' });
+
+    const intencion = parsearIntencion(mensaje);
+    intencion._rawMsg = mensaje; // para detecciones adicionales en el engine
+    const resultado = await ejecutarReporte(intencion, req.dominioId);
+
+    res.json({ ...resultado, intencion });
+  } catch (error) {
+    console.error('[IA/Reporte] Error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });

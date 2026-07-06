@@ -8,7 +8,8 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 
 
 // ══════════════════════════════════════════════════
 // POST /api/ia/ocr-extract
-// Recibe un documento (PDF/imagen) y retorna campos extraídos
+// Recibe un PDF de Constancia de Situación Fiscal y retorna campos extraídos
+// API: https://concordia.nadro.dev/api/extract_pdf
 // ══════════════════════════════════════════════════
 router.post('/ocr-extract', upload.single('documento'), async (req, res) => {
   try {
@@ -16,64 +17,82 @@ router.post('/ocr-extract', upload.single('documento'), async (req, res) => {
       return res.status(400).json({ error: 'No se recibió ningún archivo' });
     }
 
-    const fileBuffer = req.file.buffer;
-    const mimeType = req.file.mimetype;
-    const base64 = fileBuffer.toString('base64');
+    if (req.file.mimetype !== 'application/pdf') {
+      return res.status(400).json({ error: 'Solo se aceptan archivos PDF' });
+    }
 
-    // ┌──────────────────────────────────────────────────────────────────┐
-    // │  TODO: CONECTAR TU API DE OCR AQUÍ                              │
-    // │                                                                  │
-    // │  Reemplaza el bloque de abajo con la llamada a tu API de OCR.   │
-    // │  Tu API debe recibir el documento y retornar un JSON con los    │
-    // │  campos extraídos.                                              │
-    // │                                                                  │
-    // │  Ejemplo con tu API:                                             │
-    // │                                                                  │
-    // │  const axios = require('axios');                                 │
-    // │  const response = await axios.post('https://TU_API_OCR/extract',│
-    // │    { file: base64, mimeType },                                  │
-    // │    { headers: { 'Authorization': `Bearer ${process.env.OCR_API_KEY}` } } │
-    // │  );                                                              │
-    // │  const datosExtraidos = response.data;                          │
-    // │                                                                  │
-    // │  Luego mapea los campos de tu API al formato esperado:          │
-    // │  const campos = {                                                │
-    // │    rfc: datosExtraidos.rfc,                                      │
-    // │    razonSocial: datosExtraidos.razon_social,                     │
-    // │    tipoPersona: datosExtraidos.tipo_persona,  // 'moral'|'fisica'│
-    // │    nombrePila: datosExtraidos.nombre,                            │
-    // │    apellidoPaterno: datosExtraidos.apellido_paterno,             │
-    // │    apellidoMaterno: datosExtraidos.apellido_materno,             │
-    // │    calle: datosExtraidos.calle,                                  │
-    // │    numeroExterior: datosExtraidos.num_exterior,                  │
-    // │    numeroInterior: datosExtraidos.num_interior,                  │
-    // │    codigoPostal: datosExtraidos.codigo_postal,                   │
-    // │    colonia: datosExtraidos.colonia,                              │
-    // │    municipio: datosExtraidos.municipio,                          │
-    // │    estado_dir: datosExtraidos.estado,                            │
-    // │  };                                                              │
-    // │  const confianza = datosExtraidos.confidence || 0.95;            │
-    // └──────────────────────────────────────────────────────────────────┘
+    const base64 = req.file.buffer.toString('base64');
 
-    // ── DATOS DE DEMOSTRACIÓN (eliminar cuando conectes tu API) ──
-    const campos = {
-      rfc: 'XAXX010101000',
-      razonSocial: 'EMPRESA DEMO S.A. DE C.V.',
-      tipoPersona: 'moral',
-      calle: 'AV. REFORMA',
-      numeroExterior: '222',
-      codigoPostal: '06600',
-      colonia: 'JUÁREZ',
-      municipio: 'CUAUHTÉMOC',
-      estado_dir: 'CIUDAD DE MÉXICO',
-    };
-    const confianza = 0.92;
-    // ── FIN DATOS DE DEMOSTRACIÓN ──
+    // ── Llamar API OCR de Concordia ──
+    const axios = require('axios');
+    const ocrResponse = await axios.post(
+      process.env.OCR_API_URL || 'https://concordia.nadro.dev/api/extract_pdf',
+      {
+        file_type: 'constancia_de_situacion_fiscal_sat',
+        file: base64,
+      },
+      {
+        headers: {
+          'x-api-key': process.env.OCR_API_KEY || 'ocr_cc26584e2a7d478d3aadf71d03b49d95',
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000, // 30s — OCR puede tardar
+      }
+    );
 
+    const data = ocrResponse.data?.constancia_sat;
+    if (!data) {
+      return res.status(422).json({ error: 'No se pudo extraer información del documento. Verifica que sea una Constancia de Situación Fiscal válida.' });
+    }
+
+    // ── Mapear campos de la API al formato del formulario ──
+    const general = data.datosGenerales || {};
+    const domicilio = data.domicilioFiscal || {};
+
+    const tipoPersonaRaw = (general.tipoPersona || '').toLowerCase();
+    const esMoral = tipoPersonaRaw.includes('moral');
+
+    const campos = {};
+
+    // Datos generales
+    if (general.rfc) campos.rfc = general.rfc.trim();
+    campos.tipoPersona = esMoral ? 'moral' : 'fisica';
+    if (esMoral) {
+      if (general.razonSocial) campos.razonSocial = general.razonSocial.trim();
+      if (general.nombreComercial) campos.nombreComercial = general.nombreComercial.trim();
+    } else {
+      if (general.nombres) campos.nombrePila = general.nombres.trim();
+      if (general.apellidoPaterno) campos.apellidoPaterno = general.apellidoPaterno.trim();
+      if (general.apellidoMaterno) campos.apellidoMaterno = general.apellidoMaterno.trim();
+    }
+
+    // Dirección
+    if (domicilio.calle) campos.calle = domicilio.calle.trim();
+    if (domicilio.numeroExterior) campos.numeroExterior = domicilio.numeroExterior.trim();
+    if (domicilio.numeroInterior) campos.numeroInterior = domicilio.numeroInterior.trim();
+    if (domicilio.cp) campos.codigoPostal = domicilio.cp.trim();
+    if (domicilio.colonia) campos.colonia = domicilio.colonia.trim();
+    if (domicilio.municipio) campos.municipio = domicilio.municipio.trim();
+    if (domicilio.entidadFederativa) campos.estado_dir = domicilio.entidadFederativa.trim();
+
+    // Limpiar campos vacíos/null/string "null"
+    Object.keys(campos).forEach((k) => {
+      if (!campos[k] || campos[k] === 'null' || campos[k] === 'NULL' || campos[k] === 'N/A') delete campos[k];
+    });
+
+    const confianza = Object.keys(campos).length >= 5 ? 0.95 : 0.75;
+
+    console.log(`[IA/OCR] Extraídos ${Object.keys(campos).length} campos para RFC: ${campos.rfc || 'N/A'}`);
     res.json({ campos, confianza });
   } catch (error) {
-    console.error('[IA/OCR] Error:', error.message);
-    res.status(500).json({ error: 'Error al procesar el documento' });
+    console.error('[IA/OCR] Error:', error.response?.data || error.message);
+    if (error.response?.status === 401) {
+      return res.status(500).json({ error: 'Error de autenticación con el servicio OCR' });
+    }
+    if (error.response?.status === 422) {
+      return res.status(422).json({ error: 'El documento no pudo ser procesado. Verifica que sea una Constancia de Situación Fiscal legible.' });
+    }
+    res.status(500).json({ error: 'Error al procesar el documento con OCR' });
   }
 });
 

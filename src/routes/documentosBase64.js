@@ -114,4 +114,86 @@ router.get('/descargar/:id', async (req, res) => {
   }
 });
 
+// ══════════════════════════════════════════════════
+// ENDPOINTS PARA n8n (protegidos por webhook secret, no requieren JWT)
+// ══════════════════════════════════════════════════
+
+const N8N_DOCS_SECRET = process.env.N8N_DOCS_SECRET || process.env.LOGS_WEBHOOK_SECRET || '';
+
+function validarN8NSecret(req, res, next) {
+  if (!N8N_DOCS_SECRET) {
+    return res.status(500).json({ error: 'N8N_DOCS_SECRET no configurado en el servidor' });
+  }
+  const secret = req.headers['x-webhook-secret'];
+  if (secret !== N8N_DOCS_SECRET) {
+    return res.status(401).json({ error: 'Webhook secret inválido' });
+  }
+  next();
+}
+
+// GET /api/docs/n8n/solicitud/:solicitudId — Listar docs de una solicitud (metadata sin base64)
+router.get('/n8n/solicitud/:solicitudId', validarN8NSecret, async (req, res) => {
+  try {
+    const docs = await prisma.documento.findMany({
+      where: { solicitudId: req.params.solicitudId },
+      select: {
+        id: true,
+        tipoDocumento: true,
+        nombreArchivo: true,
+        tamanio: true,
+        mimeType: true,
+        creadoEn: true,
+      },
+      orderBy: { creadoEn: 'asc' },
+    });
+    res.json({ solicitudId: req.params.solicitudId, total: docs.length, documentos: docs });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/docs/n8n/archivo/:id — Obtener un documento con su base64 (para n8n)
+router.get('/n8n/archivo/:id', validarN8NSecret, async (req, res) => {
+  try {
+    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
+
+    res.json({
+      id: doc.id,
+      solicitudId: doc.solicitudId,
+      tipoDocumento: doc.tipoDocumento,
+      nombreArchivo: doc.nombreArchivo,
+      mimeType: doc.mimeType,
+      tamanio: doc.tamanio,
+      contenidoBase64: doc.contenidoBase64 || null,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/docs/n8n/solicitud/:solicitudId/todos — Todos los docs con base64 (pesado, usar con cuidado)
+router.get('/n8n/solicitud/:solicitudId/todos', validarN8NSecret, async (req, res) => {
+  try {
+    const docs = await prisma.documento.findMany({
+      where: { solicitudId: req.params.solicitudId },
+      orderBy: { creadoEn: 'asc' },
+    });
+    res.json({
+      solicitudId: req.params.solicitudId,
+      total: docs.length,
+      documentos: docs.map((d) => ({
+        id: d.id,
+        tipoDocumento: d.tipoDocumento,
+        nombreArchivo: d.nombreArchivo,
+        mimeType: d.mimeType,
+        tamanio: d.tamanio,
+        contenidoBase64: d.contenidoBase64 || null,
+      })),
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;

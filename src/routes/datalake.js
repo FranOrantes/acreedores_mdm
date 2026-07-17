@@ -59,17 +59,119 @@ router.get('/acreedores', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════
-// GET /api/datalake/:rfc/documentos
-// Lista documentos y carpetas de un acreedor por RFC
-// Query: ?modulo=acreedores&carpetaId=null (root) o ?carpetaId=xxx
+// RUTAS ESTÁTICAS (deben ir ANTES de las rutas con :rfc)
 // ══════════════════════════════════════════════════
+
+// PUT /api/datalake/carpetas/:id — Renombrar carpeta
+router.put('/carpetas/:id', async (req, res) => {
+  try {
+    const { nombre } = req.body;
+    if (!nombre || !nombre.trim()) {
+      return res.status(400).json({ error: 'El nombre es requerido' });
+    }
+    const carpeta = await prisma.carpetaDataLake.update({
+      where: { id: req.params.id },
+      data: { nombre: nombre.trim() },
+    });
+    res.json(carpeta);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+// DELETE /api/datalake/carpetas/:id — Eliminar carpeta (mueve docs a raíz)
+router.delete('/carpetas/:id', async (req, res) => {
+  try {
+    await prisma.documento.updateMany({
+      where: { carpetaId: req.params.id },
+      data: { carpetaId: null },
+    });
+    await prisma.carpetaDataLake.updateMany({
+      where: { parentId: req.params.id },
+      data: { parentId: null },
+    });
+    await prisma.carpetaDataLake.delete({ where: { id: req.params.id } });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+// PUT /api/datalake/documentos/:id/mover — Mover un documento a una carpeta
+router.put('/documentos/:id/mover', async (req, res) => {
+  try {
+    const { carpetaId } = req.body;
+    const doc = await prisma.documento.update({
+      where: { id: req.params.id },
+      data: { carpetaId: carpetaId || null },
+    });
+    res.json({ ok: true, carpetaId: doc.carpetaId });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+// GET /api/datalake/documentos/:id/preview — Vista previa inline
+router.get('/documentos/:id/preview', async (req, res) => {
+  try {
+    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
+
+    if (doc.contenidoBase64) {
+      const buffer = Buffer.from(doc.contenidoBase64, 'base64');
+      res.set('Content-Type', doc.mimeType);
+      res.set('Content-Disposition', `inline; filename="${doc.nombreArchivo}"`);
+      return res.send(buffer);
+    }
+
+    if (doc.rutaArchivo) {
+      const path = require('path');
+      const filePath = path.join(__dirname, '..', '..', doc.rutaArchivo);
+      return res.sendFile(filePath);
+    }
+
+    res.status(404).json({ error: 'No hay contenido disponible' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/datalake/documentos/:id/descargar — Forzar descarga
+router.get('/documentos/:id/descargar', async (req, res) => {
+  try {
+    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
+
+    if (doc.contenidoBase64) {
+      const buffer = Buffer.from(doc.contenidoBase64, 'base64');
+      res.set('Content-Type', doc.mimeType);
+      res.set('Content-Disposition', `attachment; filename="${doc.nombreArchivo}"`);
+      return res.send(buffer);
+    }
+
+    if (doc.rutaArchivo) {
+      const path = require('path');
+      const filePath = path.join(__dirname, '..', '..', doc.rutaArchivo);
+      return res.download(filePath, doc.nombreArchivo);
+    }
+
+    res.status(404).json({ error: 'No hay contenido disponible' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ══════════════════════════════════════════════════
+// RUTAS PARAMETRIZADAS con :rfc (van AL FINAL)
+// ══════════════════════════════════════════════════
+
+// GET /api/datalake/:rfc/documentos — Lista documentos y carpetas por RFC
 router.get('/:rfc/documentos', async (req, res) => {
   try {
     const { rfc } = req.params;
     const modulo = req.query.modulo || 'acreedores';
-    const carpetaId = req.query.carpetaId || null; // null = root
+    const carpetaId = req.query.carpetaId || null;
 
-    // Obtener carpetas en este nivel
     const carpetas = await prisma.carpetaDataLake.findMany({
       where: { rfc, modulo, parentId: carpetaId },
       include: {
@@ -78,21 +180,17 @@ router.get('/:rfc/documentos', async (req, res) => {
       orderBy: { nombre: 'asc' },
     });
 
-    // Obtener documentos en este nivel (carpeta actual)
-    // Si carpetaId es null, traer docs sin carpeta asignada
     const solicitudes = await prisma.solicitud.findMany({
       where: { rfc, modulo },
       select: { id: true },
     });
     const solicitudIds = solicitudes.map((s) => s.id);
 
-    const whereDoc = {
-      solicitudId: { in: solicitudIds },
-      carpetaId: carpetaId, // null para docs en raíz, o el id de la carpeta
-    };
-
     const documentos = await prisma.documento.findMany({
-      where: whereDoc,
+      where: {
+        solicitudId: { in: solicitudIds },
+        carpetaId: carpetaId,
+      },
       select: {
         id: true,
         tipoDocumento: true,
@@ -106,7 +204,6 @@ router.get('/:rfc/documentos', async (req, res) => {
       orderBy: { creadoEn: 'desc' },
     });
 
-    // Info del acreedor
     const acreedor = await prisma.solicitud.findFirst({
       where: { rfc, modulo },
       select: { rfc: true, razonSocial: true, nombrePila: true, apellidoPaterno: true, tipoPersona: true, bpPartner: true },
@@ -139,10 +236,7 @@ router.get('/:rfc/documentos', async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════
-// GET /api/datalake/:rfc/todos
-// Lista TODOS los documentos de un acreedor (flat, sin importar carpeta)
-// ══════════════════════════════════════════════════
+// GET /api/datalake/:rfc/todos — Todos los documentos de un acreedor (flat)
 router.get('/:rfc/todos', async (req, res) => {
   try {
     const { rfc } = req.params;
@@ -174,10 +268,7 @@ router.get('/:rfc/todos', async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════
-// POST /api/datalake/:rfc/carpetas
-// Crear una carpeta para un acreedor
-// ══════════════════════════════════════════════════
+// POST /api/datalake/:rfc/carpetas — Crear carpeta
 router.post('/:rfc/carpetas', async (req, res) => {
   try {
     const { rfc } = req.params;
@@ -198,126 +289,7 @@ router.post('/:rfc/carpetas', async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════
-// PUT /api/datalake/carpetas/:id
-// Renombrar carpeta
-// ══════════════════════════════════════════════════
-router.put('/carpetas/:id', async (req, res) => {
-  try {
-    const { nombre } = req.body;
-    if (!nombre || !nombre.trim()) {
-      return res.status(400).json({ error: 'El nombre es requerido' });
-    }
-    const carpeta = await prisma.carpetaDataLake.update({
-      where: { id: req.params.id },
-      data: { nombre: nombre.trim() },
-    });
-    res.json(carpeta);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-});
-
-// ══════════════════════════════════════════════════
-// DELETE /api/datalake/carpetas/:id
-// Eliminar carpeta (mueve docs a raíz)
-// ══════════════════════════════════════════════════
-router.delete('/carpetas/:id', async (req, res) => {
-  try {
-    // Mover documentos de esta carpeta a raíz
-    await prisma.documento.updateMany({
-      where: { carpetaId: req.params.id },
-      data: { carpetaId: null },
-    });
-    // Mover subcarpetas a raíz (huérfanas → parentId null)
-    await prisma.carpetaDataLake.updateMany({
-      where: { parentId: req.params.id },
-      data: { parentId: null },
-    });
-    await prisma.carpetaDataLake.delete({ where: { id: req.params.id } });
-    res.json({ ok: true });
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-});
-
-// ══════════════════════════════════════════════════
-// PUT /api/datalake/documentos/:id/mover
-// Mover un documento a una carpeta (o a raíz con carpetaId: null)
-// ══════════════════════════════════════════════════
-router.put('/documentos/:id/mover', async (req, res) => {
-  try {
-    const { carpetaId } = req.body; // null para mover a raíz
-    const doc = await prisma.documento.update({
-      where: { id: req.params.id },
-      data: { carpetaId: carpetaId || null },
-    });
-    res.json({ ok: true, carpetaId: doc.carpetaId });
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-});
-
-// ══════════════════════════════════════════════════
-// GET /api/datalake/documentos/:id/preview
-// Descargar/preview un documento (inline o attachment)
-// ══════════════════════════════════════════════════
-router.get('/documentos/:id/preview', async (req, res) => {
-  try {
-    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
-    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
-
-    if (doc.contenidoBase64) {
-      const buffer = Buffer.from(doc.contenidoBase64, 'base64');
-      res.set('Content-Type', doc.mimeType);
-      res.set('Content-Disposition', `inline; filename="${doc.nombreArchivo}"`);
-      return res.send(buffer);
-    }
-
-    if (doc.rutaArchivo) {
-      const path = require('path');
-      const filePath = path.join(__dirname, '..', '..', doc.rutaArchivo);
-      return res.sendFile(filePath);
-    }
-
-    res.status(404).json({ error: 'No hay contenido disponible' });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ══════════════════════════════════════════════════
-// GET /api/datalake/documentos/:id/descargar
-// Forzar descarga de un documento
-// ══════════════════════════════════════════════════
-router.get('/documentos/:id/descargar', async (req, res) => {
-  try {
-    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
-    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
-
-    if (doc.contenidoBase64) {
-      const buffer = Buffer.from(doc.contenidoBase64, 'base64');
-      res.set('Content-Type', doc.mimeType);
-      res.set('Content-Disposition', `attachment; filename="${doc.nombreArchivo}"`);
-      return res.send(buffer);
-    }
-
-    if (doc.rutaArchivo) {
-      const path = require('path');
-      const filePath = path.join(__dirname, '..', '..', doc.rutaArchivo);
-      return res.download(filePath, doc.nombreArchivo);
-    }
-
-    res.status(404).json({ error: 'No hay contenido disponible' });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ══════════════════════════════════════════════════
-// POST /api/datalake/:rfc/upload
-// Subir un documento directamente al DataLake (se crea una solicitud-placeholder si no existe)
-// ══════════════════════════════════════════════════
+// POST /api/datalake/:rfc/upload — Subir documento al DataLake
 router.post('/:rfc/upload', upload.single('archivo'), async (req, res) => {
   try {
     const { rfc } = req.params;
@@ -327,7 +299,6 @@ router.post('/:rfc/upload', upload.single('archivo'), async (req, res) => {
       return res.status(400).json({ error: 'No se recibió archivo' });
     }
 
-    // Buscar la solicitud más reciente de este acreedor para vincular el doc
     let solicitud = await prisma.solicitud.findFirst({
       where: { rfc, modulo },
       orderBy: { creadoEn: 'desc' },

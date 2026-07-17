@@ -27,6 +27,7 @@ const camposFormularioRouter = require('./routes/camposFormulario');
 const pushRouter = require('./routes/push');
 const logsRouter = require('./routes/logs');
 const iaRouter = require('./routes/ia');
+const datalakeRouter = require('./routes/datalake');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
 
@@ -80,6 +81,7 @@ app.use('/api/campos-formulario', camposFormularioRouter);
 app.use('/api/push', pushRouter);
 app.use('/api/logs', logsRouter);
 app.use('/api/ia', iaRouter);
+app.use('/api/datalake', datalakeRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

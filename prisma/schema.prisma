@@ -319,16 +319,38 @@ model ContactoAcreedor {
 }
 
 model Documento {
-  id              String    @id @default(uuid())
+  id              String           @id @default(uuid())
   solicitudId     String
-  solicitud       Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  solicitud       Solicitud        @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
   tipoDocumento   String // clave del tipo de documento
   nombreArchivo   String
   rutaArchivo     String? // legacy file path (optional)
   contenidoBase64 String? // base64 encoded content
   tamanio         Int // bytes
   mimeType        String
-  creadoEn        DateTime  @default(now())
+  carpetaId       String? // DataLake folder organization
+  carpeta         CarpetaDataLake? @relation(fields: [carpetaId], references: [id], onDelete: SetNull)
+  creadoEn        DateTime         @default(now())
+
+  @@index([carpetaId])
+}
+
+// --- DataLake: Carpetas para organizar documentos por acreedor/proveedor ---
+
+model CarpetaDataLake {
+  id            String            @id @default(uuid())
+  rfc           String
+  modulo        String            @default("acreedores") // "acreedores" | "proveedores"
+  nombre        String
+  parentId      String?
+  parent        CarpetaDataLake?  @relation("CarpetaHijos", fields: [parentId], references: [id], onDelete: SetNull)
+  hijos         CarpetaDataLake[] @relation("CarpetaHijos")
+  documentos    Documento[]
+  creadoEn      DateTime          @default(now())
+  actualizadoEn DateTime          @updatedAt
+
+  @@index([rfc, modulo])
+  @@index([parentId])
 }
 
 model DocumentoTemporal {

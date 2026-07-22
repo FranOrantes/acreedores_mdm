@@ -97,6 +97,33 @@ router.delete('/carpetas/:id', async (req, res) => {
   }
 });
 
+// PUT /api/datalake/documentos/:id/renombrar — Renombrar archivo (solo nombre, conserva extensión)
+router.put('/documentos/:id/renombrar', async (req, res) => {
+  try {
+    const { nombre } = req.body;
+    if (!nombre || !nombre.trim()) {
+      return res.status(400).json({ error: 'El nombre es requerido' });
+    }
+
+    const doc = await prisma.documento.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ error: 'Documento no encontrado' });
+
+    // Conservar la extensión original
+    const lastDot = doc.nombreArchivo.lastIndexOf('.');
+    const ext = lastDot !== -1 ? doc.nombreArchivo.substring(lastDot) : '';
+    const nuevoNombre = nombre.trim() + ext;
+
+    const updated = await prisma.documento.update({
+      where: { id: req.params.id },
+      data: { nombreArchivo: nuevoNombre },
+    });
+
+    res.json({ ok: true, nombreArchivo: updated.nombreArchivo });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // PUT /api/datalake/documentos/:id/mover — Mover un documento a una carpeta
 router.put('/documentos/:id/mover', async (req, res) => {
   try {

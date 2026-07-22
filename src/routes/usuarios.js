@@ -194,6 +194,25 @@ router.post('/carga-masiva/upload', async (req, res) => {
   }
 });
 
+// Buscar usuario por email (devuelve id y email)
+router.get('/buscar-por-email', async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ error: 'El query param "email" es requerido' });
+    }
+    const usuario = await prisma.usuario.findUnique({
+      where: { email },
+      select: { id: true, email: true },
+    });
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(usuario);
+  } catch (e) {
+    console.error('[Usuarios] Error al buscar por email:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Obtener usuario por ID
 router.get('/:id', async (req, res) => {
   try {

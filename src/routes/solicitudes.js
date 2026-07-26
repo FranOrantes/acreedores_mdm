@@ -140,6 +140,14 @@ router.post('/', async (req, res) => {
     });
 
     // ── Notificar a n8n (fire-and-forget) ──
+    // Buscar objeto completo de cuenta asociada por código
+    let cuentaAsociadaObj = null;
+    if (data.cuentaAsociada) {
+      const catCuenta = await prisma.catCuentaAsociada.findFirst({ where: { codigo: data.cuentaAsociada } });
+      if (catCuenta) {
+        cuentaAsociadaObj = { codigo: catCuenta.codigo, nombre: catCuenta.nombre, valorSap: catCuenta.valorSap || '' };
+      }
+    }
     notificarN8N('solicitudCreada', {
       modulo: data.modulo,
       dominioId: data.dominioId || null,
@@ -152,6 +160,7 @@ router.post('/', async (req, res) => {
       razonSocial: data.razonSocial,
       grupo_cuentas: data.grupoCuentas?.clave || '',
       tipo_acreedor: data.tipoAcreedor?.clave || '',
+      cuenta_asociada: cuentaAsociadaObj || { codigo: data.cuentaAsociada || '', nombre: '', valorSap: '' },
     });
 
     res.status(201).json(data);
@@ -279,6 +288,14 @@ router.post('/:id/reenviar-sap', async (req, res) => {
       }
     );
 
+    // Buscar objeto completo de cuenta asociada por código
+    let cuentaAsociadaObjReenvio = null;
+    if (solicitud.cuentaAsociada) {
+      const catCuenta = await prisma.catCuentaAsociada.findFirst({ where: { codigo: solicitud.cuentaAsociada } });
+      if (catCuenta) {
+        cuentaAsociadaObjReenvio = { codigo: catCuenta.codigo, nombre: catCuenta.nombre, valorSap: catCuenta.valorSap || '' };
+      }
+    }
     // Notificar a n8n para reintentar
     notificarN8N('solicitudCreada', {
       modulo: solicitud.modulo || 'acreedores',
@@ -290,6 +307,7 @@ router.post('/:id/reenviar-sap', async (req, res) => {
       razonSocial: solicitud.razonSocial,
       grupo_cuentas: solicitud.grupoCuentas?.clave || '',
       tipo_acreedor: solicitud.tipoAcreedor?.clave || '',
+      cuenta_asociada: cuentaAsociadaObjReenvio || { codigo: solicitud.cuentaAsociada || '', nombre: '', valorSap: '' },
       reenvio: true,
     });
 

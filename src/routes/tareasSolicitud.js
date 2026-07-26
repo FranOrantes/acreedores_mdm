@@ -108,6 +108,48 @@ router.put('/:solicitudId', async (req, res) => {
   }
 });
 
+// Actualizar tarea por solicitudId + titulo (para nodos compartidos en n8n)
+// PATCH /api/tareas-solicitud/:solicitudId/por-titulo
+// Body: { titulo, estado?, detalle?, subtexto? }
+router.patch('/:solicitudId/por-titulo', async (req, res) => {
+  try {
+    const { solicitudId } = req.params;
+    const { titulo, estado, detalle, subtexto } = req.body;
+
+    if (!titulo) {
+      return res.status(400).json({ error: 'titulo es requerido' });
+    }
+
+    // Buscar la tarea por solicitudId + titulo
+    const tarea = await prisma.tareaSolicitud.findFirst({
+      where: { solicitudId, titulo },
+    });
+
+    if (!tarea) {
+      return res.status(404).json({ error: `No se encontró tarea con titulo "${titulo}" en solicitud ${solicitudId}` });
+    }
+
+    const data = {};
+    if (estado !== undefined) data.estado = estado;
+    if (detalle !== undefined) data.detalle = detalle;
+    if (subtexto !== undefined) data.subtexto = subtexto;
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: 'No hay campos para actualizar' });
+    }
+
+    const updated = await prisma.tareaSolicitud.update({
+      where: { id: tarea.id },
+      data,
+    });
+
+    res.json(updated);
+  } catch (e) {
+    console.error('[TareasSolicitud] Error en PATCH por-titulo:', e);
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // Eliminar una tarea
 router.delete('/:id', async (req, res) => {
   try {

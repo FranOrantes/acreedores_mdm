@@ -497,7 +497,6 @@ model CatTipoAcreedor {
   nombre           String
   activo           Boolean             @default(true)
   solicitudes      Solicitud[]
-  cuentasAsociadas CatCuentaAsociada[]
 }
 
 model CatGrupoCuentas {
@@ -507,6 +506,7 @@ model CatGrupoCuentas {
   activo           Boolean             @default(true)
   cuentasAsociadas CatCuentaAsociada[]
   solicitudes      Solicitud[]
+  retenciones      CatRetencion[]
 }
 
 model CatCuentaAsociada {
@@ -514,10 +514,7 @@ model CatCuentaAsociada {
   codigo         String
   nombre         String
   valorSap       String?
-  grupoCuentasId String
-  grupoCuentas   CatGrupoCuentas  @relation(fields: [grupoCuentasId], references: [id])
-  tipoAcreedorId String?
-  tipoAcreedor   CatTipoAcreedor? @relation(fields: [tipoAcreedorId], references: [id])
+  gruposCuentas  CatGrupoCuentas[]
   activo         Boolean          @default(true)
   retenciones    CatRetencion[]
 }
@@ -526,6 +523,8 @@ model CatRetencion {
   id                        String            @id @default(uuid())
   cuentaAsociadaId          String
   cuentaAsociada            CatCuentaAsociada @relation(fields: [cuentaAsociadaId], references: [id])
+  grupoCuentasId            String?
+  grupoCuentas              CatGrupoCuentas?  @relation(fields: [grupoCuentasId], references: [id])
   esquemaResico             String?           @db.Text
   tipoRetencion             String?           @db.Text
   indicadorRetencionCuentas String?           @db.Text

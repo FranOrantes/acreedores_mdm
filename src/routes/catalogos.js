@@ -18,16 +18,16 @@ router.get('/grupos-cuentas', async (req, res) => {
 });
 
 router.get('/cuentas-asociadas', async (req, res) => {
-  const { grupoCuentasId, tipoAcreedorId } = req.query;
+  const { grupoCuentasId } = req.query;
   const where = { activo: true };
-  if (grupoCuentasId) where.grupoCuentasId = grupoCuentasId;
-  if (tipoAcreedorId) {
-    where.OR = [
-      { tipoAcreedorId },
-      { tipoAcreedorId: null },
-    ];
+  if (grupoCuentasId) {
+    where.gruposCuentas = { some: { id: grupoCuentasId } };
   }
-  const data = await prisma.catCuentaAsociada.findMany({ where, orderBy: { codigo: 'asc' } });
+  const data = await prisma.catCuentaAsociada.findMany({
+    where,
+    include: { gruposCuentas: true },
+    orderBy: { codigo: 'asc' },
+  });
   res.json(data);
 });
 

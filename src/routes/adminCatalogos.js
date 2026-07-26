@@ -7,8 +7,8 @@ const CATALOGS = {
   sucursales:              { model: 'catSucursal',              fields: ['codigo', 'nombre'],                                         label: 'Sucursales' },
   'tipos-acreedor':        { model: 'catTipoAcreedor',          fields: ['clave', 'nombre'],                                          label: 'Tipos de Acreedor' },
   'grupos-cuentas':        { model: 'catGrupoCuentas',           fields: ['clave', 'nombre'],                                          label: 'Grupos de Cuentas' },
-  'cuentas-asociadas':     { model: 'catCuentaAsociada',         fields: ['codigo', 'nombre', 'valorSap', 'grupoCuentasId', 'tipoAcreedorId'],    label: 'Cuentas Asociadas' },
-  retenciones:               { model: 'catRetencion',              fields: ['cuentaAsociadaId', 'esquemaResico', 'tipoRetencion', 'indicadorRetencionCuentas', 'aplicaFisica', 'aplicaMoral'], label: 'Retenciones', include: { cuentaAsociada: true } },
+  'cuentas-asociadas':     { model: 'catCuentaAsociada',         fields: ['codigo', 'nombre', 'valorSap'],    label: 'Cuentas Asociadas', include: { gruposCuentas: true }, m2m: { gruposCuentasIds: { relation: 'gruposCuentas', field: 'id' } } },
+  retenciones:               { model: 'catRetencion',              fields: ['cuentaAsociadaId', 'grupoCuentasId', 'esquemaResico', 'tipoRetencion', 'indicadorRetencionCuentas', 'aplicaFisica', 'aplicaMoral'], label: 'Retenciones', include: { cuentaAsociada: true, grupoCuentas: true } },
   'condiciones-pago':      { model: 'catCondicionPago',          fields: ['clave', 'nombre'],                                          label: 'Condiciones de Pago' },
   'tipos-documento':       { model: 'catTipoDocumento',          fields: ['clave', 'nombre', 'descripcion', 'obligatorio', 'condicional', 'extensiones', 'maxSizeMb', 'maxArchivos', 'orden', 'icono', 'condiciones'], label: 'Tipos de Documento' },
   'servicios-especiales':  { model: 'catServiciosEspeciales',    fields: ['clave', 'nombre'],                                          label: 'Servicios Especiales' },
@@ -50,7 +50,18 @@ router.post('/:catalog', async (req, res) => {
   try {
     const data = {};
     cfg.fields.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
-    const created = await prisma[cfg.model].create({ data });
+    // Handle M2M relations
+    if (cfg.m2m) {
+      Object.entries(cfg.m2m).forEach(([bodyKey, { relation }]) => {
+        const ids = req.body[bodyKey];
+        if (Array.isArray(ids)) {
+          data[relation] = { connect: ids.map((id) => ({ id })) };
+        }
+      });
+    }
+    const query = { data };
+    if (cfg.include) query.include = cfg.include;
+    const created = await prisma[cfg.model].create(query);
     res.status(201).json(created);
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -64,7 +75,18 @@ router.patch('/:catalog/:id', async (req, res) => {
   try {
     const data = {};
     [...cfg.fields, 'activo'].forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
-    const updated = await prisma[cfg.model].update({ where: { id: req.params.id }, data });
+    // Handle M2M relations
+    if (cfg.m2m) {
+      Object.entries(cfg.m2m).forEach(([bodyKey, { relation }]) => {
+        const ids = req.body[bodyKey];
+        if (Array.isArray(ids)) {
+          data[relation] = { set: ids.map((id) => ({ id })) };
+        }
+      });
+    }
+    const query = { where: { id: req.params.id }, data };
+    if (cfg.include) query.include = cfg.include;
+    const updated = await prisma[cfg.model].update(query);
     res.json(updated);
   } catch (e) {
     res.status(400).json({ error: e.message });

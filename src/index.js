@@ -29,6 +29,7 @@ const logsRouter = require('./routes/logs');
 const iaRouter = require('./routes/ia');
 const datalakeRouter = require('./routes/datalake');
 const clientesTareasRouter = require('./routes/clientes/tareas');
+const clientesAttachmentsRouter = require('./routes/clientes/attachments');
 const materialesRouter = require('./routes/materiales/index');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
@@ -85,6 +86,7 @@ app.use('/api/logs', logsRouter);
 app.use('/api/ia', iaRouter);
 app.use('/api/datalake', datalakeRouter);
 app.use('/api/clientes/tareas', clientesTareasRouter);
+app.use('/api/clientes/attachments', clientesAttachmentsRouter);
 app.use('/api/materiales', materialesRouter);
 
 app.listen(PORT, () => {

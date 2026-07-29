@@ -10,7 +10,18 @@ router.get('/', async (req, res) => {
     res.json(tareas);
   } catch (err) {
     console.error('[Clientes/Tareas] Error fetching tasks:', err.message);
-    res.status(500).json({ error: 'Error al obtener tareas de ServiceNow' });
+    if (err.response) {
+      console.error('[Clientes/Tareas] ServiceNow status:', err.response.status);
+      console.error('[Clientes/Tareas] ServiceNow data:', JSON.stringify(err.response.data).substring(0, 500));
+    }
+    console.error('[Clientes/Tareas] SERVICENOW_BASE_URL:', process.env.SERVICENOW_BASE_URL || '(not set)');
+    console.error('[Clientes/Tareas] SERVICENOW_USER:', process.env.SERVICENOW_USER ? '✓ set' : '✗ NOT set');
+    console.error('[Clientes/Tareas] SERVICENOW_PASSWORD:', process.env.SERVICENOW_PASSWORD ? '✓ set' : '✗ NOT set');
+    res.status(err.response?.status || 500).json({
+      error: 'Error al obtener tareas de ServiceNow',
+      detail: err.message,
+      snowStatus: err.response?.status || null,
+    });
   }
 });
 

@@ -190,6 +190,17 @@ router.patch('/:id', async (req, res) => {
       },
     });
 
+    // Si la solicitud fue cancelada, marcar tareas activas/no_iniciada como cancelado
+    if (updateData.estado === 'cancelado') {
+      await prisma.tareaSolicitud.updateMany({
+        where: {
+          solicitudId: req.params.id,
+          estado: { in: ['activo', 'no_iniciada'] },
+        },
+        data: { estado: 'cancelado', detalle: 'Solicitud cancelada' },
+      });
+    }
+
     // Registrar cambios de campo
     await registrarCambios('solicitud', req.params.id, anterior, data, {
       autorNombre: req.body._autorNombre || anterior.solicitanteNombre,

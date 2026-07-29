@@ -42,6 +42,27 @@ router.patch('/:sysId', async (req, res) => {
   }
 });
 
+// GET /api/clientes/tareas/:sysId/attachments/:attSysId/file — Stream attachment (download/preview)
+router.get('/:sysId/attachments/:attSysId/file', async (req, res) => {
+  try {
+    const { attSysId } = req.params;
+    const { stream, contentType, contentDisposition } = await servicenow.getAttachmentStream(attSysId);
+
+    res.set('Content-Type', contentType);
+    if (contentDisposition) {
+      res.set('Content-Disposition', contentDisposition);
+    }
+
+    stream.pipe(res);
+  } catch (err) {
+    console.error('[Clientes/Attachments] Error downloading:', err.message);
+    if (err.response?.status === 404) {
+      return res.status(404).json({ error: 'Attachment no encontrado' });
+    }
+    res.status(500).json({ error: 'Error al descargar archivo de ServiceNow' });
+  }
+});
+
 // POST /api/clientes/tareas/:sysId/cerrar — Close a task
 router.post('/:sysId/cerrar', async (req, res) => {
   try {

@@ -25,14 +25,24 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/clientes/tareas/:sysId — Get single task detail
+// GET /api/clientes/tareas/:sysId — Get single task detail + variables/campos
 router.get('/:sysId', async (req, res) => {
   try {
-    const tarea = await servicenow.getTareaById(req.params.sysId);
+    const [tarea, detalle] = await Promise.all([
+      servicenow.getTareaById(req.params.sysId),
+      servicenow.getDetalleTarea(req.params.sysId).catch((err) => {
+        console.warn('[Clientes/Tareas] Detalle API failed, continuing without it:', err.message);
+        return {};
+      }),
+    ]);
     if (!tarea) {
       return res.status(404).json({ error: 'Tarea no encontrada' });
     }
-    res.json(tarea);
+    res.json({
+      ...tarea,
+      variables: detalle.variables || {},
+      campos: detalle.campos || {},
+    });
   } catch (err) {
     console.error('[Clientes/Tareas] Error fetching task:', err.message);
     res.status(500).json({ error: 'Error al obtener tarea de ServiceNow' });

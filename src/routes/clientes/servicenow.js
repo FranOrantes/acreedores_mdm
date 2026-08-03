@@ -70,6 +70,13 @@ async function getTareaById(sysId) {
   return { ...tarea, attachments };
 }
 
+// ─── Detalle de tarea (API custom — variables + campos editables) ────────────
+
+async function getDetalleTarea(sysId) {
+  const response = await snowClient.get(`/api/nsadc/checkingclientes/get_detalle_tarea/${sysId}`);
+  return response.data.result || {};
+}
+
 // ─── Update ──────────────────────────────────────────────────────────────────
 
 async function updateTarea(sysId, fields) {
@@ -108,6 +115,7 @@ async function getAttachmentStream(attSysId) {
 module.exports = {
   getTareas,
   getTareaById,
+  getDetalleTarea,
   updateTarea,
   cerrarTarea,
   getAttachmentStream,

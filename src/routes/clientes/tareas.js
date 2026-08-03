@@ -38,10 +38,16 @@ router.get('/:sysId', async (req, res) => {
     if (!tarea) {
       return res.status(404).json({ error: 'Tarea no encontrada' });
     }
+    // Rewrite adjuntos download_link to local proxy URLs
+    const adjuntos = (detalle.adjuntos || []).map((adj, i) => ({
+      ...adj,
+      download_url: `/api/clientes/tareas/${req.params.sysId}/adjuntos/${i}/file`,
+    }));
+
     res.json({
       ...tarea,
       tabs: detalle.tabs || [],
-      adjuntos: detalle.adjuntos || [],
+      adjuntos,
     });
   } catch (err) {
     console.error('[Clientes/Tareas] Error fetching task:', err.message);
@@ -60,6 +66,34 @@ router.patch('/:sysId', async (req, res) => {
   } catch (err) {
     console.error('[Clientes/Tareas] Error updating task:', err.message);
     res.status(500).json({ error: 'Error al actualizar tarea en ServiceNow' });
+  }
+});
+
+// GET /api/clientes/tareas/:sysId/adjuntos/:idx/file — Proxy download for custom API adjuntos
+router.get('/:sysId/adjuntos/:idx/file', async (req, res) => {
+  try {
+    const { sysId, idx } = req.params;
+    const detalle = await servicenow.getDetalleTarea(sysId);
+    const adjuntos = detalle.adjuntos || [];
+    const adjunto = adjuntos[parseInt(idx, 10)];
+
+    if (!adjunto || !adjunto.download_link) {
+      return res.status(404).json({ error: 'Adjunto no encontrado' });
+    }
+
+    const { stream, contentType, contentDisposition } = await servicenow.proxyDownload(adjunto.download_link);
+
+    res.set('Content-Type', contentType);
+    if (contentDisposition) {
+      res.set('Content-Disposition', contentDisposition);
+    } else {
+      res.set('Content-Disposition', `inline; filename="${adjunto.filename || 'archivo'}"`);
+    }
+
+    stream.pipe(res);
+  } catch (err) {
+    console.error('[Clientes/Adjuntos] Error downloading:', err.message);
+    res.status(500).json({ error: 'Error al descargar adjunto de ServiceNow' });
   }
 });
 

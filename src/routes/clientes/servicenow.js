@@ -112,6 +112,20 @@ async function getAttachmentStream(attSysId) {
   };
 }
 
+// ─── Proxy genérico para download_link de ServiceNow ─────────────────────────
+
+async function proxyDownload(fullUrl) {
+  const response = await axios.get(fullUrl, {
+    auth: { username: SERVICENOW_USER, password: SERVICENOW_PASSWORD },
+    responseType: 'stream',
+  });
+  return {
+    stream: response.data,
+    contentType: response.headers['content-type'] || 'application/octet-stream',
+    contentDisposition: response.headers['content-disposition'] || null,
+  };
+}
+
 module.exports = {
   getTareas,
   getTareaById,
@@ -119,4 +133,5 @@ module.exports = {
   updateTarea,
   cerrarTarea,
   getAttachmentStream,
+  proxyDownload,
 };

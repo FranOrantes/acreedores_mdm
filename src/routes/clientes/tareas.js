@@ -40,8 +40,8 @@ router.get('/:sysId', async (req, res) => {
     }
     res.json({
       ...tarea,
-      variables: detalle.variables || {},
-      campos: detalle.campos || {},
+      tabs: detalle.tabs || [],
+      adjuntos: detalle.adjuntos || [],
     });
   } catch (err) {
     console.error('[Clientes/Tareas] Error fetching task:', err.message);

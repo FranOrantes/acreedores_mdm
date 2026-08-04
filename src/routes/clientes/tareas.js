@@ -47,6 +47,7 @@ router.get('/:sysId', async (req, res) => {
     res.json({
       ...tarea,
       tabs: detalle.tabs || [],
+      campos: detalle.campos || [],
       adjuntos,
     });
   } catch (err) {

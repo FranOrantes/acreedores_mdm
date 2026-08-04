@@ -298,6 +298,7 @@ model TareaSolicitud {
   detalle       String? // Ej: "Enviada el 21 may", "Pendiente"
   subtexto      String? // Ej: "Folio asignado: SOL-2026-0029"
   orden         Int       @default(0)
+  completadoEn  DateTime? // Se fija cuando estado pasa a "completado"
   creadoEn      DateTime  @default(now())
   actualizadoEn DateTime  @updatedAt
 

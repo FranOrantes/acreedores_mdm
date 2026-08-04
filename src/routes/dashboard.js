@@ -37,20 +37,20 @@ router.get('/metricas', async (req, res) => {
     const volumenMensual = Object.values(porMes).sort((a, b) => a.mes.localeCompare(b.mes));
 
     // ── 3. Tiempo promedio total (creación solicitud → última tarea completada) ──
-    // Incluye cualquier solicitud que tenga al menos una tarea completada
+    // Usa completadoEn de la última tarea marcada como completado
     const solicitudesConTareas = await prisma.solicitud.findMany({
       where: {
         modulo,
-        tareas: { some: { estado: 'completado' } },
+        tareas: { some: { estado: 'completado', completadoEn: { not: null } } },
       },
       select: {
         id: true,
         creadoEn: true,
         tareas: {
-          where: { estado: 'completado' },
-          orderBy: { creadoEn: 'desc' },
+          where: { estado: 'completado', completadoEn: { not: null } },
+          orderBy: { completadoEn: 'desc' },
           take: 1,
-          select: { creadoEn: true },
+          select: { completadoEn: true },
         },
       },
     });
@@ -58,8 +58,8 @@ router.get('/metricas', async (req, res) => {
     let totalDias = 0;
     let countConTiempo = 0;
     solicitudesConTareas.forEach((s) => {
-      if (s.tareas.length > 0) {
-        const diff = s.tareas[0].creadoEn.getTime() - s.creadoEn.getTime();
+      if (s.tareas.length > 0 && s.tareas[0].completadoEn) {
+        const diff = s.tareas[0].completadoEn.getTime() - s.creadoEn.getTime();
         if (diff > 0) {
           totalDias += diff / (1000 * 60 * 60 * 24);
           countConTiempo++;
@@ -69,19 +69,21 @@ router.get('/metricas', async (req, res) => {
     const tiempoPromedioTotal = countConTiempo > 0 ? +(totalDias / countConTiempo).toFixed(1) : null;
 
     // ── 4. Tiempo promedio por etapa ──
-    // Calcula el tiempo entre etapas consecutivas por solicitud:
-    // Para cada tarea completada, el tiempo = su creadoEn - creadoEn de la tarea anterior (o solicitud.creadoEn si es la primera)
+    // Para cada solicitud con tareas completadas (que tengan completadoEn),
+    // ordena por completadoEn y calcula el delta entre etapas consecutivas.
+    // Primera etapa: completadoEn - solicitud.creadoEn
+    // Siguientes: completadoEn actual - completadoEn anterior
     const solicitudesParaEtapas = await prisma.solicitud.findMany({
       where: {
         modulo,
-        tareas: { some: { estado: 'completado' } },
+        tareas: { some: { estado: 'completado', completadoEn: { not: null } } },
       },
       select: {
         creadoEn: true,
         tareas: {
-          where: { estado: 'completado' },
+          where: { estado: 'completado', completadoEn: { not: null } },
           orderBy: { orden: 'asc' },
-          select: { titulo: true, creadoEn: true, orden: true },
+          select: { titulo: true, completadoEn: true, orden: true },
         },
       },
     });
@@ -90,8 +92,8 @@ router.get('/metricas', async (req, res) => {
     solicitudesParaEtapas.forEach((sol) => {
       const tareas = sol.tareas;
       tareas.forEach((t, idx) => {
-        const prevTime = idx === 0 ? sol.creadoEn : tareas[idx - 1].creadoEn;
-        const diffHoras = (t.creadoEn.getTime() - prevTime.getTime()) / (1000 * 60 * 60);
+        const prevTime = idx === 0 ? sol.creadoEn : tareas[idx - 1].completadoEn;
+        const diffHoras = (t.completadoEn.getTime() - prevTime.getTime()) / (1000 * 60 * 60);
         if (diffHoras >= 0) {
           if (!etapaAcc[t.titulo]) etapaAcc[t.titulo] = { titulo: t.titulo, totalHoras: 0, count: 0 };
           etapaAcc[t.titulo].totalHoras += diffHoras;

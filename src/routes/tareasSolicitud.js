@@ -26,14 +26,16 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'solicitudId y titulo son requeridos' });
     }
 
+    const finalEstado = estado || 'pendiente';
     const tarea = await prisma.tareaSolicitud.create({
       data: {
         solicitudId,
         titulo,
-        estado: estado || 'pendiente',
+        estado: finalEstado,
         detalle: detalle || null,
         subtexto: subtexto || null,
         orden: orden ?? 0,
+        completadoEn: finalEstado === 'completado' ? new Date() : null,
       },
     });
 
@@ -55,6 +57,10 @@ router.patch('/:id', async (req, res) => {
     if (subtexto !== undefined) data.subtexto = subtexto;
     if (titulo !== undefined) data.titulo = titulo;
     if (orden !== undefined) data.orden = orden;
+
+    // Fijar completadoEn al marcar como completado
+    if (estado === 'completado') data.completadoEn = new Date();
+    else if (estado && estado !== 'completado') data.completadoEn = null;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'No hay campos para actualizar' });
@@ -83,22 +89,42 @@ router.put('/:solicitudId', async (req, res) => {
       return res.status(400).json({ error: 'tareas debe ser un array' });
     }
 
+    // Preservar completadoEn de tareas ya completadas antes de recrear
+    const existentes = await prisma.tareaSolicitud.findMany({
+      where: { solicitudId },
+      select: { titulo: true, completadoEn: true, estado: true },
+    });
+    const completadoMap = {};
+    existentes.forEach((e) => {
+      if (e.estado === 'completado' && e.completadoEn) {
+        completadoMap[e.titulo] = e.completadoEn;
+      }
+    });
+
     // Eliminar tareas existentes y recrear (reemplazo total)
     await prisma.tareaSolicitud.deleteMany({ where: { solicitudId } });
 
+    const ahora = new Date();
     const created = await prisma.$transaction(
-      tareas.map((t, idx) =>
-        prisma.tareaSolicitud.create({
+      tareas.map((t, idx) => {
+        const est = t.estado || 'pendiente';
+        // Usar completadoEn previo si existía, o ahora si es nuevo completado
+        let completadoEn = null;
+        if (est === 'completado') {
+          completadoEn = completadoMap[t.titulo] || ahora;
+        }
+        return prisma.tareaSolicitud.create({
           data: {
             solicitudId,
             titulo: t.titulo,
-            estado: t.estado || 'pendiente',
+            estado: est,
             detalle: t.detalle || null,
             subtexto: t.subtexto || null,
             orden: t.orden ?? idx,
+            completadoEn,
           },
-        })
-      )
+        });
+      })
     );
 
     res.json(created);
@@ -133,6 +159,10 @@ router.patch('/:solicitudId/por-titulo', async (req, res) => {
     if (estado !== undefined) data.estado = estado;
     if (detalle !== undefined) data.detalle = detalle;
     if (subtexto !== undefined) data.subtexto = subtexto;
+
+    // Fijar completadoEn al marcar como completado
+    if (estado === 'completado') data.completadoEn = new Date();
+    else if (estado && estado !== 'completado') data.completadoEn = null;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'No hay campos para actualizar' });

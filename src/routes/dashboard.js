@@ -36,20 +36,21 @@ router.get('/metricas', async (req, res) => {
     });
     const volumenMensual = Object.values(porMes).sort((a, b) => a.mes.localeCompare(b.mes));
 
-    // ── 3. Tiempo promedio total (creación → última tarea completada) ──
+    // ── 3. Tiempo promedio total (creación solicitud → última tarea completada) ──
+    // Incluye cualquier solicitud que tenga al menos una tarea completada
     const solicitudesConTareas = await prisma.solicitud.findMany({
       where: {
         modulo,
-        estado: { in: ['aprobada', 'registrado'] },
+        tareas: { some: { estado: 'completado' } },
       },
       select: {
         id: true,
         creadoEn: true,
         tareas: {
           where: { estado: 'completado' },
-          orderBy: { actualizadoEn: 'desc' },
+          orderBy: { creadoEn: 'desc' },
           take: 1,
-          select: { actualizadoEn: true },
+          select: { creadoEn: true },
         },
       },
     });
@@ -58,33 +59,45 @@ router.get('/metricas', async (req, res) => {
     let countConTiempo = 0;
     solicitudesConTareas.forEach((s) => {
       if (s.tareas.length > 0) {
-        const diff = s.tareas[0].actualizadoEn.getTime() - s.creadoEn.getTime();
-        totalDias += diff / (1000 * 60 * 60 * 24);
-        countConTiempo++;
+        const diff = s.tareas[0].creadoEn.getTime() - s.creadoEn.getTime();
+        if (diff > 0) {
+          totalDias += diff / (1000 * 60 * 60 * 24);
+          countConTiempo++;
+        }
       }
     });
     const tiempoPromedioTotal = countConTiempo > 0 ? +(totalDias / countConTiempo).toFixed(1) : null;
 
     // ── 4. Tiempo promedio por etapa ──
-    const tareasCompletadas = await prisma.tareaSolicitud.findMany({
+    // Calcula el tiempo entre etapas consecutivas por solicitud:
+    // Para cada tarea completada, el tiempo = su creadoEn - creadoEn de la tarea anterior (o solicitud.creadoEn si es la primera)
+    const solicitudesParaEtapas = await prisma.solicitud.findMany({
       where: {
-        estado: 'completado',
-        solicitud: { modulo },
+        modulo,
+        tareas: { some: { estado: 'completado' } },
       },
       select: {
-        titulo: true,
         creadoEn: true,
-        actualizadoEn: true,
+        tareas: {
+          where: { estado: 'completado' },
+          orderBy: { orden: 'asc' },
+          select: { titulo: true, creadoEn: true, orden: true },
+        },
       },
     });
 
     const etapaAcc = {};
-    tareasCompletadas.forEach((t) => {
-      const key = t.titulo;
-      if (!etapaAcc[key]) etapaAcc[key] = { titulo: key, totalHoras: 0, count: 0 };
-      const diffHoras = (t.actualizadoEn.getTime() - t.creadoEn.getTime()) / (1000 * 60 * 60);
-      etapaAcc[key].totalHoras += diffHoras;
-      etapaAcc[key].count++;
+    solicitudesParaEtapas.forEach((sol) => {
+      const tareas = sol.tareas;
+      tareas.forEach((t, idx) => {
+        const prevTime = idx === 0 ? sol.creadoEn : tareas[idx - 1].creadoEn;
+        const diffHoras = (t.creadoEn.getTime() - prevTime.getTime()) / (1000 * 60 * 60);
+        if (diffHoras >= 0) {
+          if (!etapaAcc[t.titulo]) etapaAcc[t.titulo] = { titulo: t.titulo, totalHoras: 0, count: 0 };
+          etapaAcc[t.titulo].totalHoras += diffHoras;
+          etapaAcc[t.titulo].count++;
+        }
+      });
     });
 
     const tiempoPorEtapa = Object.values(etapaAcc)

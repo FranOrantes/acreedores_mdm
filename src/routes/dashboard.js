@@ -105,8 +105,9 @@ router.get('/metricas', async (req, res) => {
     const tiempoPorEtapa = Object.values(etapaAcc)
       .map((e) => ({
         etapa: e.titulo,
-        promedioHoras: +(e.totalHoras / e.count).toFixed(1),
-        promedioDias: +((e.totalHoras / e.count) / 24).toFixed(1),
+        promedioMinutos: +((e.totalHoras / e.count) * 60).toFixed(1),
+        promedioHoras: +(e.totalHoras / e.count).toFixed(2),
+        promedioDias: +((e.totalHoras / e.count) / 24).toFixed(2),
         cantidad: e.count,
       }))
       .sort((a, b) => b.promedioHoras - a.promedioHoras);

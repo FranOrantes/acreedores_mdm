@@ -707,6 +707,7 @@ model ReglaFormularioCampo {
   accionObligatorio String   @default("no_cambiar") // "requerir", "no_requerir", "no_cambiar"
   accionReadOnly    String   @default("no_cambiar") // "solo_lectura", "editable", "no_cambiar"
   reverseIfFalse    Boolean  @default(false) // si true, aplica la acción inversa cuando NO se cumplen las condiciones
+  script            String?  @db.Text // modo avanzado: JS client-side con API { campo, form, setVisible, setRequired, setReadOnly, setValue, callScriptInclude }
   formulario        String   @default("alta") // "alta", "actualizacion", "ambos"
   modulo            String   @default("acreedores") // "acreedores", "proveedores", "ambos"
   dominioId         String?
@@ -802,5 +803,42 @@ model ConfiguracionModulo {
   actualizadoEn  DateTime @updatedAt
 
   @@unique([modulo, clave])
+  @@index([modulo])
+}
+
+// --- Script Includes (funciones JS reutilizables, llamables desde Business Rules y Reglas de Formulario) ---
+model ScriptInclude {
+  id            String   @id @default(uuid())
+  nombre        String   @unique // identificador de llamada, ej: "MDM_Utils"
+  descripcion   String?
+  script        String   @db.Text // JS: exporta funciones vía `return { ... }` o `module.exports = { ... }`
+  modulo        String   @default("todos") // "materiales" | "acreedores" | "proveedores" | "todos"
+  activo        Boolean  @default(true)
+  creadoPor     String?
+  actualizadoPor String?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([modulo])
+}
+
+// --- Business Rules (server-side, estilo ServiceNow) ---
+model BusinessRule {
+  id             String   @id @default(uuid())
+  nombre         String
+  descripcion    String?
+  entidad        String   // "solicitud" | "material" | "usuario" | "excel_materiales" | ...
+  evento         String   // "before_create" | "after_create" | "before_update" | "after_update" | "custom"
+  condiciones    String?  @db.Text // JSON array [{campo, operador, valor}]
+  logica         String   @default("AND") // AND | OR
+  script         String?  @db.Text // modo avanzado: JS con contexto { datos, prisma, callScriptInclude, log, resultado }
+  orden          Int      @default(0)
+  activo         Boolean  @default(true)
+  modulo         String   @default("todos")
+  dominioId      String?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+
+  @@index([entidad, evento])
   @@index([modulo])
 }

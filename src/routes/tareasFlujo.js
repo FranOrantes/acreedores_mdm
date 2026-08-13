@@ -7,10 +7,11 @@ const router = express.Router();
 // Listar tareas de flujo (con filtros opcionales)
 router.get('/', async (req, res) => {
   try {
-    const { estado, solicitudId } = req.query;
+    const { estado, solicitudId, modulo } = req.query;
     const where = {};
     if (estado) where.estado = estado;
     if (solicitudId) where.solicitudId = solicitudId;
+    if (modulo) where.solicitud = { modulo };
 
     const data = await prisma.tareaFlujo.findMany({
       where,

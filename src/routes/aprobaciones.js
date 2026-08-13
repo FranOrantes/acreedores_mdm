@@ -9,10 +9,11 @@ const router = express.Router();
 // Listar todas las aprobaciones (con filtros opcionales)
 router.get('/', async (req, res) => {
   try {
-    const { estado, solicitudId } = req.query;
+    const { estado, solicitudId, modulo } = req.query;
     const where = {};
     if (estado) where.estado = estado;
     if (solicitudId) where.solicitudId = solicitudId;
+    if (modulo) where.solicitud = { modulo };
 
     const data = await prisma.aprobacion.findMany({
       where,

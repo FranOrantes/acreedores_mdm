@@ -119,11 +119,17 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
     const reEan = new RegExp(`^\\d{${eanMin || 3},${eanMax || 16}}$`);
 
     const wb = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const ws = wb.Sheets['Info - Correcto'];
+    // Buscar la hoja de datos tolerando variantes (espacios, guiones, acentos, mayúsculas).
+    // Si no existe "Info - Correcto", se usa la primera hoja con datos.
+    const normaliza = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const hojaDatos = wb.SheetNames.find((n) => normaliza(n) === 'infocorrecto')
+      || wb.SheetNames.find((n) => normaliza(n).startsWith('info'))
+      || wb.SheetNames[0];
+    const ws = wb.Sheets[hojaDatos];
     if (!ws) {
       return res.json({
         resultado: 'Error',
-        informacion: 'No se encontro la hoja "Info - Correcto". Usa el layout oficial de Alta (KEY).',
+        informacion: `No se encontro la hoja de datos ("Info - Correcto"). Hojas presentes: ${wb.SheetNames.join(', ')}. Usa el layout oficial de Alta (KEY).`,
         registros: [],
         noRegistros: 0,
       });
@@ -135,7 +141,7 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
       .filter(({ row }) => row.some((c) => !esVacio(c)));
 
     if (filas.length === 0) {
-      return res.json({ resultado: 'Error', informacion: 'El archivo no tiene registros (los datos inician en la fila 5).', registros: [], noRegistros: 0 });
+      return res.json({ resultado: 'Error', informacion: `El archivo no tiene registros (hoja "${hojaDatos}", los datos inician en la fila 5).`, registros: [], noRegistros: 0 });
     }
 
     const errores = [];

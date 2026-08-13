@@ -359,6 +359,10 @@ router.get('/me', async (req, res) => {
       .filter((ud) => ud.dominio?.activo)
       .map((ud) => ({ ...ud.dominio, rol: ud.rol }));
 
+    // Parsear módulos permitidos
+    let modulosPermitidos;
+    try { modulosPermitidos = JSON.parse(usuario.modulosPermitidos || '[]'); } catch { modulosPermitidos = []; }
+
     res.json({
       id: usuario.id,
       ssoId: usuario.ssoId,
@@ -375,6 +379,7 @@ router.get('/me', async (req, res) => {
       ubicacionId: usuario.ubicacionId,
       dominioActualId: usuario.dominioActualId,
       esSuperAdmin: usuario.esSuperAdmin,
+      modulosPermitidos,
       dominios: dominiosUsuario,
     });
   } catch (error) {

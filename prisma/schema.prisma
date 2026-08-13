@@ -429,6 +429,10 @@ model Usuario {
   creadoEn      DateTime  @default(now())
   actualizadoEn DateTime  @updatedAt
 
+  // Módulos a los que tiene acceso (JSON array). Ej: ["acreedores","proveedores"]
+  // Si está vacío o null, se asume acceso a todos.
+  modulosPermitidos String @default("[\"acreedores\",\"proveedores\",\"clientes\",\"materiales\"]")
+
   // Dominio (multi-tenant)
   dominioActualId String? // dominio activo en sesión
   esSuperAdmin    Boolean @default(false)

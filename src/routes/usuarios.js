@@ -237,7 +237,7 @@ router.get('/:id', async (req, res) => {
 // Crear usuario
 router.post('/', async (req, res) => {
   try {
-    const { email, nombre, username, rolInterno, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId } = req.body;
+    const { email, nombre, username, rolInterno, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId, modulosPermitidos } = req.body;
     if (!email || !nombre) {
       return res.status(400).json({ error: 'email y nombre son requeridos' });
     }
@@ -257,6 +257,7 @@ router.post('/', async (req, res) => {
         employeeNumber: employeeNumber || null,
         contrasena: contrasena || null,
         ubicacionId: ubicacionId || null,
+        ...(modulosPermitidos !== undefined && { modulosPermitidos: JSON.stringify(modulosPermitidos) }),
       },
     });
     res.status(201).json(data);
@@ -272,7 +273,7 @@ router.post('/', async (req, res) => {
 // Actualizar usuario
 router.patch('/:id', async (req, res) => {
   try {
-    const { nombre, email, username, rolInterno, activo, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId, dominioActualId, esSuperAdmin } = req.body;
+    const { nombre, email, username, rolInterno, activo, areaHumana, linea, managerId, employeeNumber, contrasena, ubicacionId, dominioActualId, esSuperAdmin, modulosPermitidos } = req.body;
     const data = await prisma.usuario.update({
       where: { id: req.params.id },
       data: {
@@ -289,6 +290,7 @@ router.patch('/:id', async (req, res) => {
         ...(ubicacionId !== undefined && { ubicacionId: ubicacionId || null }),
         ...(dominioActualId !== undefined && { dominioActualId: dominioActualId || null }),
         ...(esSuperAdmin !== undefined && { esSuperAdmin }),
+        ...(modulosPermitidos !== undefined && { modulosPermitidos: JSON.stringify(modulosPermitidos) }),
       },
     });
     res.json(data);

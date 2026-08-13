@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/routes/materiales/**)"
+    ],
+    "deny": [
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/.env*)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/package*.json)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/prisma/**)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/index.js)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/lib/**)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/middleware/**)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/routes/*.js)",
+      "Write(/home/crespomartin900/Documents/MDM_IA/acreedores_mdm/src/routes/clientes/**)"
+    ]
+  }
+}

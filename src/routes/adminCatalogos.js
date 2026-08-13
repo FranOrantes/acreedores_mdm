@@ -42,13 +42,14 @@ DEFAULT_CATALOG_VISIBILITY['tipos-documento'] = ['acreedores', 'proveedores', 'm
 
 router.get('/visibilidad-modulos', async (req, res) => {
   try {
-    const config = await prisma.configuracionModulo.findUnique({
-      where: { modulo_clave: { modulo: 'sistema', clave: 'catalogos.visibilidad' } },
+    const config = await prisma.configuracionModulo.findFirst({
+      where: { modulo: 'sistema', clave: 'catalogos.visibilidad' },
     });
     const visibility = config ? config.valor : DEFAULT_CATALOG_VISIBILITY;
     const merged = { ...DEFAULT_CATALOG_VISIBILITY, ...(typeof visibility === 'object' ? visibility : {}) };
     res.json(merged);
   } catch (e) {
+    console.error('Error GET visibilidad-modulos:', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -59,20 +60,30 @@ router.put('/visibilidad-modulos', async (req, res) => {
     if (!visibilidad || typeof visibilidad !== 'object') {
       return res.status(400).json({ error: 'Se requiere un objeto visibilidad' });
     }
-    const config = await prisma.configuracionModulo.upsert({
-      where: { modulo_clave: { modulo: 'sistema', clave: 'catalogos.visibilidad' } },
-      update: { valor: visibilidad, actualizadoEn: new Date() },
-      create: {
-        modulo: 'sistema',
-        clave: 'catalogos.visibilidad',
-        valor: visibilidad,
-        tipo: 'json',
-        grupo: 'General',
-        descripcion: 'Visibilidad de catálogos por módulo',
-      },
+    const existing = await prisma.configuracionModulo.findFirst({
+      where: { modulo: 'sistema', clave: 'catalogos.visibilidad' },
     });
+    let config;
+    if (existing) {
+      config = await prisma.configuracionModulo.update({
+        where: { id: existing.id },
+        data: { valor: visibilidad },
+      });
+    } else {
+      config = await prisma.configuracionModulo.create({
+        data: {
+          modulo: 'sistema',
+          clave: 'catalogos.visibilidad',
+          valor: visibilidad,
+          tipo: 'json',
+          grupo: 'General',
+          descripcion: 'Visibilidad de catálogos por módulo',
+        },
+      });
+    }
     res.json({ ok: true, data: config.valor });
   } catch (e) {
+    console.error('Error PUT visibilidad-modulos:', e);
     res.status(500).json({ error: e.message });
   }
 });

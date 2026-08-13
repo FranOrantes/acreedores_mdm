@@ -1,14 +1,12 @@
 const { Router } = require('express');
 const axios = require('axios');
 const prisma = require('../../lib/prisma');
+const config = require('./configService');
 
 const router = Router();
 
-// Réplica de la integración "MDM Imagen Rixie" de ServiceNow
-// (REST Message: POST https://concordia.nadro.dev/api/validate)
-const RIXIE_URL = process.env.RIXIE_VALIDATE_URL || 'https://concordia.nadro.dev/api/validate';
-const RIXIE_API_KEY = process.env.RIXIE_API_KEY; // header X-API-Key (misma que el REST Message de SN)
-const CHECKS = ['Formato', 'Tamaño', 'Dimensiones', 'Fondo'];
+// Réplica de la integración "MDM Imagen Rixie" de ServiceNow.
+// URL, API key, position y timeout son parametrizables (módulo Configuración).
 
 // POST /api/materiales/validar-imagen { adjuntoId }
 // Réplica de jj_MDM_Utils_Client.rixie_Imagen
@@ -25,13 +23,19 @@ router.post('/validar-imagen', async (req, res) => {
 
     let recordData;
     try {
+      const [url, apiKey, position, timeout] = await Promise.all([
+        config.get('integracion.rixie.url'),
+        config.get('integracion.rixie.api_key'),
+        config.get('integracion.rixie.position'),
+        config.get('integracion.rixie.timeout_ms'),
+      ]);
       // validateStatus: como el RESTMessageV2 de SN, leemos el body aunque el status no sea 2xx
       const { data } = await axios.post(
-        RIXIE_URL,
-        { image: doc.contenidoBase64, mimetype: doc.mimeType, filename: doc.nombreArchivo, position: 'frontal' },
+        url,
+        { image: doc.contenidoBase64, mimetype: doc.mimeType, filename: doc.nombreArchivo, position: position || 'frontal' },
         {
-          headers: { 'Content-Type': 'application/json', ...(RIXIE_API_KEY ? { 'X-API-Key': RIXIE_API_KEY } : {}) },
-          timeout: 30000,
+          headers: { 'Content-Type': 'application/json', ...(apiKey ? { 'X-API-Key': apiKey } : {}) },
+          timeout: Number(timeout) || 30000,
           validateStatus: () => true,
         }
       );

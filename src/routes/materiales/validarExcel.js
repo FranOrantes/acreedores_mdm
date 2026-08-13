@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const multer = require('multer');
 const XLSX = require('xlsx');
+const config = require('./configService');
 
 const router = Router();
 const upload = multer({
@@ -28,6 +29,7 @@ const esVacio = (v) => v === undefined || v === null || String(v).trim() === '';
 const esNumero = (v) => !esVacio(v) && !Number.isNaN(Number(v));
 const esEntero = (v) => esNumero(v) && Number.isInteger(Number(v));
 const esEnteroDigitos = (v, min, max) => esEntero(v) && String(Math.abs(Number(v))).length >= min && String(Math.abs(Number(v))).length <= max;
+const esEanValido = (v, min, max) => new RegExp(`^\\d{${min},${max}}$`).test(String(v));
 
 function leerHoja(wb, nombre) {
   const ws = wb.Sheets[nombre];
@@ -38,13 +40,13 @@ function leerHoja(wb, nombre) {
     .filter(({ row }) => row.some((c) => !esVacio(c)));
 }
 
-function validarHojaDatosBasicos(filas, errores) {
+function validarHojaDatosBasicos(filas, errores, camposRequeridos) {
   const materiales = [];
   for (const { row, linea } of filas) {
     const val = (campo) => row[COLS_DATOS[campo] - 1];
-    // Obligatorios (réplica validarVacio)
-    for (const campo of ['ID_CARGA', 'MTART', 'MATKL', 'MEINS', 'MAKTX']) {
-      if (esVacio(val(campo))) errores.push(msg(linea, campo, 'Valor requerido (vacio)'));
+    // Obligatorios (réplica validarVacio) — parametrizable desde Configuración
+    for (const campo of camposRequeridos) {
+      if (COLS_DATOS[campo] && esVacio(val(campo))) errores.push(msg(linea, campo, 'Valor requerido (vacio)'));
     }
     // Numéricos (réplica validarVacioNumero)
     if (!esVacio(val('NTGEW')) && !esNumero(val('NTGEW'))) errores.push(msg(linea, 'NTGEW', 'Debe ser numerico'));
@@ -68,7 +70,7 @@ function validarHojaDatosBasicos(filas, errores) {
   return materiales;
 }
 
-function validarHojaUnidades(filas, errores) {
+function validarHojaUnidades(filas, errores, eanMin, eanMax) {
   const eansVistos = new Map(); // EAN -> linea (réplica validarUnicoEAN)
   const porCarga = {}; // idCarga -> [{ meinh, ean }]
   for (const { row, linea } of filas) {
@@ -82,11 +84,12 @@ function validarHojaUnidades(filas, errores) {
     for (const campo of ['LAENG', 'BREIT', 'HOEHE', 'VOLUM', 'BRGEW']) {
       if (!esVacio(val(campo)) && !esNumero(val(campo))) errores.push(msg(linea, campo, 'Debe ser numerico'));
     }
-    // EAN: entero de 3 a 16 dígitos y único (réplica validarVacioNumeroEnteroDigitosDos + validarUnicoEAN)
+    // EAN: entero de N dígitos y único (réplica validarVacioNumeroEnteroDigitosDos + validarUnicoEAN)
+    // Rango de dígitos parametrizable desde Configuración (SN: 3-16)
     const ean = String(val('EAN11') || '').trim();
     if (!esVacio(ean)) {
-      if (!/^\d{3,16}$/.test(ean)) {
-        errores.push(msg(linea, 'EAN11', 'EAN invalido (entero de 3 a 16 digitos)'));
+      if (!esEanValido(ean, eanMin, eanMax)) {
+        errores.push(msg(linea, 'EAN11', `EAN invalido (entero de ${eanMin} a ${eanMax} digitos)`));
       } else if (eansVistos.has(ean)) {
         errores.push(msg(linea, 'EAN11', `EAN duplicado (ya usado en linea ${eansVistos.get(ean)})`));
       } else {
@@ -100,7 +103,7 @@ function validarHojaUnidades(filas, errores) {
 
 // POST /api/materiales/validar-excel — réplica de jj_MDM_Utils_Client.lecturaExcel (Alta)
 // Respuesta espejo del delimitador zzRespUestazz: { resultado, informacion, registros, noRegistros }
-router.post('/validar-excel', upload.single('archivo'), (req, res) => {
+router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ resultado: 'Error', informacion: 'No se recibio archivo.', registros: [], noRegistros: 0 });
@@ -117,6 +120,12 @@ router.post('/validar-excel', upload.single('archivo'), (req, res) => {
       });
     }
 
+    const [eanMin, eanMax, camposRequeridos] = await Promise.all([
+      config.get('validacion.excel.ean_min_digitos'),
+      config.get('validacion.excel.ean_max_digitos'),
+      config.get('validacion.excel.campos_requeridos'),
+    ]);
+
     const wb = XLSX.read(req.file.buffer, { type: 'buffer' });
     const errores = [];
 
@@ -130,8 +139,8 @@ router.post('/validar-excel', upload.single('archivo'), (req, res) => {
       });
     }
 
-    const materiales = validarHojaDatosBasicos(filasDatos, errores);
-    const unidadesPorCarga = validarHojaUnidades(leerHoja(wb, 'UnidadesAlter'), errores);
+    const materiales = validarHojaDatosBasicos(filasDatos, errores, camposRequeridos || []);
+    const unidadesPorCarga = validarHojaUnidades(leerHoja(wb, 'UnidadesAlter'), errores, eanMin || 3, eanMax || 16);
 
     // Enlazar unidades (EANs) por ID_CARGA: PI = unidad base, EMP/SUB = siguientes
     const registros = materiales.map((m) => {

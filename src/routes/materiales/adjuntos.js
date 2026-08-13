@@ -1,20 +1,30 @@
 const { Router } = require('express');
 const multer = require('multer');
 const prisma = require('../../lib/prisma');
+const config = require('./configService');
 
 const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 25 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 }, // tope duro; el límite real se valida contra Configuración
 });
 
-const EXT_IMG = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp'];
-const EXT_DOC = ['.pdf', '.png', '.jpg', '.jpeg', '.xlsx', '.xls', '.doc', '.docx', '.ppt', '.pptx'];
-
-// Réplica de validarExtencionIMG / validarExtencionPDF / validarExtencionSize
-function validarExtension(nombre, esImagen) {
-  const ext = (nombre.match(/\.[^.]+$/) || [''])[0].toLowerCase();
-  return (esImagen ? EXT_IMG : EXT_DOC).includes(ext);
+// Réplica de validarExtencionIMG / validarExtencionPDF / validarExtencionSize (parametrizable)
+async function validarAdjunto(file, esImagen) {
+  const [extImg, extDoc, maxMb] = await Promise.all([
+    config.get('validacion.adjuntos.ext_imagenes'),
+    config.get('validacion.adjuntos.ext_documentos'),
+    config.get('validacion.adjuntos.max_mb'),
+  ]);
+  const ext = (file.originalname.match(/\.[^.]+$/) || [''])[0].toLowerCase();
+  const permitidas = esImagen ? extImg : extDoc;
+  if (!permitidas.includes(ext)) {
+    return `Extension no permitida para ${esImagen ? 'imagen' : 'documento'} (${permitidas.join(' ')})`;
+  }
+  if (file.size > (Number(maxMb) || 25) * 1024 * 1024) {
+    return `El archivo excede el tamaño máximo de ${maxMb} MB`;
+  }
+  return null;
 }
 
 // POST /api/materiales/adjuntos?tipo=<clave>&session=<sessionKey>&imagen=1
@@ -24,9 +34,8 @@ router.post('/adjuntos', upload.single('archivo'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No se recibio archivo' });
     const { tipo = 'generico', session, imagen } = req.body;
     if (!session) return res.status(400).json({ error: 'session requerida' });
-    if (!validarExtension(req.file.originalname, imagen === '1')) {
-      return res.status(400).json({ error: `Extension no permitida para ${imagen === '1' ? 'imagen' : 'documento'}` });
-    }
+    const errorValidacion = await validarAdjunto(req.file, imagen === '1');
+    if (errorValidacion) return res.status(400).json({ error: errorValidacion });
 
     const doc = await prisma.documentoTemporal.create({
       data: {

@@ -1,12 +1,13 @@
 const { Router } = require('express');
 const prisma = require('../../lib/prisma');
+const config = require('./configService');
 
 const router = Router();
 
 async function siguienteFolio() {
-  // Folio MT-XXXX (folioPrefix "MT" del ModuloContext)
+  const prefijo = await config.get('flujo.folio_prefijo');
   const count = await prisma.solicitud.count({ where: { modulo: 'materiales' } });
-  return `MT-${String(count + 1).padStart(4, '0')}`;
+  return `${prefijo || 'MT'}-${String(count + 1).padStart(4, '0')}`;
 }
 
 // POST /api/materiales/alta — crea la solicitud de alta de materiales
@@ -25,8 +26,8 @@ router.post('/alta', async (req, res) => {
       return res.status(400).json({ error: 'Los registros mostrados no coinciden con el excel. Favor de cargar nuevamente el archivo layout.' });
     }
 
-    // Réplica de archivos obligatorios por material
-    const OBLIGATORIOS = ['vs_pi_img_01', 'vs_pi_img_02', 'vs_pi_img_03', 'vs_carta_de_presentacion_documento', 'vs_lista_de_precios', 'vs_marbete_empaque_artes_de_producto', 'vs_ficha_tecnica'];
+    // Réplica de archivos obligatorios por material (parametrizable desde Configuración)
+    const OBLIGATORIOS = await config.get('validacion.adjuntos.obligatorios');
     const faltantes = [];
     for (const m of materiales) {
       const falta = OBLIGATORIOS.filter((k) => !m.adjuntos?.[k]);
@@ -49,7 +50,7 @@ router.post('/alta', async (req, res) => {
         dominioId: req.body.dominioId || null,
         camposExtra: {
           flujo: 'MDM Material Alta (réplica ServiceNow)',
-          etapa: '01 - Comprador',
+          etapa: await config.get('flujo.etapa_inicial'),
           excelNoRegistros: Number(excelInfo) || materiales.length,
           materiales,
         },

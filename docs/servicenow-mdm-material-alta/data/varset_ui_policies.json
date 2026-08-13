@@ -1,0 +1,188 @@
+[
+  {
+    "short_description": {
+      "display_value": "ReadOnly",
+      "value": "ReadOnly"
+    },
+    "set_values": {
+      "display_value": "",
+      "value": ""
+    },
+    "applies_catalog": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "va_supported": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "isolate_script": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "global": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_updated_on": {
+      "display_value": "05-09-2024 10:58:46",
+      "value": "2024-09-05 16:58:46"
+    },
+    "applies_target_record": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy",
+      "value": "catalog_ui_policy"
+    },
+    "applies_req_item": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "ui_type": {
+      "display_value": "Desktop",
+      "value": "0"
+    },
+    "view": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "applies_to": {
+      "display_value": "A Variable Set",
+      "value": "set"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:32:35",
+      "value": "2024-04-24 05:32:35"
+    },
+    "script_true": {
+      "display_value": "function onCondition() {\n\n}",
+      "value": "function onCondition() {\n\n}"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "reverse_if_false": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_name": {
+      "display_value": "ReadOnly",
+      "value": "ReadOnly"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "catalog_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "run_scripts": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "model_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script_false": {
+      "display_value": "function onCondition() {\n\n}",
+      "value": "function onCondition() {\n\n}"
+    },
+    "model_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "applies_sc_task": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "on_load": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "catalog_ui_policy_ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "inherit": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

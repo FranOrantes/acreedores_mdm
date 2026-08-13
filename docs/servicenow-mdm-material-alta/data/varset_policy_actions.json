@@ -1,0 +1,1466 @@
+[
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "28-06-2024 15:06:40",
+      "value": "2024-06-28 21:06:40"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "1d03f98297438a10cc1ebbdfe153af44",
+      "value": "1d03f98297438a10cc1ebbdfe153af44"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "28-06-2024 15:06:40",
+      "value": "2024-06-28 21:06:40"
+    },
+    "sys_name": {
+      "display_value": "vs_comprador",
+      "value": "vs_comprador"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:d23be10a97038a10cc1ebbdfe153aff7",
+      "value": "IO:d23be10a97038a10cc1ebbdfe153aff7"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_1d03f98297438a10cc1ebbdfe153af44",
+      "value": "catalog_ui_policy_action_1d03f98297438a10cc1ebbdfe153af44"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_comprador",
+      "value": "vs_comprador"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "23-04-2024 23:33:01",
+      "value": "2024-04-24 05:33:01"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "39fd277c977d4e10cc1ebbdfe153afae",
+      "value": "39fd277c977d4e10cc1ebbdfe153afae"
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:33:01",
+      "value": "2024-04-24 05:33:01"
+    },
+    "sys_name": {
+      "display_value": "vs_unidad_del_producto_id_pi",
+      "value": "vs_unidad_del_producto_id_pi"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:7654e5781b758a10a9f8766dcc4bcb56",
+      "value": "IO:7654e5781b758a10a9f8766dcc4bcb56"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_39fd277c977d4e10cc1ebbdfe153afae",
+      "value": "catalog_ui_policy_action_39fd277c977d4e10cc1ebbdfe153afae"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_unidad_del_producto_id_pi",
+      "value": "vs_unidad_del_producto_id_pi"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "28-06-2024 13:43:40",
+      "value": "2024-06-28 19:43:40"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "4900ad8a97cf4a10cc1ebbdfe153af75",
+      "value": "4900ad8a97cf4a10cc1ebbdfe153af75"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "28-06-2024 13:43:40",
+      "value": "2024-06-28 19:43:40"
+    },
+    "sys_name": {
+      "display_value": "vs_carta_de_presentacion_documento",
+      "value": "vs_carta_de_presentacion_documento"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:6aee154a97cf4a10cc1ebbdfe153af57",
+      "value": "IO:6aee154a97cf4a10cc1ebbdfe153af57"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_4900ad8a97cf4a10cc1ebbdfe153af75",
+      "value": "catalog_ui_policy_action_4900ad8a97cf4a10cc1ebbdfe153af75"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_carta_de_presentacion_documento",
+      "value": "vs_carta_de_presentacion_documento"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "28-06-2024 13:44:43",
+      "value": "2024-06-28 19:44:43"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "631061ca97cf4a10cc1ebbdfe153af2f",
+      "value": "631061ca97cf4a10cc1ebbdfe153af2f"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "28-06-2024 13:44:43",
+      "value": "2024-06-28 19:44:43"
+    },
+    "sys_name": {
+      "display_value": "vs_marbete_empaque_artes_de_producto",
+      "value": "vs_marbete_empaque_artes_de_producto"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:ea3f514a97cf4a10cc1ebbdfe153af0a",
+      "value": "IO:ea3f514a97cf4a10cc1ebbdfe153af0a"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_631061ca97cf4a10cc1ebbdfe153af2f",
+      "value": "catalog_ui_policy_action_631061ca97cf4a10cc1ebbdfe153af2f"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_marbete_empaque_artes_de_producto",
+      "value": "vs_marbete_empaque_artes_de_producto"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:47:08",
+      "value": "2024-06-12 15:47:08"
+    },
+    "mandatory": {
+      "display_value": "False",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "90423f4d9771ce10cc1ebbdfe153af81",
+      "value": "90423f4d9771ce10cc1ebbdfe153af81"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "24-04-2024 18:30:02",
+      "value": "2024-04-25 00:30:02"
+    },
+    "sys_name": {
+      "display_value": "vs_unidad_del_producto_id_sub",
+      "value": "vs_unidad_del_producto_id_sub"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:e2907f899771ce10cc1ebbdfe153af3f",
+      "value": "IO:e2907f899771ce10cc1ebbdfe153af3f"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "6",
+      "value": "6"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_90423f4d9771ce10cc1ebbdfe153af81",
+      "value": "catalog_ui_policy_action_90423f4d9771ce10cc1ebbdfe153af81"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_unidad_del_producto_id_sub",
+      "value": "vs_unidad_del_producto_id_sub"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:46:57",
+      "value": "2024-06-12 15:46:57"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "922ea37c977d4e10cc1ebbdfe153af18",
+      "value": "922ea37c977d4e10cc1ebbdfe153af18"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:33:32",
+      "value": "2024-04-24 05:33:32"
+    },
+    "sys_name": {
+      "display_value": "vs_pi_img_03",
+      "value": "vs_pi_img_03"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:d27c27f8977d4e10cc1ebbdfe153af72",
+      "value": "IO:d27c27f8977d4e10cc1ebbdfe153af72"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_922ea37c977d4e10cc1ebbdfe153af18",
+      "value": "catalog_ui_policy_action_922ea37c977d4e10cc1ebbdfe153af18"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_pi_img_03",
+      "value": "vs_pi_img_03"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "23-04-2024 23:33:08",
+      "value": "2024-04-24 05:33:08"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "981ea77c977d4e10cc1ebbdfe153af08",
+      "value": "981ea77c977d4e10cc1ebbdfe153af08"
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:33:08",
+      "value": "2024-04-24 05:33:08"
+    },
+    "sys_name": {
+      "display_value": "vs_nombre_completo_del_material",
+      "value": "vs_nombre_completo_del_material"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:a614e1781b758a10a9f8766dcc4bcb5e",
+      "value": "IO:a614e1781b758a10a9f8766dcc4bcb5e"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_981ea77c977d4e10cc1ebbdfe153af08",
+      "value": "catalog_ui_policy_action_981ea77c977d4e10cc1ebbdfe153af08"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_nombre_completo_del_material",
+      "value": "vs_nombre_completo_del_material"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:46:57",
+      "value": "2024-06-12 15:46:57"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "a32e2b3c977d4e10cc1ebbdfe153afa7",
+      "value": "a32e2b3c977d4e10cc1ebbdfe153afa7"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:33:38",
+      "value": "2024-04-24 05:33:38"
+    },
+    "sys_name": {
+      "display_value": "vs_pi_img_02",
+      "value": "vs_pi_img_02"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:125ce7b8977d4e10cc1ebbdfe153af08",
+      "value": "IO:125ce7b8977d4e10cc1ebbdfe153af08"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_a32e2b3c977d4e10cc1ebbdfe153afa7",
+      "value": "catalog_ui_policy_action_a32e2b3c977d4e10cc1ebbdfe153afa7"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_pi_img_02",
+      "value": "vs_pi_img_02"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:46:57",
+      "value": "2024-06-12 15:46:57"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "a82e677c977d4e10cc1ebbdfe153af26",
+      "value": "a82e677c977d4e10cc1ebbdfe153af26"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 23:33:25",
+      "value": "2024-04-24 05:33:25"
+    },
+    "sys_name": {
+      "display_value": "vs_pi_img_01",
+      "value": "vs_pi_img_01"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:360baabc97394e10cc1ebbdfe153afc9",
+      "value": "IO:360baabc97394e10cc1ebbdfe153afc9"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_a82e677c977d4e10cc1ebbdfe153af26",
+      "value": "catalog_ui_policy_action_a82e677c977d4e10cc1ebbdfe153af26"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_pi_img_01",
+      "value": "vs_pi_img_01"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:47:08",
+      "value": "2024-06-12 15:47:08"
+    },
+    "mandatory": {
+      "display_value": "False",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "d832bb4d9771ce10cc1ebbdfe153afe7",
+      "value": "d832bb4d9771ce10cc1ebbdfe153afe7"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "24-04-2024 18:29:48",
+      "value": "2024-04-25 00:29:48"
+    },
+    "sys_name": {
+      "display_value": "vs_unidad_del_producto_id_emp",
+      "value": "vs_unidad_del_producto_id_emp"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:017f63499771ce10cc1ebbdfe153af5b",
+      "value": "IO:017f63499771ce10cc1ebbdfe153af5b"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "6",
+      "value": "6"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_d832bb4d9771ce10cc1ebbdfe153afe7",
+      "value": "catalog_ui_policy_action_d832bb4d9771ce10cc1ebbdfe153afe7"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_unidad_del_producto_id_emp",
+      "value": "vs_unidad_del_producto_id_emp"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:47:08",
+      "value": "2024-06-12 15:47:08"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "f3b191da97eaca14cc1ebbdfe153af70",
+      "value": "f3b191da97eaca14cc1ebbdfe153af70"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "04-06-2024 10:48:28",
+      "value": "2024-06-04 16:48:28"
+    },
+    "sys_name": {
+      "display_value": "vs_ficha_tecnica",
+      "value": "vs_ficha_tecnica"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:0d1a730c979ace90cc1ebbdfe153af81",
+      "value": "IO:0d1a730c979ace90cc1ebbdfe153af81"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_f3b191da97eaca14cc1ebbdfe153af70",
+      "value": "catalog_ui_policy_action_f3b191da97eaca14cc1ebbdfe153af70"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_ficha_tecnica",
+      "value": "vs_ficha_tecnica"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "ui_policy": {
+      "display_value": "ReadOnly",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_ui_policy/ceeda37c977d4e10cc1ebbdfe153af95",
+      "value": "ceeda37c977d4e10cc1ebbdfe153af95"
+    },
+    "value_action": {
+      "display_value": "Leave alone",
+      "value": "ignore"
+    },
+    "sys_updated_on": {
+      "display_value": "12-06-2024 09:47:08",
+      "value": "2024-06-12 15:47:08"
+    },
+    "mandatory": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog UI Policy Action",
+      "value": "catalog_ui_policy_action"
+    },
+    "sys_id": {
+      "display_value": "fdd155da97eaca14cc1ebbdfe153af07",
+      "value": "fdd155da97eaca14cc1ebbdfe153af07"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "field_message_type": {
+      "display_value": "None",
+      "value": "none"
+    },
+    "sys_created_on": {
+      "display_value": "04-06-2024 10:48:40",
+      "value": "2024-06-04 16:48:40"
+    },
+    "sys_name": {
+      "display_value": "vs_lista_de_precios",
+      "value": "vs_lista_de_precios"
+    },
+    "disabled": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "catalog_variable": {
+      "display_value": "IO:52c4bf04979ace90cc1ebbdfe153afb6",
+      "value": "IO:52c4bf04979ace90cc1ebbdfe153afb6"
+    },
+    "visible": {
+      "display_value": "True",
+      "value": "true"
+    },
+    "catalog_item": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_ui_policy_action_fdd155da97eaca14cc1ebbdfe153af07",
+      "value": "catalog_ui_policy_action_fdd155da97eaca14cc1ebbdfe153af07"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable": {
+      "display_value": "vs_lista_de_precios",
+      "value": "vs_lista_de_precios"
+    },
+    "cleared": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "field_message": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

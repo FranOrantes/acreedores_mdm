@@ -1,0 +1,127 @@
+[
+  {
+    "basic_auth_password": {
+      "display_value": "**********",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "05-03-2026 12:27:33",
+      "value": "2026-03-05 18:27:33"
+    },
+    "rest_message": {
+      "display_value": "MDM Imagen Rixie",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_rest_message/4deacc533b3aa210a4187124c3e45a5d",
+      "value": "4deacc533b3aa210a4187124c3e45a5d"
+    },
+    "authentication_type": {
+      "display_value": "Inherit from parent",
+      "value": "inherit_from_parent"
+    },
+    "content": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_class_name": {
+      "display_value": "HTTP Method",
+      "value": "sys_rest_message_fn"
+    },
+    "sys_id": {
+      "display_value": "345bc4933b3aa210a4187124c3e45a53",
+      "value": "345bc4933b3aa210a4187124c3e45a53"
+    },
+    "http_method": {
+      "display_value": "POST",
+      "value": "post"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "oauth2_profile": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "22-07-2025 10:52:23",
+      "value": "2025-07-22 16:52:23"
+    },
+    "lock": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_name": {
+      "display_value": "ImagenValida",
+      "value": "ImagenValida"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "basic_auth_profile": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "8",
+      "value": "8"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_auth_mid_server": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_mutual_auth": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "sys_rest_message_fn_345bc4933b3aa210a4187124c3e45a53",
+      "value": "sys_rest_message_fn_345bc4933b3aa210a4187124c3e45a53"
+    },
+    "qualified_name": {
+      "display_value": "MDM Imagen Rixie [ ImagenValida ]",
+      "value": "MDM Imagen Rixie [ ImagenValida ]"
+    },
+    "basic_auth_user": {
+      "display_value": "",
+      "value": ""
+    },
+    "function_name": {
+      "display_value": "ImagenValida",
+      "value": "ImagenValida"
+    },
+    "use_basic_auth": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "use_mid_server": {
+      "display_value": "",
+      "value": ""
+    },
+    "protocol_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_endpoint": {
+      "display_value": "https://concordia.nadro.dev/api/validate",
+      "value": "https://concordia.nadro.dev/api/validate"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

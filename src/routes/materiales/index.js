@@ -1,12 +1,20 @@
 const { Router } = require('express');
+const layoutRouter = require('./layout');
+const excelRouter = require('./validarExcel');
+const adjuntosRouter = require('./adjuntos');
+const validarImagenRouter = require('./validarImagen');
+const solicitudesRouter = require('./solicitudes');
 
 const router = Router();
 
-// Placeholder — Materiales module
 router.get('/health', (req, res) => {
-  res.json({ status: 'ok', module: 'materiales', message: 'Module placeholder - not yet implemented' });
+  res.json({ status: 'ok', module: 'materiales' });
 });
 
-// TODO: Add materiales routes when module is implemented
+router.use('/', layoutRouter);
+router.use('/', excelRouter);
+router.use('/', adjuntosRouter);
+router.use('/', validarImagenRouter);
+router.use('/', solicitudesRouter);
 
 module.exports = router;

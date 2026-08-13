@@ -1,0 +1,360 @@
+[
+  {
+    "entitlement_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_sc_layout": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "show_variable_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "no_order_now": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sc_ic_version": {
+      "display_value": "",
+      "value": ""
+    },
+    "delivery_time": {
+      "display_value": "2 Days",
+      "value": "1970-01-03 00:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "23-07-2026 13:45:49",
+      "value": "2026-07-23 19:45:49"
+    },
+    "type": {
+      "display_value": "Item",
+      "value": "item"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "no_search": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_by": {
+      "display_value": "system",
+      "value": "system"
+    },
+    "price": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "sys_created_on": {
+      "display_value": "09-04-2024 16:30:35",
+      "value": "2024-04-09 22:30:35"
+    },
+    "recurring_frequency": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Material Alta",
+      "value": "Material Alta"
+    },
+    "model": {
+      "display_value": "",
+      "value": ""
+    },
+    "state": {
+      "display_value": null,
+      "value": ""
+    },
+    "no_cart": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "group": {
+      "display_value": "",
+      "value": ""
+    },
+    "hide_sp": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "order": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "start_closed": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "image": {
+      "display_value": "",
+      "value": ""
+    },
+    "no_quantity": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "workflow": {
+      "display_value": "MDM mtr Alta v2.0",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_workflow/255aedcc97c2ee10cc1ebbdfe153af91",
+      "value": "255aedcc97c2ee10cc1ebbdfe153af91"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "checked_out": {
+      "display_value": null,
+      "value": ""
+    },
+    "custom_cart": {
+      "display_value": "",
+      "value": ""
+    },
+    "no_cart_v2": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "no_proceed_checkout": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "version": {
+      "display_value": "217",
+      "value": "217"
+    },
+    "ignore_price": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_update_name": {
+      "display_value": "sc_cat_item_96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "sc_cat_item_96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "meta": {
+      "display_value": "",
+      "value": ""
+    },
+    "omit_price": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "name": {
+      "display_value": "Material Alta",
+      "value": "Material Alta"
+    },
+    "flow_designer_flow": {
+      "display_value": "",
+      "value": ""
+    },
+    "mobile_hide_price": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "cc_render_type": {
+      "display_value": null,
+      "value": ""
+    },
+    "no_wishlist_v2": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "preview": {
+      "display_value": "JavaScript: popupOpenStandard(\"com.glideapp.servicecatalog_cat_item_view.do?v=1&sysparm_id=96f6425c1be58610a9f8766dcc4bcbab&sysparm_preview=true\", \"summary\");",
+      "value": "JavaScript: popupOpenStandard(\"com.glideapp.servicecatalog_cat_item_view.do?v=1&sysparm_id=96f6425c1be58610a9f8766dcc4bcbab&sysparm_preview=true\", \"summary\");"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "short_description": {
+      "display_value": "MDM Material Alta",
+      "value": "MDM Material Alta"
+    },
+    "access_type": {
+      "display_value": "Restricted",
+      "value": "restricted"
+    },
+    "fulfillment_automation_level": {
+      "display_value": "Unspecified",
+      "value": "unspecified"
+    },
+    "roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "icon": {
+      "display_value": "",
+      "value": ""
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "mobile_picture": {
+      "display_value": "",
+      "value": ""
+    },
+    "sc_template": {
+      "display_value": "",
+      "value": ""
+    },
+    "availability": {
+      "display_value": "Desktop Only",
+      "value": "on_desktop"
+    },
+    "mandatory_attachment": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "request_method": {
+      "display_value": "Submit",
+      "value": "submit"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog Item",
+      "value": "sc_cat_item"
+    },
+    "sys_id": {
+      "display_value": "96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "no_order": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "vendor": {
+      "display_value": "",
+      "value": ""
+    },
+    "no_attachment_v2": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "mobile_picture_type": {
+      "display_value": "Desktop",
+      "value": "use_desktop_picture"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sc_catalogs": {
+      "display_value": "Service Catalog",
+      "value": "e0d08b13c3330100c8b837659bba8fb4"
+    },
+    "make_item_non_conversational": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "ordered_item_link": {
+      "display_value": "",
+      "value": ""
+    },
+    "owner": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "no_delivery_time_v2": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "cost": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "no_quantity_v2": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_mod_count": {
+      "display_value": "220",
+      "value": "220"
+    },
+    "recurring_price": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "list_price": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "sc_ic_item_staging": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "billable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "picture": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "display_price_property": {
+      "display_value": "non_zero",
+      "value": "non_zero"
+    },
+    "taxonomy_topic": {
+      "display_value": "",
+      "value": ""
+    },
+    "delivery_plan_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "location": {
+      "display_value": "",
+      "value": ""
+    },
+    "category": {
+      "display_value": "Datos Maestros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_category/79cdf4501b9aca90a9f8766dcc4bcbae",
+      "value": "79cdf4501b9aca90a9f8766dcc4bcbae"
+    },
+    "no_save_as_draft": {
+      "display_value": "true",
+      "value": "true"
+    }
+  }
+]

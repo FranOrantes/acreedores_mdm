@@ -1,0 +1,110 @@
+[
+  {
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "set_attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "09-04-2026 23:00:06",
+      "value": "2026-04-10 05:00:06"
+    },
+    "title": {
+      "display_value": "Listado de registros",
+      "value": "Listado de registros"
+    },
+    "type": {
+      "display_value": "Multi Row",
+      "value": "one_to_many"
+    },
+    "sys_class_name": {
+      "display_value": "Variable Set",
+      "value": "item_option_new_set"
+    },
+    "sys_id": {
+      "display_value": "f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "internal_name": {
+      "display_value": "vs_listado_de_registros",
+      "value": "vs_listado_de_registros"
+    },
+    "sys_updated_by": {
+      "display_value": "system",
+      "value": "system"
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 13:29:44",
+      "value": "2024-04-23 19:29:44"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Listado de registros",
+      "value": "Listado de registros"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "250",
+      "value": "250"
+    },
+    "sys_mod_count": {
+      "display_value": "475",
+      "value": "475"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "version": {
+      "display_value": "475",
+      "value": "475"
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_set_f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "item_option_new_set_f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "name": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

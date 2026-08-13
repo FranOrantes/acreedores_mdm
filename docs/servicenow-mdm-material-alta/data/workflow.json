@@ -1,0 +1,99 @@
+[
+  {
+    "preview": {
+      "display_value": "",
+      "value": ""
+    },
+    "template": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "access": {
+      "display_value": "All application scopes",
+      "value": "public"
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "13-11-2025 13:33:12",
+      "value": "2025-11-13 19:33:12"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_class_name": {
+      "display_value": "Workflow",
+      "value": "wf_workflow"
+    },
+    "sys_id": {
+      "display_value": "255aedcc97c2ee10cc1ebbdfe153af91",
+      "value": "255aedcc97c2ee10cc1ebbdfe153af91"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "wf_workflow_255aedcc97c2ee10cc1ebbdfe153af91",
+      "value": "wf_workflow_255aedcc97c2ee10cc1ebbdfe153af91"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "05-06-2025 08:40:09",
+      "value": "2025-06-05 14:40:09"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "name": {
+      "display_value": "MDM mtr Alta v2.0",
+      "value": "MDM mtr Alta v2.0"
+    },
+    "sys_name": {
+      "display_value": "MDM mtr Alta v2.0",
+      "value": "MDM mtr Alta v2.0"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "vars": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

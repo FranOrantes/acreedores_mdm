@@ -1,0 +1,158 @@
+[
+  {
+    "sys_id": {
+      "display_value": "4bea5376474b3e50f71cbf12516d4350",
+      "value": "4bea5376474b3e50f71cbf12516d4350"
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "name": {
+      "display_value": "jj MDM Estatus RITM pendientes",
+      "value": "jj MDM Estatus RITM pendientes"
+    },
+    "next_action": {
+      "display_value": "13-08-2026 14:00:00",
+      "value": "2026-08-13 20:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 13:00:03",
+      "value": "2026-08-13 19:00:03"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "4fea5376474b3e50f71cbf12516d433f",
+      "value": "4fea5376474b3e50f71cbf12516d433f"
+    },
+    "trigger_type": {
+      "display_value": "Daily",
+      "value": "11"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Registros Vacios AprovacionMultiple",
+      "value": "jj MDM Borrar Registros Vacios AprovacionMultiple"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 05:00:00",
+      "value": "2026-08-14 11:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 05:00:01",
+      "value": "2026-08-13 11:00:01"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "c7ea5376474b3e50f71cbf12516d4354",
+      "value": "c7ea5376474b3e50f71cbf12516d4354"
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "name": {
+      "display_value": "jj MDM Alta sin RITM",
+      "value": "jj MDM Alta sin RITM"
+    },
+    "next_action": {
+      "display_value": "13-08-2026 14:00:00",
+      "value": "2026-08-13 20:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 13:00:00",
+      "value": "2026-08-13 19:00:00"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "cbea5376474b3e50f71cbf12516d433a",
+      "value": "cbea5376474b3e50f71cbf12516d433a"
+    },
+    "trigger_type": {
+      "display_value": "Daily",
+      "value": "11"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Random en Registros estado lectura",
+      "value": "jj MDM Borrar Random en Registros estado lectura"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 05:00:00",
+      "value": "2026-08-14 11:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 05:00:01",
+      "value": "2026-08-13 11:00:01"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "cbea5376474b3e50f71cbf12516d4359",
+      "value": "cbea5376474b3e50f71cbf12516d4359"
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "name": {
+      "display_value": "MDM Materiales Styrk - No SAP - SUPER API",
+      "value": "MDM Materiales Styrk - No SAP - SUPER API"
+    },
+    "next_action": {
+      "display_value": "15-08-2026 22:00:00",
+      "value": "2026-08-16 04:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "12-08-2026 22:00:00",
+      "value": "2026-08-13 04:00:00"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "ec5d741e93f94b106af0b6cd1dba1071",
+      "value": "ec5d741e93f94b106af0b6cd1dba1071"
+    },
+    "trigger_type": {
+      "display_value": "Days in Week",
+      "value": "3"
+    },
+    "name": {
+      "display_value": "jj MDM cancelar por N dias",
+      "value": "jj MDM cancelar por N dias"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 17:00:00",
+      "value": "2026-08-14 23:00:00"
+    },
+    "sys_updated_on": {
+      "display_value": "07-08-2026 17:00:01",
+      "value": "2026-08-07 23:00:01"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    }
+  }
+]

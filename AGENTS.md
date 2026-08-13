@@ -25,3 +25,6 @@
 
 - Este repositorio es el backend; el frontend correspondiente vive en un repo separado (`acreedores_mdm_frontend`) con sus propias reglas.
 - Existe bloqueo duro a nivel de herramienta en `.devin/config.json`: las escrituras fuera de `src/routes/materiales/` están denegadas.
+
+## Github
+Nunca pongas marca de generated o co-authored-by

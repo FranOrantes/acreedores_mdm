@@ -1,0 +1,377 @@
+[
+  {
+    "sys_id": {
+      "display_value": "1cf5e7492b5b3ed0677df2f9ed91bf99",
+      "value": "1cf5e7492b5b3ed0677df2f9ed91bf99"
+    },
+    "name": {
+      "display_value": "05 - Negociador",
+      "value": "05 - Negociador"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "20f52b492b5b3ed0677df2f9ed91bf19",
+      "value": "20f52b492b5b3ed0677df2f9ed91bf19"
+    },
+    "name": {
+      "display_value": "Rechazo 4 ejecuciones",
+      "value": "Rechazo 4 ejecuciones"
+    },
+    "activity_definition": {
+      "display_value": "If",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/98f621ca0a0a0b5900f7c291f5e45a0e",
+      "value": "98f621ca0a0a0b5900f7c291f5e45a0e"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "20f5e7492b5b3ed0677df2f9ed91bfc6",
+      "value": "20f5e7492b5b3ed0677df2f9ed91bfc6"
+    },
+    "name": {
+      "display_value": "08 - Maestro de Materiales",
+      "value": "08 - Maestro de Materiales"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "24f52b492b5b3ed0677df2f9ed91bf03",
+      "value": "24f52b492b5b3ed0677df2f9ed91bf03"
+    },
+    "name": {
+      "display_value": "Notificacion Cancelada",
+      "value": "Notificacion Cancelada"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "28f52b492b5b3ed0677df2f9ed91bf17",
+      "value": "28f52b492b5b3ed0677df2f9ed91bf17"
+    },
+    "name": {
+      "display_value": "Limpiar hilos duplicados",
+      "value": "Limpiar hilos duplicados"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "54f5e7492b5b3ed0677df2f9ed91bfbd",
+      "value": "54f5e7492b5b3ed0677df2f9ed91bfbd"
+    },
+    "name": {
+      "display_value": "04 - Jefe de Costos",
+      "value": "04 - Jefe de Costos"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "58f5e7492b5b3ed0677df2f9ed91bfb9",
+      "value": "58f5e7492b5b3ed0677df2f9ed91bfb9"
+    },
+    "name": {
+      "display_value": "EtapaN",
+      "value": "EtapaN"
+    },
+    "activity_definition": {
+      "display_value": "Switch",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/f84eda480a0a3c1800a6fa8c7badf346",
+      "value": "f84eda480a0a3c1800a6fa8c7badf346"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "60f5e7492b5b3ed0677df2f9ed91bfee",
+      "value": "60f5e7492b5b3ed0677df2f9ed91bfee"
+    },
+    "name": {
+      "display_value": "Close task en paralelo?",
+      "value": "Close task en paralelo?"
+    },
+    "activity_definition": {
+      "display_value": "Wait for condition",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/d93a02ae0a0a0aa30077abad3fdac035",
+      "value": "d93a02ae0a0a0aa30077abad3fdac035"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "68f5e7492b5b3ed0677df2f9ed91bfec",
+      "value": "68f5e7492b5b3ed0677df2f9ed91bfec"
+    },
+    "name": {
+      "display_value": "Notificacion",
+      "value": "Notificacion"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "68f5e7492b5b3ed0677df2f9ed91bffa",
+      "value": "68f5e7492b5b3ed0677df2f9ed91bffa"
+    },
+    "name": {
+      "display_value": "01 - Comprador",
+      "value": "01 - Comprador"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "6cf52b492b5b3ed0677df2f9ed91bf0e",
+      "value": "6cf52b492b5b3ed0677df2f9ed91bf0e"
+    },
+    "name": {
+      "display_value": "03 - Mercadotecnia",
+      "value": "03 - Mercadotecnia"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "6cf5e7492b5b3ed0677df2f9ed91bfdd",
+      "value": "6cf5e7492b5b3ed0677df2f9ed91bfdd"
+    },
+    "name": {
+      "display_value": "SAP respuesta",
+      "value": "SAP respuesta"
+    },
+    "activity_definition": {
+      "display_value": "Switch",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/f84eda480a0a3c1800a6fa8c7badf346",
+      "value": "f84eda480a0a3c1800a6fa8c7badf346"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "94f5e7492b5b3ed0677df2f9ed91bf94",
+      "value": "94f5e7492b5b3ed0677df2f9ed91bf94"
+    },
+    "name": {
+      "display_value": "Limpiar hilos duplicados",
+      "value": "Limpiar hilos duplicados"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "98f5e7492b5b3ed0677df2f9ed91bfab",
+      "value": "98f5e7492b5b3ed0677df2f9ed91bfab"
+    },
+    "name": {
+      "display_value": "Notificacion",
+      "value": "Notificacion"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "a0f52b492b5b3ed0677df2f9ed91bf06",
+      "value": "a0f52b492b5b3ed0677df2f9ed91bf06"
+    },
+    "name": {
+      "display_value": "00 - Inicio",
+      "value": "00 - Inicio"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "a0f5e7492b5b3ed0677df2f9ed91bfdc",
+      "value": "a0f5e7492b5b3ed0677df2f9ed91bfdc"
+    },
+    "name": {
+      "display_value": "Begin",
+      "value": "Begin"
+    },
+    "activity_definition": {
+      "display_value": "Begin",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/c7a5e32c0a0a0b3a002377c24ed8ea76",
+      "value": "c7a5e32c0a0a0b3a002377c24ed8ea76"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "a4f5e7492b5b3ed0677df2f9ed91bfd7",
+      "value": "a4f5e7492b5b3ed0677df2f9ed91bfd7"
+    },
+    "name": {
+      "display_value": "Respuesta SAP",
+      "value": "Respuesta SAP"
+    },
+    "activity_definition": {
+      "display_value": "Wait for condition",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/d93a02ae0a0a0aa30077abad3fdac035",
+      "value": "d93a02ae0a0a0aa30077abad3fdac035"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "acf5e7492b5b3ed0677df2f9ed91bfef",
+      "value": "acf5e7492b5b3ed0677df2f9ed91bfef"
+    },
+    "name": {
+      "display_value": "Enviar notificacion",
+      "value": "Enviar notificacion"
+    },
+    "activity_definition": {
+      "display_value": "Set Values",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/1ca8d7cf0a0a0b265e9a000c2c08248c",
+      "value": "1ca8d7cf0a0a0b265e9a000c2c08248c"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "acf5e7492b5b3ed0677df2f9ed91bff1",
+      "value": "acf5e7492b5b3ed0677df2f9ed91bff1"
+    },
+    "name": {
+      "display_value": "02 - Asuntos regulatorios ",
+      "value": "02 - Asuntos regulatorios "
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "d4f5e7492b5b3ed0677df2f9ed91bf97",
+      "value": "d4f5e7492b5b3ed0677df2f9ed91bf97"
+    },
+    "name": {
+      "display_value": "Esta OPEN ?",
+      "value": "Esta OPEN ?"
+    },
+    "activity_definition": {
+      "display_value": "Wait for condition",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/d93a02ae0a0a0aa30077abad3fdac035",
+      "value": "d93a02ae0a0a0aa30077abad3fdac035"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "dcf5e7492b5b3ed0677df2f9ed91bfa2",
+      "value": "dcf5e7492b5b3ed0677df2f9ed91bfa2"
+    },
+    "name": {
+      "display_value": "06 - DGA",
+      "value": "06 - DGA"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "e0f5e7492b5b3ed0677df2f9ed91bfd9",
+      "value": "e0f5e7492b5b3ed0677df2f9ed91bfd9"
+    },
+    "name": {
+      "display_value": "Correo de errores SAP",
+      "value": "Correo de errores SAP"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "e8f52b492b5b3ed0677df2f9ed91bf04",
+      "value": "e8f52b492b5b3ed0677df2f9ed91bf04"
+    },
+    "name": {
+      "display_value": "End",
+      "value": "End"
+    },
+    "activity_definition": {
+      "display_value": "End",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/c7a66f7d0a0a0b3a004544a6d2f14076",
+      "value": "c7a66f7d0a0a0b3a004544a6d2f14076"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "e8f5e7492b5b3ed0677df2f9ed91bfce",
+      "value": "e8f5e7492b5b3ed0677df2f9ed91bfce"
+    },
+    "name": {
+      "display_value": "07 - Maestro de Articulos",
+      "value": "07 - Maestro de Articulos"
+    },
+    "activity_definition": {
+      "display_value": "Catalog Task",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/38891b6f0a0a0b1e00efdfdd77602027",
+      "value": "38891b6f0a0a0b1e00efdfdd77602027"
+    }
+  },
+  {
+    "sys_id": {
+      "display_value": "e8f5e7492b5b3ed0677df2f9ed91bfda",
+      "value": "e8f5e7492b5b3ed0677df2f9ed91bfda"
+    },
+    "name": {
+      "display_value": "Terminar padre",
+      "value": "Terminar padre"
+    },
+    "activity_definition": {
+      "display_value": "Run Script",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/wf_element_definition/db8c65aec0a8016501d00259bc7203a4",
+      "value": "db8c65aec0a8016501d00259bc7203a4"
+    }
+  }
+]

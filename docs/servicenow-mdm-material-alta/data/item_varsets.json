@@ -1,0 +1,72 @@
+[
+  {
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 11:42:00",
+      "value": "2024-06-03 17:42:00"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_class_name": {
+      "display_value": "Catalog Variable Set",
+      "value": "io_set_item"
+    },
+    "sys_id": {
+      "display_value": "e1f3e9381b758a10a9f8766dcc4bcb03",
+      "value": "e1f3e9381b758a10a9f8766dcc4bcb03"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "sys_update_name": {
+      "display_value": "io_set_item_e1f3e9381b758a10a9f8766dcc4bcb03",
+      "value": "io_set_item_e1f3e9381b758a10a9f8766dcc4bcb03"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "Listado de registros",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/item_option_new_set/f1d3e5381b758a10a9f8766dcc4bcbfb",
+      "value": "f1d3e5381b758a10a9f8766dcc4bcbfb"
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 13:29:44",
+      "value": "2024-04-23 19:29:44"
+    },
+    "sys_name": {
+      "display_value": "Listado de registros.MDM",
+      "value": "Listado de registros.MDM"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sc_cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "500",
+      "value": "500"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

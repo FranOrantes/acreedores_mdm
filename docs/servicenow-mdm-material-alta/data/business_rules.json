@@ -1,0 +1,4538 @@
+[
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "26-02-2026 22:47:42",
+      "value": "2026-02-27 04:47:42"
+    },
+    "when": {
+      "display_value": "async",
+      "value": "async_always"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "0a56cc042b197650677df2f9ed91bf1f",
+      "value": "0a56cc042b197650677df2f9ed91bf1f"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "13-11-2025 14:53:24",
+      "value": "2025-11-13 20:53:24"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task Open/Closed Cambio MKT",
+      "value": "jj MDM mt - Task Open/Closed Cambio MKT"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "43",
+      "value": "43"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var tID = current.sys_id.toString(),\n        logDeTodo = false,\n        msgHistorico,\n        mtrID,\n        mtrName,\n        mtrTipoCambio,\n        horaInicio = new GlideDateTime(),\n        rID,\n        rNumber = current.request_item.getDisplayValue().toString(),\n        rNoEjecucion;\n\n    var msgLog = 'JJ_MDM_Cambio_MKT_' + rNumber;\n\n    if (logDeTodo)\n        gs.log('000 Entro ', msgLog);\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + current.request_item);\n    gr01.query();\n    gr01.next();\n    rID = gr01.sys_id;\n    rNoEjecucion = gr01.u_mdm_ejecuciones_no.toString();\n    mtrTipoCambio = gr01.variables.tipo_de_solicitud.toString();\n\n    if (rNoEjecucion == '1') {\n\n        msgHistorico = 'Cambio MKT ' + gr01.number + ' ' + new jj_Fecha_Mx().fechaHoyMx_MDM_hoy_hora();\n\n        var gr02 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n        gr02.addEncodedQuery('u_mkt_ritm=' + rID);\n        gr02.query();\n        gr02.u_mkt_task = tID;\n        gr02.updateMultiple();\n        if (logDeTodo)\n            gs.log('001 ' + current.number + ' Update ', msgLog);\n\n        // Tiempo de espera\n        gs.sleep(5000);\n\n        var iConta = 0;\n        var gr13 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n        gr13.addEncodedQuery('u_mkt_ritm=' + rID);\n        gr13.query();\n        while (gr13.next()) {\n\n            if (logDeTodo)\n                gs.log('002 MDM_Reg.  ', msgLog);\n\n\n            mtrID = gr13.u_mkt_material_original;\n            mtrName = gr13.u_mkt_descripcion_larga_de_producto.toString();\n\n            var gr12 = new GlideRecord('u_mdm_registros');\n            gr12.addEncodedQuery('sys_id=' + mtrID);\n            gr12.query();\n            if (gr12.next()) {\n\n                gr12.setWorkflow(false);\n\n                gr12.u_mt_historico = msgHistorico;\n                gr12.u_mt_nombre = mtrName;\n                gr12.u_mt_ecommerce = gr13.u_mkt_keyword;\n\n                // Actualizar campos \n                var respuestaTask00 = new jj_MDM_Utils_Client().mdm_ActualizarName(mtrID, mtrName);\n                gs.sleep(500); // Pausa de 0.5 segundo\n                var strArray = respuestaTask00.toString().split('zzRespUestazz');\n\n                gr12.u_mt_keywords_complementario = strArray[0];\n                gr12.u_mt_metadescripcion = strArray[1];\n                gr12.u_mt_caption_link = strArray[2];\n\n                gr12.update();\n\n            }\n            if (logDeTodo)\n                gs.log('Update EAN: ' + iConta + ' - ' + gr13.u_mkt_ean_pieza, msgLog);\n\n\n            gr13.setWorkflow(false);\n            if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n                // \"Uno a uno\"\t\n            } else {\n                // \"Masivo\"\t\t\n                gr13.u_mkt_keyword_comple = strArray[0];\n                gr13.u_mtr_metadescripcion = strArray[1];\n                gr13.u_mtr_caption_link = strArray[2];\n            }\n            gr13.u_mkt_estatus = 'Aprobado';\n            gr13.u_mkt_random = '';\n            gr13.update();\n\n\n            iConta++;\n            if ((iConta % 100) == 0)\n                gs.log('UpDate Reg: ' + iConta, msgLog);\n        }\n        // Ultimo\n        gs.log('UpDate Reg: ' + iConta + ' --- FIN', msgLog);\n\n\n\n\n        var gr03 = new GlideRecord('sc_task');\n        gr03.addEncodedQuery('sys_id=' + tID);\n        gr03.query();\n        gr03.next();\n        gr03.state = 3;\n        gr03.update();\n        if (logDeTodo)\n            gs.log('002 Closed ', msgLog);\n\n\n\n\n    }\n    if (logDeTodo)\n        gs.log('zZz FIN zZz', msgLog);\n\n\n    var msgFinalReturn = jjTiempoTotal(horaInicio, 'Listo');\n    gs.log('99999\\n\\nMDM Materiales Cambio MKT \"Modificado\"' + msgFinalReturn, msgLog);\n\n})(current, previous);\n\n\n\n\n\n\n\n// ==============================================================================================================================\n\n// ------------------------------------------------------------------------------------------------------------\n// Contador auto incremental para mensajes\nfunction jjGet00Mov(vNum) {\n    var calculoMov;\n    calculoMov = '000000' + (vNum);\n    calculoMov = calculoMov.substring(calculoMov.length - 5, calculoMov.length) + ' ';\n    return calculoMov;\n}\n// ------------------------------------------------------------------------------------------------------------\n// Calculo tiempo total de ejecucion de codigo\nfunction jjTiempoTotal(vFecha1, vMsg) {\n    var vFecha2 = new GlideDateTime(); // Obtener fecha final\n    var date1 = new GlideDateTime(vFecha1).getNumericValue(); // Convertir a milisegundos\n    var date2 = new GlideDateTime(vFecha2).getNumericValue(); // Convertir a milisegundos\n    var diffMillis = date2 - date1; // Calcular la diferencia en milisegundos\n    var msgTemp = '\\n\\n';\n    msgTemp += vFecha1 + ' \\n';\n    msgTemp += vFecha2 + ' \\n';\n    msgTemp += 'Tiempo de proceso = ' + this.jjConvertMillisToTime(diffMillis) + '\\n\\n';\n    msgTemp += vMsg + ' \\n\\n';\n    msgTemp += 'FIN \\n\\n';\n    return msgTemp;\n}\n// ------------------------------------------------------------------------------------------------------------\n// Calculo de minutos\nfunction jjConvertMillisToTime(millis) {\n    var hours = Math.floor(millis / (1000 * 60 * 60)); // Calcular horas, minutos y segundos\n    var minutes = Math.floor((millis % (1000 * 60 * 60)) / (1000 * 60));\n    var seconds = Math.floor((millis % (1000 * 60)) / 1000);\n    hours = hours.toString().padStart(2, '0'); // Agregar ceros iniciales si es necesario (para formato HH:mm:ss)\n    minutes = minutes.toString().padStart(2, '0');\n    seconds = seconds.toString().padStart(2, '0');\n    return hours + ':' + minutes + ':' + seconds; // Devolver el formato HH:mm:ss\n}\n// ------------------------------------------------------------------------------------------------------------\n\n// ==============================================================================================================================",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var tID = current.sys_id.toString(),\n        logDeTodo = false,\n        msgHistorico,\n        mtrID,\n        mtrName,\n        mtrTipoCambio,\n        horaInicio = new GlideDateTime(),\n        rID,\n        rNumber = current.request_item.getDisplayValue().toString(),\n        rNoEjecucion;\n\n    var msgLog = 'JJ_MDM_Cambio_MKT_' + rNumber;\n\n    if (logDeTodo)\n        gs.log('000 Entro ', msgLog);\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + current.request_item);\n    gr01.query();\n    gr01.next();\n    rID = gr01.sys_id;\n    rNoEjecucion = gr01.u_mdm_ejecuciones_no.toString();\n    mtrTipoCambio = gr01.variables.tipo_de_solicitud.toString();\n\n    if (rNoEjecucion == '1') {\n\n        msgHistorico = 'Cambio MKT ' + gr01.number + ' ' + new jj_Fecha_Mx().fechaHoyMx_MDM_hoy_hora();\n\n        var gr02 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n        gr02.addEncodedQuery('u_mkt_ritm=' + rID);\n        gr02.query();\n        gr02.u_mkt_task = tID;\n        gr02.updateMultiple();\n        if (logDeTodo)\n            gs.log('001 ' + current.number + ' Update ', msgLog);\n\n        // Tiempo de espera\n        gs.sleep(5000);\n\n        var iConta = 0;\n        var gr13 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n        gr13.addEncodedQuery('u_mkt_ritm=' + rID);\n        gr13.query();\n        while (gr13.next()) {\n\n            if (logDeTodo)\n                gs.log('002 MDM_Reg.  ', msgLog);\n\n\n            mtrID = gr13.u_mkt_material_original;\n            mtrName = gr13.u_mkt_descripcion_larga_de_producto.toString();\n\n            var gr12 = new GlideRecord('u_mdm_registros');\n            gr12.addEncodedQuery('sys_id=' + mtrID);\n            gr12.query();\n            if (gr12.next()) {\n\n                gr12.setWorkflow(false);\n\n                gr12.u_mt_historico = msgHistorico;\n                gr12.u_mt_nombre = mtrName;\n                gr12.u_mt_ecommerce = gr13.u_mkt_keyword;\n\n                // Actualizar campos \n                var respuestaTask00 = new jj_MDM_Utils_Client().mdm_ActualizarName(mtrID, mtrName);\n                gs.sleep(500); // Pausa de 0.5 segundo\n                var strArray = respuestaTask00.toString().split('zzRespUestazz');\n\n                gr12.u_mt_keywords_complementario = strArray[0];\n                gr12.u_mt_metadescripcion = strArray[1];\n                gr12.u_mt_caption_link = strArray[2];\n\n                gr12.update();\n\n            }\n            if (logDeTodo)\n                gs.log('Update EAN: ' + iConta + ' - ' + gr13.u_mkt_ean_pieza, msgLog);\n\n\n            gr13.setWorkflow(false);\n            if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n                // \"Uno a uno\"\t\n            } else {\n                // \"Masivo\"\t\t\n                gr13.u_mkt_keyword_comple = strArray[0];\n                gr13.u_mtr_metadescripcion = strArray[1];\n                gr13.u_mtr_caption_link = strArray[2];\n            }\n            gr13.u_mkt_estatus = 'Aprobado';\n            gr13.u_mkt_random = '';\n            gr13.update();\n\n\n            iConta++;\n            if ((iConta % 100) == 0)\n                gs.log('UpDate Reg: ' + iConta, msgLog);\n        }\n        // Ultimo\n        gs.log('UpDate Reg: ' + iConta + ' --- FIN', msgLog);\n\n\n\n\n        var gr03 = new GlideRecord('sc_task');\n        gr03.addEncodedQuery('sys_id=' + tID);\n        gr03.query();\n        gr03.next();\n        gr03.state = 3;\n        gr03.update();\n        if (logDeTodo)\n            gs.log('002 Closed ', msgLog);\n\n\n\n\n    }\n    if (logDeTodo)\n        gs.log('zZz FIN zZz', msgLog);\n\n\n    var msgFinalReturn = jjTiempoTotal(horaInicio, 'Listo');\n    gs.log('99999\\n\\nMDM Materiales Cambio MKT \"Modificado\"' + msgFinalReturn, msgLog);\n\n})(current, previous);\n\n\n\n\n\n\n\n// ==============================================================================================================================\n\n// ------------------------------------------------------------------------------------------------------------\n// Contador auto incremental para mensajes\nfunction jjGet00Mov(vNum) {\n    var calculoMov;\n    calculoMov = '000000' + (vNum);\n    calculoMov = calculoMov.substring(calculoMov.length - 5, calculoMov.length) + ' ';\n    return calculoMov;\n}\n// ------------------------------------------------------------------------------------------------------------\n// Calculo tiempo total de ejecucion de codigo\nfunction jjTiempoTotal(vFecha1, vMsg) {\n    var vFecha2 = new GlideDateTime(); // Obtener fecha final\n    var date1 = new GlideDateTime(vFecha1).getNumericValue(); // Convertir a milisegundos\n    var date2 = new GlideDateTime(vFecha2).getNumericValue(); // Convertir a milisegundos\n    var diffMillis = date2 - date1; // Calcular la diferencia en milisegundos\n    var msgTemp = '\\n\\n';\n    msgTemp += vFecha1 + ' \\n';\n    msgTemp += vFecha2 + ' \\n';\n    msgTemp += 'Tiempo de proceso = ' + this.jjConvertMillisToTime(diffMillis) + '\\n\\n';\n    msgTemp += vMsg + ' \\n\\n';\n    msgTemp += 'FIN \\n\\n';\n    return msgTemp;\n}\n// ------------------------------------------------------------------------------------------------------------\n// Calculo de minutos\nfunction jjConvertMillisToTime(millis) {\n    var hours = Math.floor(millis / (1000 * 60 * 60)); // Calcular horas, minutos y segundos\n    var minutes = Math.floor((millis % (1000 * 60 * 60)) / (1000 * 60));\n    var seconds = Math.floor((millis % (1000 * 60)) / 1000);\n    hours = hours.toString().padStart(2, '0'); // Agregar ceros iniciales si es necesario (para formato HH:mm:ss)\n    minutes = minutes.toString().padStart(2, '0');\n    seconds = seconds.toString().padStart(2, '0');\n    return hours + ':' + minutes + ':' + seconds; // Devolver el formato HH:mm:ss\n}\n// ------------------------------------------------------------------------------------------------------------\n\n// =============================================================================================================================="
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^EQ",
+      "value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_0a56cc042b197650677df2f9ed91bf1f",
+      "value": "sys_script_0a56cc042b197650677df2f9ed91bf1f"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task Open/Closed Cambio MKT",
+      "value": "jj MDM mt - Task Open/Closed Cambio MKT"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "01-09-2025 16:55:36",
+      "value": "2025-09-01 22:55:36"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "10c5efed1b9c9210a9f8766dcc4bcbdf",
+      "value": "10c5efed1b9c9210a9f8766dcc4bcbdf"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "28-08-2024 13:29:14",
+      "value": "2024-08-28 19:29:14"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task N Hijos Cambio New",
+      "value": "jj MDM mt - Task N Hijos Cambio New"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "83",
+      "value": "83"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLogEmail = '_MDM_BR_Task_Hijo_C',\n\ttempMsg= '\\n\\n';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    msgLogEmail = current.request_item.getDisplayValue() +'_0'+current.u_mdm_etapa+'_'+ msgLogEmail;\n\n\t// gs.log('Entro', msgLogEmail);\n\n    var gr00 = new GlideRecord('u_mdm_registros');\n    gr00.addEncodedQuery('u_ritm=' + current.request_item);\n    gr00.query();\n    if (gr00.next()) {\n\n        // Asignar Material a \"Task\"\n        // La asignacion de materiales se realiza mientras espera \"Flujo de cambio\" en el Workflow\n\n\t\t// Los cambios solo se pueden crear desde widget\n\t\t// - Cambio normal\n\t\t// - Cambio cambrica\n\t\t// - Cambio masivo\n\n\n        // [0] - PROVEEDOR (Etapa0) \n        // [1] - COMPRADOR\n        // [2] - ASUNTOS REGULATORIOS\n        // [3] - MKT\n        // [4] - MM\n\n\t\t// 441ae9871bfd9610a9f8766dcc4bcbc3 - Modificacion sin flujo MM\n\n\n\n\n\n        var varEmail = 'jj@gmail.com',\n            varEtapa = gr00.u_mt_etapa_actual;\n\n\n\t\t// Material es el registro del cambio solicitado\n\t\tcurrent.u_mdm_material_actual = gr00.u_mtr_cambio_material_origen;\n\t\tcurrent.u_mdm_material_cambio = gr00.sys_id;\n\t\t// Asignacion\n\t\tif (varEtapa == 1) \n\t\t\tcurrent.assigned_to = gr00.u_mt_comprador;\n\t\tcurrent.update();\n\n\t\ttempMsg += 'MTR_Actual: '+current.u_mdm_material_actual+' / '+ current.u_mdm_material_actual.getDisplayValue()+'\\n';\n\t\ttempMsg += 'MTR_Cambio: '+current.u_mdm_material_cambio+' / '+ current.u_mdm_material_cambio.getDisplayValue()+'\\n';\n\t\ttempMsg+= '\\n';\t\n\t\ttempMsg += 'Asignado: '+current.assignment_group.getDisplayValue()+' / '+ current.assigned_to.getDisplayValue()+'\\n';\n\t\ttempMsg+= '\\n';\t\n\n\n        if (varEtapa == 1) {\n            // [1] - COMPRADOR\n            varEmail = gr00.u_mt_comprador.email.toString();\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 2) {\n            // [2] - ASUNTOS REGULATORIOS\n            varEmail = getEmailGrupal('73975fb797468e90cc1ebbdfe153af82'); // MDM_02_Asuntos_Regulatorios\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 3) {\n            // [3] - MKT\n            varEmail = getEmailGrupal('6cd75fbb97468e90cc1ebbdfe153afbd'); // MDM_03_Mercadotecnia\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 4) {\n            // [4] - OPERACIONES\n            varEmail = getEmailGrupal('1666508d1bc11a10a9f8766dcc4bcb51'); // MDM_04_Operaciones\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 5) {\n            // [5] - Maestro de articulos\n            varEmail = getEmailGrupal('9b08ff94971b4650cc1ebbdfe153afbc'); // MDM_07_Analista Sr\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 6) {\n            // [6] - Maestro de articulos\n            varEmail = getEmailGrupal('9b08ff94971b4650cc1ebbdfe153afbc'); // MDM_07_Analista Sr\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        }\n\n\t\t\t\n        // gs.eventQueue(\"<event_name>\", object, parm1, parm2);\n        gs.log('RITM: ' + gr00.u_ritm.getDisplayValue() + '\\nTask: ' + current.number + '\\nEtapa: ' + varEtapa + '\\nEmail(s): ' + varEmail+ tempMsg, msgLogEmail);\n        // gs.log(current, msgLogEmail); // Task\n    }\n})(current, previous);\n\n\n\n\n\n// -------------------------------- Regresa email del grupo consultado --------------------------------\nfunction getEmailGrupal(varGrupoID) {\n    var respUsers = '',\n        iCont = 1;\n    var gr02 = new GlideRecord('sys_user_grmember');\n    gr02.addEncodedQuery('group=' + varGrupoID);\n    gr02.query();\n    while (gr02.next()) {\n        respUsers += (iCont == 1) ? '' : ',';\n        respUsers += gr02.user.email.toString();\n        iCont++;\n    }\n    // gs.log(respUsers, msgLogEmail);\n    return respUsers;\n}",
+      "value": "var msgLogEmail = '_MDM_BR_Task_Hijo_C',\n\ttempMsg= '\\n\\n';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    msgLogEmail = current.request_item.getDisplayValue() +'_0'+current.u_mdm_etapa+'_'+ msgLogEmail;\n\n\t// gs.log('Entro', msgLogEmail);\n\n    var gr00 = new GlideRecord('u_mdm_registros');\n    gr00.addEncodedQuery('u_ritm=' + current.request_item);\n    gr00.query();\n    if (gr00.next()) {\n\n        // Asignar Material a \"Task\"\n        // La asignacion de materiales se realiza mientras espera \"Flujo de cambio\" en el Workflow\n\n\t\t// Los cambios solo se pueden crear desde widget\n\t\t// - Cambio normal\n\t\t// - Cambio cambrica\n\t\t// - Cambio masivo\n\n\n        // [0] - PROVEEDOR (Etapa0) \n        // [1] - COMPRADOR\n        // [2] - ASUNTOS REGULATORIOS\n        // [3] - MKT\n        // [4] - MM\n\n\t\t// 441ae9871bfd9610a9f8766dcc4bcbc3 - Modificacion sin flujo MM\n\n\n\n\n\n        var varEmail = 'jj@gmail.com',\n            varEtapa = gr00.u_mt_etapa_actual;\n\n\n\t\t// Material es el registro del cambio solicitado\n\t\tcurrent.u_mdm_material_actual = gr00.u_mtr_cambio_material_origen;\n\t\tcurrent.u_mdm_material_cambio = gr00.sys_id;\n\t\t// Asignacion\n\t\tif (varEtapa == 1) \n\t\t\tcurrent.assigned_to = gr00.u_mt_comprador;\n\t\tcurrent.update();\n\n\t\ttempMsg += 'MTR_Actual: '+current.u_mdm_material_actual+' / '+ current.u_mdm_material_actual.getDisplayValue()+'\\n';\n\t\ttempMsg += 'MTR_Cambio: '+current.u_mdm_material_cambio+' / '+ current.u_mdm_material_cambio.getDisplayValue()+'\\n';\n\t\ttempMsg+= '\\n';\t\n\t\ttempMsg += 'Asignado: '+current.assignment_group.getDisplayValue()+' / '+ current.assigned_to.getDisplayValue()+'\\n';\n\t\ttempMsg+= '\\n';\t\n\n\n        if (varEtapa == 1) {\n            // [1] - COMPRADOR\n            varEmail = gr00.u_mt_comprador.email.toString();\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 2) {\n            // [2] - ASUNTOS REGULATORIOS\n            varEmail = getEmailGrupal('73975fb797468e90cc1ebbdfe153af82'); // MDM_02_Asuntos_Regulatorios\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 3) {\n            // [3] - MKT\n            varEmail = getEmailGrupal('6cd75fbb97468e90cc1ebbdfe153afbd'); // MDM_03_Mercadotecnia\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 4) {\n            // [4] - OPERACIONES\n            varEmail = getEmailGrupal('1666508d1bc11a10a9f8766dcc4bcb51'); // MDM_04_Operaciones\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 5) {\n            // [5] - Maestro de articulos\n            varEmail = getEmailGrupal('9b08ff94971b4650cc1ebbdfe153afbc'); // MDM_07_Analista Sr\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        } else if (varEtapa == 6) {\n            // [6] - Maestro de articulos\n            varEmail = getEmailGrupal('9b08ff94971b4650cc1ebbdfe153afbc'); // MDM_07_Analista Sr\n            gs.eventQueue('mdm.mt.task.nueva', current, varEmail, '');\n        }\n\n\t\t\t\n        // gs.eventQueue(\"<event_name>\", object, parm1, parm2);\n        gs.log('RITM: ' + gr00.u_ritm.getDisplayValue() + '\\nTask: ' + current.number + '\\nEtapa: ' + varEtapa + '\\nEmail(s): ' + varEmail+ tempMsg, msgLogEmail);\n        // gs.log(current, msgLogEmail); // Task\n    }\n})(current, previous);\n\n\n\n\n\n// -------------------------------- Regresa email del grupo consultado --------------------------------\nfunction getEmailGrupal(varGrupoID) {\n    var respUsers = '',\n        iCont = 1;\n    var gr02 = new GlideRecord('sys_user_grmember');\n    gr02.addEncodedQuery('group=' + varGrupoID);\n    gr02.query();\n    while (gr02.next()) {\n        respUsers += (iCont == 1) ? '' : ',';\n        respUsers += gr02.user.email.toString();\n        iCont++;\n    }\n    // gs.log(respUsers, msgLogEmail);\n    return respUsers;\n}"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^EQ",
+      "value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_10c5efed1b9c9210a9f8766dcc4bcbdf",
+      "value": "sys_script_10c5efed1b9c9210a9f8766dcc4bcbdf"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task N Hijos Cambio New",
+      "value": "jj MDM mt - Task N Hijos Cambio New"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "u_marc_perkz=T^u_marc_dislk=EX^u_marc_beskz=F^u_marc_ladgr=1^u_marc_vrmod=2^u_marc_vint1=1^u_marc_vint2=21^u_marc_strgr=40^u_marc_lgfsb=0010^EQ",
+      "value": "u_marc_perkz=T^u_marc_dislk=EX^u_marc_beskz=F^u_marc_ladgr=1^u_marc_vrmod=2^u_marc_vint1=1^u_marc_vint2=21^u_marc_strgr=40^u_marc_lgfsb=0010^EQ"
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "19-12-2024 00:19:18",
+      "value": "2024-12-19 06:19:18"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "1a50382d97909210cc1ebbdfe153afa4",
+      "value": "1a50382d97909210cc1ebbdfe153afa4"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "28-08-2024 00:18:27",
+      "value": "2024-08-28 06:18:27"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "MDM DISMM X0",
+      "value": "MDM DISMM X0"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "400",
+      "value": "400"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "active": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_cmdb_mdm_planta",
+      "value": "u_cmdb_mdm_planta"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\t// gs.addInfoMessage(\"Entro a validar X0\")\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\t// gs.addInfoMessage(\"Entro a validar X0\")\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_marc_dismm=X0^EQ",
+      "value": "u_marc_dismm=X0^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_1a50382d97909210cc1ebbdfe153afa4",
+      "value": "sys_script_1a50382d97909210cc1ebbdfe153afa4"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "MDM DISMM X0",
+      "value": "MDM DISMM X0"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "04-02-2026 14:40:41",
+      "value": "2026-02-04 20:40:41"
+    },
+    "when": {
+      "display_value": "async",
+      "value": "async_always"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "202498182b55f650677df2f9ed91bf34",
+      "value": "202498182b55f650677df2f9ed91bf34"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "14-11-2025 10:29:37",
+      "value": "2025-11-14 16:29:37"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio MKT",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio MKT"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "12",
+      "value": "12"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "active": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "12",
+      "value": "12"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog02 = '_C_MKT_MDM_BR_EnvioSAP';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_A_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=8');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C_MKT]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C_MKT');\n\n    }\n})(current, previous);",
+      "value": "var msgLog02 = '_C_MKT_MDM_BR_EnvioSAP';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_A_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=8');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C_MKT]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C_MKT');\n\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^u_mdm_resultadoCHANGESTOEnviado^stateCHANGESTO2^EQ",
+      "value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^u_mdm_resultadoCHANGESTOEnviado^stateCHANGESTO2^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_202498182b55f650677df2f9ed91bf34",
+      "value": "sys_script_202498182b55f650677df2f9ed91bf34"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio MKT",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio MKT"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "u_mara_bismtSAMEASu_mara_matnr^EQ",
+      "value": "u_mara_bismtSAMEASu_mara_matnr^EQ"
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "08-03-2025 23:06:43",
+      "value": "2025-03-09 05:06:43"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "2208822b97cc2210cc1ebbdfe153afc8",
+      "value": "2208822b97cc2210cc1ebbdfe153afc8"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "08-03-2025 21:43:43",
+      "value": "2025-03-09 03:43:43"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "CopiarMaterial-Anterior v2",
+      "value": "CopiarMaterial-Anterior v2"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_cmdb_mdm_datos_basicos",
+      "value": "u_cmdb_mdm_datos_basicos"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_mara_bismtISEMPTY^EQ",
+      "value": "u_mara_bismtISEMPTY^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_2208822b97cc2210cc1ebbdfe153afc8",
+      "value": "sys_script_2208822b97cc2210cc1ebbdfe153afc8"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "CopiarMaterial-Anterior v2",
+      "value": "CopiarMaterial-Anterior v2"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "04-02-2026 14:40:30",
+      "value": "2026-02-04 20:40:30"
+    },
+    "when": {
+      "display_value": "async",
+      "value": "async_always"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "2c3660331b44d610a9f8766dcc4bcb48",
+      "value": "2c3660331b44d610a9f8766dcc4bcb48"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "22-08-2024 13:06:33",
+      "value": "2024-08-22 19:06:33"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Alta",
+      "value": "jj MDM mt - RITM EnvioSAP Alta"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "11",
+      "value": "11"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "77",
+      "value": "77"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "11",
+      "value": "11"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog02 = '_A_MDM_BR_EnvioSAP';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_A_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=8');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [A]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos(sysid, 'A');\n\n    }\n})(current, previous);",
+      "value": "var msgLog02 = '_A_MDM_BR_EnvioSAP';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_A_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=8');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [A]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos(sysid, 'A');\n\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_resultadoCHANGESTOEnviado^stateCHANGESTO2^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_resultadoCHANGESTOEnviado^stateCHANGESTO2^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_2c3660331b44d610a9f8766dcc4bcb48",
+      "value": "sys_script_2c3660331b44d610a9f8766dcc4bcb48"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Alta",
+      "value": "jj MDM mt - RITM EnvioSAP Alta"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "17-09-2025 10:21:52",
+      "value": "2025-09-17 16:21:52"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "53e373b43bc8b210a4187124c3e45ae3",
+      "value": "53e373b43bc8b210a4187124c3e45ae3"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "15-09-2025 12:43:38",
+      "value": "2025-09-15 18:43:38"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task OPEN",
+      "value": "jj MDM mt - Task OPEN"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'MDM_Task_open',\n        varFechaMX = '';\n\n    varFechaMX = new jj_Fecha_Mx().fechaHoyMx_mXX_time(); // Script Includes \n    current.u_mdm_open = varFechaMX;\n    gs.log('Task ' + current.number + ' OPEN ' + varFechaMX, msgLog);\n\n\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'MDM_Task_open',\n        varFechaMX = '';\n\n    varFechaMX = new jj_Fecha_Mx().fechaHoyMx_mXX_time(); // Script Includes \n    current.u_mdm_open = varFechaMX;\n    gs.log('Task ' + current.number + ' OPEN ' + varFechaMX, msgLog);\n\n\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO1^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO1^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_53e373b43bc8b210a4187124c3e45ae3",
+      "value": "sys_script_53e373b43bc8b210a4187124c3e45ae3"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task OPEN",
+      "value": "jj MDM mt - Task OPEN"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "14-08-2024 20:02:27",
+      "value": "2024-08-15 02:02:27"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "6039f4d997881a10cc1ebbdfe153af66",
+      "value": "6039f4d997881a10cc1ebbdfe153af66"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "14-08-2024 20:01:22",
+      "value": "2024-08-15 02:01:22"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "RechazarSinMaterial",
+      "value": "RechazarSinMaterial"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_cmdb_mdm_datos_basicos",
+      "value": "u_cmdb_mdm_datos_basicos"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/) {\n\n\t current.setAbortAction(true);\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/) {\n\n\t current.setAbortAction(true);\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_mara_bismtISEMPTY^u_mara_matnrISEMPTY^EQ",
+      "value": "u_mara_bismtISEMPTY^u_mara_matnrISEMPTY^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_6039f4d997881a10cc1ebbdfe153af66",
+      "value": "sys_script_6039f4d997881a10cc1ebbdfe153af66"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "RechazarSinMaterial",
+      "value": "RechazarSinMaterial"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "30-06-2025 11:55:34",
+      "value": "2025-06-30 17:55:34"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "668c8c439756a290cc1ebbdfe153afb2",
+      "value": "668c8c439756a290cc1ebbdfe153afb2"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "26-06-2025 19:47:49",
+      "value": "2025-06-27 01:47:49"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task N Hijos Alta Open",
+      "value": "jj MDM mt - Task N Hijos Alta Open"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "12",
+      "value": "12"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLogEmail = '_MDM_BR_Task_Hijo_A_Open';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    var vTask_New = new jj_MDM_Utils_Client().mdm_alta_new_hijo(current,msgLogEmail);\n\n})(current, previous);",
+      "value": "var msgLogEmail = '_MDM_BR_Task_Hijo_A_Open';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    var vTask_New = new jj_MDM_Utils_Client().mdm_alta_new_hijo(current,msgLogEmail);\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISNOTEMPTY^stateCHANGESTO1^stateCHANGESFROM3^ORstateCHANGESFROM2^ORstateCHANGESFROM-5^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISNOTEMPTY^stateCHANGESTO1^stateCHANGESFROM3^ORstateCHANGESFROM2^ORstateCHANGESFROM-5^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_668c8c439756a290cc1ebbdfe153afb2",
+      "value": "sys_script_668c8c439756a290cc1ebbdfe153afb2"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task N Hijos Alta Open",
+      "value": "jj MDM mt - Task N Hijos Alta Open"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "24-06-2024 15:43:35",
+      "value": "2024-06-24 21:43:35"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "7a4beacf97360e10cc1ebbdfe153af1b",
+      "value": "7a4beacf97360e10cc1ebbdfe153af1b"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "mario.trejo",
+      "value": "mario.trejo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "19-06-2024 11:56:20",
+      "value": "2024-06-19 17:56:20"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "MDM Proveedores - Renombra adjuntos",
+      "value": "MDM Proveedores - Renombra adjuntos"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "mario.trejo",
+      "value": "mario.trejo"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "6",
+      "value": "6"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/) {\n\nvar RitmID = current.sys_id.toString();\n\nvar gr = new GlideRecord('sc_req_item');\n gr.addEncodedQuery('sys_id=' + RitmID);\n gr.query();\nvar previousName = gr.variables.comprobante_domicilio;\nvar rfc = gr.variables.rfc;\nvar razon = gr.variables.razon_social;\n\ngs.log('Nombre del archivo: '+ previousName + ' - Razon: ' + razon);\n\n/*current.variables.comprobante_domicilio = updateName(RitmID,previousName,rfc,razon);\n\nfunction updateName(){\n\tvar grAttach = new GlideRecord('sys_attachment');\n\tgrAttach.addQuery('table_sys_id', RitmID);\n\tgrAttach.addQuery('file_name', previousName);\n\tgrAttach.query();\n\tif (grAttach.next()) {\n\t\tgrAttach.file_name = 'COMPROB_DOM_' + rfc + '_' + razon;\n\t\tgrAttach.update();\n\t}\n\tgs.log('En la funcion');\n}*/\n\n\n\n\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/) {\n\nvar RitmID = current.sys_id.toString();\n\nvar gr = new GlideRecord('sc_req_item');\n gr.addEncodedQuery('sys_id=' + RitmID);\n gr.query();\nvar previousName = gr.variables.comprobante_domicilio;\nvar rfc = gr.variables.rfc;\nvar razon = gr.variables.razon_social;\n\ngs.log('Nombre del archivo: '+ previousName + ' - Razon: ' + razon);\n\n/*current.variables.comprobante_domicilio = updateName(RitmID,previousName,rfc,razon);\n\nfunction updateName(){\n\tvar grAttach = new GlideRecord('sys_attachment');\n\tgrAttach.addQuery('table_sys_id', RitmID);\n\tgrAttach.addQuery('file_name', previousName);\n\tgrAttach.query();\n\tif (grAttach.next()) {\n\t\tgrAttach.file_name = 'COMPROB_DOM_' + rfc + '_' + razon;\n\t\tgrAttach.update();\n\t}\n\tgs.log('En la funcion');\n}*/\n\n\n\n\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=3e53cd0697a68a14cc1ebbdfe153af0c^EQ",
+      "value": "cat_item=3e53cd0697a68a14cc1ebbdfe153af0c^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_7a4beacf97360e10cc1ebbdfe153af1b",
+      "value": "sys_script_7a4beacf97360e10cc1ebbdfe153af1b"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "MDM Proveedores - Renombra adjuntos",
+      "value": "MDM Proveedores - Renombra adjuntos"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "14-04-2026 09:56:12",
+      "value": "2026-04-14 15:56:12"
+    },
+    "when": {
+      "display_value": "async",
+      "value": "async_always"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "825968fa3bc88310a4187124c3e45aa5",
+      "value": "825968fa3bc88310a4187124c3e45aa5"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "07-04-2026 23:18:57",
+      "value": "2026-04-08 05:18:57"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio IMG off",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio IMG off"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "active": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog02 = '_C_MDM_BR_EnvioSAP';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_C_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=11');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C');\n\n    }\n})(current, previous);",
+      "value": "var msgLog02 = '_C_MDM_BR_EnvioSAP';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_C_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=11');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C');\n\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=fa1c86963b880710a4187124c3e45a0c^u_mdm_resultadoCHANGESTOEnviado^ORstateCHANGESTO2^EQ",
+      "value": "cat_item=fa1c86963b880710a4187124c3e45a0c^u_mdm_resultadoCHANGESTOEnviado^ORstateCHANGESTO2^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_825968fa3bc88310a4187124c3e45aa5",
+      "value": "sys_script_825968fa3bc88310a4187124c3e45aa5"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio IMG off",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio IMG off"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "14-05-2025 17:13:35",
+      "value": "2025-05-14 23:13:35"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "8df2ce4d976dae10cc1ebbdfe153af4e",
+      "value": "8df2ce4d976dae10cc1ebbdfe153af4e"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "14-05-2025 16:30:14",
+      "value": "2025-05-14 22:30:14"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task Update Etapa08 Asig",
+      "value": "jj MDM mt - Task Update Etapa08 Asig"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "11",
+      "value": "11"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n    var gr01 = new GlideRecord('u_mdm_registros');\n    gr01.addEncodedQuery('sys_id=' + current.u_mdm_material);\n    gr01.query();\n    if (gr01.next()) {\n        var gr03 = new GlideRecord('sc_task');\n\t\t\tgr03.addEncodedQuery('request_item='+gr01.u_ritm+'^u_mdm_etapa=7');\n\t\t\tgr03.query();\n\t\t\tif(gr03.next()){\n\t\t\t\tcurrent.assigned_to = gr03.assigned_to.toString();\n\t\t\t}\n\t\t// current.u_mdm_extra = gr01.u_ritm.getDisplayValue();\n    }\n    current.update();\n\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n    var gr01 = new GlideRecord('u_mdm_registros');\n    gr01.addEncodedQuery('sys_id=' + current.u_mdm_material);\n    gr01.query();\n    if (gr01.next()) {\n        var gr03 = new GlideRecord('sc_task');\n\t\t\tgr03.addEncodedQuery('request_item='+gr01.u_ritm+'^u_mdm_etapa=7');\n\t\t\tgr03.query();\n\t\t\tif(gr03.next()){\n\t\t\t\tcurrent.assigned_to = gr03.assigned_to.toString();\n\t\t\t}\n\t\t// current.u_mdm_extra = gr01.u_ritm.getDisplayValue();\n    }\n    current.update();\n\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapa=8^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapa=8^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_8df2ce4d976dae10cc1ebbdfe153af4e",
+      "value": "sys_script_8df2ce4d976dae10cc1ebbdfe153af4e"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task Update Etapa08 Asig",
+      "value": "jj MDM mt - Task Update Etapa08 Asig"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "26-06-2025 19:50:55",
+      "value": "2025-06-27 01:50:55"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "9068a1821bbc5e90a9f8766dcc4bcb0b",
+      "value": "9068a1821bbc5e90a9f8766dcc4bcb0b"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "23-09-2024 14:13:41",
+      "value": "2024-09-23 20:13:41"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Registros Update EtapasAlta",
+      "value": "jj MDM mt - Registros Update EtapasAlta"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "42",
+      "value": "42"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_mdm_registros",
+      "value": "u_mdm_registros"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'mdm_BR_RegUpdate_Alta';\n    // gs.log('Entro', msgLog);\n\n    // Biene el cambio desde la BR \"jj MDM mt RITM NumEtapa Alta\"\n\n    var gr11 = new GlideRecord('sc_task');\n    gr11.addEncodedQuery('u_mdm_material=' + current.sys_id + '^request_item=' + current.u_ritm);\n    gr11.query();\n    // gr11.u_mdm_flujo_cambio = current.u_mt_flujo_cambio.toString();\n    gr11.u_mdm_etapa_actual = current.u_mt_etapa_actual.toString();\n    gr11.u_mdm_estatus_solicitud_material = current.u_mt_estatus.toString();\n    if (gr11.getRowCount() != 0) {\n        gr11.updateMultiple();\n    }\n    // gs.log('UpDate All \"Etapa Actual\".', msgLog);\n\n\n\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'mdm_BR_RegUpdate_Alta';\n    // gs.log('Entro', msgLog);\n\n    // Biene el cambio desde la BR \"jj MDM mt RITM NumEtapa Alta\"\n\n    var gr11 = new GlideRecord('sc_task');\n    gr11.addEncodedQuery('u_mdm_material=' + current.sys_id + '^request_item=' + current.u_ritm);\n    gr11.query();\n    // gr11.u_mdm_flujo_cambio = current.u_mt_flujo_cambio.toString();\n    gr11.u_mdm_etapa_actual = current.u_mt_etapa_actual.toString();\n    gr11.u_mdm_estatus_solicitud_material = current.u_mt_estatus.toString();\n    if (gr11.getRowCount() != 0) {\n        gr11.updateMultiple();\n    }\n    // gs.log('UpDate All \"Etapa Actual\".', msgLog);\n\n\n\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "sys_updated_by!=martin.crespo^EQ",
+      "value": "sys_updated_by!=martin.crespo^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_9068a1821bbc5e90a9f8766dcc4bcb0b",
+      "value": "sys_script_9068a1821bbc5e90a9f8766dcc4bcb0b"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Registros Update EtapasAlta",
+      "value": "jj MDM mt - Registros Update EtapasAlta"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "20-06-2025 22:06:04",
+      "value": "2025-06-21 04:06:04"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "9794cd7497314e10cc1ebbdfe153af49",
+      "value": "9794cd7497314e10cc1ebbdfe153af49"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "23-04-2024 11:13:22",
+      "value": "2024-04-23 17:13:22"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM Closed Incomplete A/C",
+      "value": "jj MDM mt - RITM Closed Incomplete A/C"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "57",
+      "value": "57"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'jj_001-BR';\n\n    // Buscar RITM hijos todos \"Close\" o \"Close incomplet\"\n\n    var gr00 = new GlideRecord('sc_req_item');\n    gr00.addEncodedQuery('sys_id=' + current.sys_id);\n    gr00.query();\n    if (gr00.next()) {\n\n        var varPadre = gr00.parent;\n        var varEstatus = gr00.state;\n\n\n        // Update estatus de registros Alta o Cambio\n        var gr01 = new GlideRecord('u_mdm_registros');\n        gr01.addEncodedQuery('u_ritm=' + current.sys_id);\n        gr01.query();\n        if (gr01.next()) {\n\n            if (gr00.cat_item == '96f6425c1be58610a9f8766dcc4bcbab') // ALTA\n                gr01.u_mt_estatus = 'Rechazado';\n\n            if (gr00.cat_item == 'ac6f02961bbf8210a9f8766dcc4bcbc1') // CAMBIO\n                gr01.u_mt_estatus = 'Rechazado';\n\n            gr01.update();\n        }\n\n\n        // ALTA\n        // Validar que el resto de RITM hijos esten cerrados\n        /*\n        if (gr00.cat_item == '96f6425c1be58610a9f8766dcc4bcbab') { // ALTA\n            var gr02 = new GlideRecord('sc_req_item');\n            gr02.addEncodedQuery('parent=' + varPadre + '^state!=3^state!=4');\n            gr02.query();\n            if (gr02.next()) {\n                // Ritm's abiertos\n            } else {\n                // Actualizar RITM padre\n                var gr03 = new GlideRecord('sc_req_item');\n                gr03.addEncodedQuery('sys_id=' + varPadre);\n                gr03.query();\n                if (gr03.next()) {\n                    gr03.state = 3;\n                    gr03.u_mdm_etapa = 100;\n                    gr03.update();\n                }\n            }\n        }\n\t\t*/\n\n\n        // Limpiar \"Cambio pendiente\" sea Alta o Cambio\n        var gr04 = new GlideRecord('u_mdm_registros');\n        gr04.addEncodedQuery('sys_id=' + current.u_mdm_material);\n        gr04.query();\n        if (gr04.getRowCount()) {\n            while (gr04.next()) {\n                gr04.u_mtr_cambio_pendiente = '';\n                gr04.update();\n            }\n        }\n\n\n    }\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'jj_001-BR';\n\n    // Buscar RITM hijos todos \"Close\" o \"Close incomplet\"\n\n    var gr00 = new GlideRecord('sc_req_item');\n    gr00.addEncodedQuery('sys_id=' + current.sys_id);\n    gr00.query();\n    if (gr00.next()) {\n\n        var varPadre = gr00.parent;\n        var varEstatus = gr00.state;\n\n\n        // Update estatus de registros Alta o Cambio\n        var gr01 = new GlideRecord('u_mdm_registros');\n        gr01.addEncodedQuery('u_ritm=' + current.sys_id);\n        gr01.query();\n        if (gr01.next()) {\n\n            if (gr00.cat_item == '96f6425c1be58610a9f8766dcc4bcbab') // ALTA\n                gr01.u_mt_estatus = 'Rechazado';\n\n            if (gr00.cat_item == 'ac6f02961bbf8210a9f8766dcc4bcbc1') // CAMBIO\n                gr01.u_mt_estatus = 'Rechazado';\n\n            gr01.update();\n        }\n\n\n        // ALTA\n        // Validar que el resto de RITM hijos esten cerrados\n        /*\n        if (gr00.cat_item == '96f6425c1be58610a9f8766dcc4bcbab') { // ALTA\n            var gr02 = new GlideRecord('sc_req_item');\n            gr02.addEncodedQuery('parent=' + varPadre + '^state!=3^state!=4');\n            gr02.query();\n            if (gr02.next()) {\n                // Ritm's abiertos\n            } else {\n                // Actualizar RITM padre\n                var gr03 = new GlideRecord('sc_req_item');\n                gr03.addEncodedQuery('sys_id=' + varPadre);\n                gr03.query();\n                if (gr03.next()) {\n                    gr03.state = 3;\n                    gr03.u_mdm_etapa = 100;\n                    gr03.update();\n                }\n            }\n        }\n\t\t*/\n\n\n        // Limpiar \"Cambio pendiente\" sea Alta o Cambio\n        var gr04 = new GlideRecord('u_mdm_registros');\n        gr04.addEncodedQuery('sys_id=' + current.u_mdm_material);\n        gr04.query();\n        if (gr04.getRowCount()) {\n            while (gr04.next()) {\n                gr04.u_mtr_cambio_pendiente = '';\n                gr04.update();\n            }\n        }\n\n\n    }\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO4^u_mdm_etapa!=99^ORu_mdm_etapa!=100^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO4^u_mdm_etapa!=99^ORu_mdm_etapa!=100^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_9794cd7497314e10cc1ebbdfe153af49",
+      "value": "sys_script_9794cd7497314e10cc1ebbdfe153af49"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM Closed Incomplete A/C",
+      "value": "jj MDM mt - RITM Closed Incomplete A/C"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "27-06-2025 14:55:53",
+      "value": "2025-06-27 20:55:53"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "9a82905397dae290cc1ebbdfe153af41",
+      "value": "9a82905397dae290cc1ebbdfe153af41"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "27-06-2025 14:52:30",
+      "value": "2025-06-27 20:52:30"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task N Hijos Alta New",
+      "value": "jj MDM mt - Task N Hijos Alta New"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "4",
+      "value": "4"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "9",
+      "value": "9"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLogEmail = '_MDM_BR_Task_Hijo_A_New';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    var vTask_New = new jj_MDM_Utils_Client().mdm_alta_new_hijo(current,msgLogEmail);\n\n})(current, previous);",
+      "value": "var msgLogEmail = '_MDM_BR_Task_Hijo_A_New';\n\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    var vTask_New = new jj_MDM_Utils_Client().mdm_alta_new_hijo(current,msgLogEmail);\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISNOTEMPTY^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISNOTEMPTY^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_9a82905397dae290cc1ebbdfe153af41",
+      "value": "sys_script_9a82905397dae290cc1ebbdfe153af41"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task N Hijos Alta New",
+      "value": "jj MDM mt - Task N Hijos Alta New"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "04-02-2026 14:40:36",
+      "value": "2026-02-04 20:40:36"
+    },
+    "when": {
+      "display_value": "async",
+      "value": "async_always"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "a45eb6e91bd89210a9f8766dcc4bcbad",
+      "value": "a45eb6e91bd89210a9f8766dcc4bcbad"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "28-08-2024 10:42:02",
+      "value": "2024-08-28 16:42:02"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "35",
+      "value": "35"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog02 = '_C_MDM_BR_EnvioSAP';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_C_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=6');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C');\n\n    }\n})(current, previous);",
+      "value": "var msgLog02 = '_C_MDM_BR_EnvioSAP';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // RITM000001_C_JJ_MDM_BR_EnvioSAP_001\n    msgLog02 = current.number + msgLog02;\n\n    var gr00 = new GlideRecord('sc_task');\n    gr00.addEncodedQuery('request_item=' + current.sys_id.toString() + '^u_mdm_etapa=6');\n    gr00.query();\n    if (gr00.next()) {\n        gs.log('Entro MDM_Rest_Utils [C]', msgLog02);\n\n        // CODE Ikaros [Martin]\t\n        var sysid = gr00.sys_id.toString();\n        var respSAP = new MDM_Rest_Utils().getDatos_mod(sysid, 'C');\n\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^u_mdm_resultadoCHANGESTOEnviado^ORstateCHANGESTO2^EQ",
+      "value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^u_mdm_resultadoCHANGESTOEnviado^ORstateCHANGESTO2^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_a45eb6e91bd89210a9f8766dcc4bcbad",
+      "value": "sys_script_a45eb6e91bd89210a9f8766dcc4bcbad"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM EnvioSAP Cambio",
+      "value": "jj MDM mt - RITM EnvioSAP Cambio"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "26-06-2025 19:50:49",
+      "value": "2025-06-27 01:50:49"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "bc6ec68d97a69250cc1ebbdfe153af05",
+      "value": "bc6ec68d97a69250cc1ebbdfe153af05"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "16-12-2024 14:15:06",
+      "value": "2024-12-16 20:15:06"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Registros Update EtapaCambio",
+      "value": "jj MDM mt - Registros Update EtapaCambio"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'mdm_BR_RegUpdate_Cambio';\n    // gs.log('Entro', msgLog);\n\n    var gr11 = new GlideRecord('sc_task');\n    gr11.addEncodedQuery('u_mdm_material=' + current.u_mdm_material_cambio + '^request_item=' + current.sys_id);\n    gr11.query();\n    // gr11.u_mdm_flujo_cambio = current.u_mt_flujo_cambio.toString();\n    // gr11.u_mdm_estatus_solicitud_material = current.u_mt_estatus.toString();\n    gr11.setWorkflow(false);\n    gr11.u_mdm_etapa_actual = current.u_mdm_etapa.toString();\n    if (gr11.getRowCount() != 0) {\n        gr11.updateMultiple();\n    }\n\n    var gr21 = new GlideRecord('u_mdm_registros');\n    gr21.addEncodedQuery('sys_id=' + current.u_mdm_material_cambio + '^u_ritm=' + current.sys_id);\n    gr21.query();\n    gr21.setWorkflow(false);\n    gr21.u_mt_etapa_actual = current.u_mdm_etapa.toString();\n    if (gr21.getRowCount() != 0) {\n        gr21.updateMultiple();\n    }\n\n    gs.log('UpDate All.', msgLog);\n\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    var msgLog = 'mdm_BR_RegUpdate_Cambio';\n    // gs.log('Entro', msgLog);\n\n    var gr11 = new GlideRecord('sc_task');\n    gr11.addEncodedQuery('u_mdm_material=' + current.u_mdm_material_cambio + '^request_item=' + current.sys_id);\n    gr11.query();\n    // gr11.u_mdm_flujo_cambio = current.u_mt_flujo_cambio.toString();\n    // gr11.u_mdm_estatus_solicitud_material = current.u_mt_estatus.toString();\n    gr11.setWorkflow(false);\n    gr11.u_mdm_etapa_actual = current.u_mdm_etapa.toString();\n    if (gr11.getRowCount() != 0) {\n        gr11.updateMultiple();\n    }\n\n    var gr21 = new GlideRecord('u_mdm_registros');\n    gr21.addEncodedQuery('sys_id=' + current.u_mdm_material_cambio + '^u_ritm=' + current.sys_id);\n    gr21.query();\n    gr21.setWorkflow(false);\n    gr21.u_mt_etapa_actual = current.u_mdm_etapa.toString();\n    if (gr21.getRowCount() != 0) {\n        gr21.updateMultiple();\n    }\n\n    gs.log('UpDate All.', msgLog);\n\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^u_mdm_etapaVALCHANGES^EQ",
+      "value": "cat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^u_mdm_etapaVALCHANGES^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_bc6ec68d97a69250cc1ebbdfe153af05",
+      "value": "sys_script_bc6ec68d97a69250cc1ebbdfe153af05"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Registros Update EtapaCambio",
+      "value": "jj MDM mt - Registros Update EtapaCambio"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "13-04-2026 14:21:22",
+      "value": "2026-04-13 20:21:22"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "bffb1dac3b10c350a4187124c3e45ae1",
+      "value": "bffb1dac3b10c350a4187124c3e45ae1"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "13-04-2026 13:30:35",
+      "value": "2026-04-13 19:30:35"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Reg Aprobacion",
+      "value": "jj MDM mt - Reg Aprobacion"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "18",
+      "value": "18"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "13",
+      "value": "13"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_mdm_registros_aprobaciones",
+      "value": "u_mdm_registros_aprobaciones"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "18",
+      "value": "18"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    current.u_tiempo_de_vida = this.diferenciaEnDias(current.u_fecha_open , current.u_fecha);\n    current.update();\n\n})(current, previous);\n\n\n\n\n\nfunction diferenciaEnDias(valor01, valor02) {\n\n    var whatTime01 = new GlideDateTime(valor01); \n    var whatTime02 = new GlideDateTime(valor02); \n\n    var whatTime = GlideDateTime.subtract(whatTime01, whatTime02);\n    var whatTime_Time = whatTime.getDisplayValue();\n    var whatTime_Dia = whatTime.getDate(); // Dia 0 = '1970-01-01'\n\treturn whatTime_Time;\n\n}",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n    current.u_tiempo_de_vida = this.diferenciaEnDias(current.u_fecha_open , current.u_fecha);\n    current.update();\n\n})(current, previous);\n\n\n\n\n\nfunction diferenciaEnDias(valor01, valor02) {\n\n    var whatTime01 = new GlideDateTime(valor01); \n    var whatTime02 = new GlideDateTime(valor02); \n\n    var whatTime = GlideDateTime.subtract(whatTime01, whatTime02);\n    var whatTime_Time = whatTime.getDisplayValue();\n    var whatTime_Dia = whatTime.getDate(); // Dia 0 = '1970-01-01'\n\treturn whatTime_Time;\n\n}"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_fechaVALCHANGES^EQ",
+      "value": "u_fechaVALCHANGES^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_bffb1dac3b10c350a4187124c3e45ae1",
+      "value": "sys_script_bffb1dac3b10c350a4187124c3e45ae1"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Reg Aprobacion",
+      "value": "jj MDM mt - Reg Aprobacion"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "28-04-2025 15:40:48",
+      "value": "2025-04-28 21:40:48"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "d28e100c1bc4ae1014b95310604bcbee",
+      "value": "d28e100c1bc4ae1014b95310604bcbee"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "25-02-2025 17:05:25",
+      "value": "2025-02-25 23:05:25"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task Historico Update",
+      "value": "jj MDM mt - Task Historico Update"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "15",
+      "value": "15"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n\tvar msgHistorico ='';\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + current.request_item);\n    gr01.query();\n    if (gr01.next()) {\n        if (current.state == 1) {\n\t\t\tif(gr01.u_mdm_historial.toString()== ''){\n\t\t\t\tmsgHistorico = '[' + gr01.sys_updated_on + ']  ' + current.short_description;\n\t\t\t}\n            msgHistorico = '[' + gr01.sys_updated_on + ']  ' + current.short_description + ' \\n' + gr01.u_mdm_historial;\n        } else if (current.state == -5) {\n            msgHistorico = '[' + gr01.sys_updated_on + ']  00 - Proveedor \\n' + gr01.u_mdm_historial;\n        }\n\t\tgr01.u_mdm_historial = msgHistorico;\n        gr01.update();\n    }\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n\tvar msgHistorico ='';\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + current.request_item);\n    gr01.query();\n    if (gr01.next()) {\n        if (current.state == 1) {\n\t\t\tif(gr01.u_mdm_historial.toString()== ''){\n\t\t\t\tmsgHistorico = '[' + gr01.sys_updated_on + ']  ' + current.short_description;\n\t\t\t}\n            msgHistorico = '[' + gr01.sys_updated_on + ']  ' + current.short_description + ' \\n' + gr01.u_mdm_historial;\n        } else if (current.state == -5) {\n            msgHistorico = '[' + gr01.sys_updated_on + ']  00 - Proveedor \\n' + gr01.u_mdm_historial;\n        }\n\t\tgr01.u_mdm_historial = msgHistorico;\n        gr01.update();\n    }\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO1^ORstateCHANGESTO-5^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^ORcat_item=ac6f02961bbf8210a9f8766dcc4bcbc1^stateCHANGESTO1^ORstateCHANGESTO-5^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_d28e100c1bc4ae1014b95310604bcbee",
+      "value": "sys_script_d28e100c1bc4ae1014b95310604bcbee"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task Historico Update",
+      "value": "jj MDM mt - Task Historico Update"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "26-02-2026 19:09:15",
+      "value": "2026-02-27 01:09:15"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "df424f692b49f610677df2f9ed91bf3d",
+      "value": "df424f692b49f610677df2f9ed91bf3d"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "06-11-2025 10:05:14",
+      "value": "2025-11-06 16:05:14"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM new Cambio MKT",
+      "value": "jj MDM mt - RITM new Cambio MKT"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "8",
+      "value": "8"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "50",
+      "value": "50"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog = 'JJ_MDM_BR_Task_Padre_007';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // var vaRitmID = '68dd7a851bf10e10a9f8766dcc4bcb32';\n    var vaRitmID = current.sys_id.toString();\n\n\n    // Material \"0000\" - 441ae9871bfd9610a9f8766dcc4bcbc3\t\n\n    var mdmID,\n        mtrNum,\n        mtrNumTask,\n        mtrOriginal000 = '441ae9871bfd9610a9f8766dcc4bcbc3', // El mismo para las 3 instancias [DEV-TES-PROD]\n        mtrTipoCambio,\n        mtrNameL,\n        mtrKeywordecomm,\n        mtrKeywordcomple,\n        mtrMetadescript,\n        mtrCaptionlink,\n        rPadreID,\n        rPadreReq,\n        rPadreOpen,\n        rPadreRandom,\n        vLogALL = false;\n\n    if (vLogALL) {\n        gs.log('00 Entro', msgLog);\n        gs.log('01 RITM: ' + vaRitmID, msgLog);\n    }\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + vaRitmID);\n    gr01.query();\n    if (gr01.next()) {\n        gr01.quantity = 1;\n        gr01.u_mdm_etapa = '8';\n        gr01.u_mdm_enviado_sap_no = 0;\n        gr01.u_mdm_ejecuciones_no = 1;\n        gr01.u_mdm_material = mtrOriginal000;\n        gr01.u_mdm_flujo = '1';\n        mtrTipoCambio = gr01.variables.tipo_de_solicitud.toString();\n\n        if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n            // \"Uno a uno\"\t\t\n            gr01.short_description = 'MDM Material Cambio MKT [Uno a uno]';\n        } else {\n            // \"Masivo\"\t\t\n            gr01.short_description = 'MDM Material Cambio MKT [Masivo]';\n        }\n\n        rPadreID = gr01.sys_id; \n        rPadreReq = gr01.reques;\n        rPadreOpen = gr01.opened_by;\n        rPadreRandom = gr01.variables.excel_id_random;\n\n        mtrNameL = gr01.variables.mtr_larga_descrip.toString();\n        mtrKeywordecomm = gr01.variables.mtr_keyword_ecommerce.toString();\n        mtrKeywordcomple = gr01.variables.mtr_keyword_comple.toString();\n        mtrMetadescript = gr01.variables.mtr_metadescripcion.toString();\n        mtrCaptionlink = gr01.variables.mtr_caption_link.toString();\n\n        gr01.update();\n        if (vLogALL)\n            gs.log('03 RITM \"SI\" localizado', msgLog);\n    } else {\n        if (vLogALL)\n            gs.log('03 RITM \"NO\" encontrado', msgLog);\n    }\n\n    if (vLogALL)\n        gs.log('04 Random: ' + rPadreRandom, msgLog);\n\n\n    // Actuializar tabla \"MDM Material Cambio MKTs\"\n    var gr13 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n    gr13.addEncodedQuery('u_mkt_random=' + rPadreRandom);\n    gr13.query();\n    gr13.u_mkt_ritm = vaRitmID;\n    gr13.u_mkt_estatus = 'En Proceso';\n    gr13.u_mkt_random = '';    \n    if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n\t\t// \"Uno a uno\"\n        gr13.u_mkt_descripcion_larga_de_producto = mtrNameL;\n        gr13.u_mkt_keyword = mtrKeywordecomm;\n        gr13.u_mkt_keyword_comple = mtrKeywordcomple;\n        gr13.u_mtr_metadescripcion = mtrMetadescript;\n        gr13.u_mtr_caption_link = mtrCaptionlink;\n    }\n    gr13.updateMultiple();\n\n\n    if (vLogALL)\n        gs.log('06 FIN', msgLog);\n\n})(current, previous);",
+      "value": "var msgLog = 'JJ_MDM_BR_Task_Padre_007';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // var vaRitmID = '68dd7a851bf10e10a9f8766dcc4bcb32';\n    var vaRitmID = current.sys_id.toString();\n\n\n    // Material \"0000\" - 441ae9871bfd9610a9f8766dcc4bcbc3\t\n\n    var mdmID,\n        mtrNum,\n        mtrNumTask,\n        mtrOriginal000 = '441ae9871bfd9610a9f8766dcc4bcbc3', // El mismo para las 3 instancias [DEV-TES-PROD]\n        mtrTipoCambio,\n        mtrNameL,\n        mtrKeywordecomm,\n        mtrKeywordcomple,\n        mtrMetadescript,\n        mtrCaptionlink,\n        rPadreID,\n        rPadreReq,\n        rPadreOpen,\n        rPadreRandom,\n        vLogALL = false;\n\n    if (vLogALL) {\n        gs.log('00 Entro', msgLog);\n        gs.log('01 RITM: ' + vaRitmID, msgLog);\n    }\n\n    var gr01 = new GlideRecord('sc_req_item');\n    gr01.addEncodedQuery('sys_id=' + vaRitmID);\n    gr01.query();\n    if (gr01.next()) {\n        gr01.quantity = 1;\n        gr01.u_mdm_etapa = '8';\n        gr01.u_mdm_enviado_sap_no = 0;\n        gr01.u_mdm_ejecuciones_no = 1;\n        gr01.u_mdm_material = mtrOriginal000;\n        gr01.u_mdm_flujo = '1';\n        mtrTipoCambio = gr01.variables.tipo_de_solicitud.toString();\n\n        if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n            // \"Uno a uno\"\t\t\n            gr01.short_description = 'MDM Material Cambio MKT [Uno a uno]';\n        } else {\n            // \"Masivo\"\t\t\n            gr01.short_description = 'MDM Material Cambio MKT [Masivo]';\n        }\n\n        rPadreID = gr01.sys_id; \n        rPadreReq = gr01.reques;\n        rPadreOpen = gr01.opened_by;\n        rPadreRandom = gr01.variables.excel_id_random;\n\n        mtrNameL = gr01.variables.mtr_larga_descrip.toString();\n        mtrKeywordecomm = gr01.variables.mtr_keyword_ecommerce.toString();\n        mtrKeywordcomple = gr01.variables.mtr_keyword_comple.toString();\n        mtrMetadescript = gr01.variables.mtr_metadescripcion.toString();\n        mtrCaptionlink = gr01.variables.mtr_caption_link.toString();\n\n        gr01.update();\n        if (vLogALL)\n            gs.log('03 RITM \"SI\" localizado', msgLog);\n    } else {\n        if (vLogALL)\n            gs.log('03 RITM \"NO\" encontrado', msgLog);\n    }\n\n    if (vLogALL)\n        gs.log('04 Random: ' + rPadreRandom, msgLog);\n\n\n    // Actuializar tabla \"MDM Material Cambio MKTs\"\n    var gr13 = new GlideRecord('x_nsadc_tables_mdm_material_cambio_mkt');\n    gr13.addEncodedQuery('u_mkt_random=' + rPadreRandom);\n    gr13.query();\n    gr13.u_mkt_ritm = vaRitmID;\n    gr13.u_mkt_estatus = 'En Proceso';\n    gr13.u_mkt_random = '';    \n    if (mtrTipoCambio == '6451a9b32bb436d0677df2f9ed91bff9') {\n\t\t// \"Uno a uno\"\n        gr13.u_mkt_descripcion_larga_de_producto = mtrNameL;\n        gr13.u_mkt_keyword = mtrKeywordecomm;\n        gr13.u_mkt_keyword_comple = mtrKeywordcomple;\n        gr13.u_mtr_metadescripcion = mtrMetadescript;\n        gr13.u_mtr_caption_link = mtrCaptionlink;\n    }\n    gr13.updateMultiple();\n\n\n    if (vLogALL)\n        gs.log('06 FIN', msgLog);\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^u_mdm_etapaISEMPTY^EQ",
+      "value": "cat_item=171f95bf2b7436d0677df2f9ed91bfcb^u_mdm_etapaISEMPTY^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_df424f692b49f610677df2f9ed91bf3d",
+      "value": "sys_script_df424f692b49f610677df2f9ed91bf3d"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM new Cambio MKT",
+      "value": "jj MDM mt - RITM new Cambio MKT"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "01-04-2026 11:45:00",
+      "value": "2026-04-01 17:45:00"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "e2e34c5197c41a10cc1ebbdfe153af0e",
+      "value": "e2e34c5197c41a10cc1ebbdfe153af0e"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "14-08-2024 16:09:18",
+      "value": "2024-08-14 22:09:18"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - Task E08 XLSXchange",
+      "value": "jj MDM mt - Task E08 XLSXchange"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "268",
+      "value": "268"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "70",
+      "value": "70"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_task",
+      "value": "sc_task"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\r\n\r\n    //gs.eventQueue('custom.async.notification', current, 'Proceso iniciado correctamente', current.sys_id);\r\n\r\n\r\n\r\n    var logs = 'logXLSX_jj_001',\r\n        lecturaEXCEL = 'JJ', // \"Martin\" o \"JJ\"\r\n        attachmentSysId = '',\r\n        esAlta = true,\r\n        SysIDTask = current.sys_id,\r\n        SysIDTaskNumber = current.number,\r\n        tipoDeMovimiento = current.request_item.cat_item;\r\n\r\n    // Material Cambio \tac6f02961bbf8210a9f8766dcc4bcbc1, \r\n    // Material alta \t96f6425c1be58610a9f8766dcc4bcbab\r\n\r\n    if (tipoDeMovimiento == 'ac6f02961bbf8210a9f8766dcc4bcbc1') {\r\n        attachmentSysId = current.u_mdm_mt_layout_mm_cambio;\r\n        esAlta = false;\r\n    } else {\r\n        attachmentSysId = current.u_mdm_mt_layout_mm;\r\n    }\r\n\r\n\r\n    var parser = new MDM_ExcelToJsonParser();\r\n\r\n    // Limpiar tablas relaccionadas a Task\r\n    parser.cleanDataByTask(SysIDTask, SysIDTaskNumber);\r\n\r\n\r\n\t\r\n    if (lecturaEXCEL == 'JJ') {\t // ===========================================================================================\r\n\r\n        var jsonResult = JSON.parse(parser.parseExcel_JJ(attachmentSysId, SysIDTask, SysIDTaskNumber, esAlta));\r\n\r\n    } else if (lecturaEXCEL == 'Martin') { // =================================================================================\r\n\r\n\r\n        var logs = 'logXLSX';\r\n        //gs.log('Alta: '+esAlta+' sysID Task: '+SysIDTask+' Attach: '+attachmentSysId+' Tipo Mov: '+tipoDeMovimiento,'logXLSX_'+SysIDTask);\r\n\r\n        parser = new MDM_ExcelToJsonParser();\r\n        var jsonResult = JSON.parse(parser.parseExcel(attachmentSysId));\r\n        // gs.log(JSON.stringify(jsonResult.DatosBasicos),'logXLSX2');\r\n\r\n        //Insert\r\n        jsonResult.DatosBasicos.forEach(function(subArray) {\r\n            // gs.log('SysIDTask: '+SysIDTask+ ' PreDatos Basicos: '+JSON.stringify(subArray),'logXLSX2_DatosBasicos_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_datos_basicos', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Caracteristicas.forEach(function(subArray) {\r\n            // gs.print(JSON.stringify(subArray));\r\n            parser.doInsert('u_cmdb_mdm_caracteristicas', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.UnidadesAlter.forEach(function(subArray) {\r\n            //gs.log('UnidadesAlter: '+SysIDTask+ ' Pre UnidadesAlter: '+JSON.stringify(subArray),'logXLSX2_UnidadesAlter_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_unidadesalter', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.TaxClassif.forEach(function(subArray) {\r\n            // gs.log('TaxClassif: '+SysIDTask+ ' Pre TaxClassif: '+JSON.stringify(subArray),'logXLSX2_TaxClassif_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_taxclassif', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Planta.forEach(function(subArray) {\r\n            // gs.log('Planta: '+SysIDTask+ ' Pre Planta: '+JSON.stringify(subArray),'logXLSX2_Planta_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_planta', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Almacen.forEach(function(subArray) {\r\n            // gs.log('Almacen: '+SysIDTask+ ' Pre Almacen: '+JSON.stringify(subArray),'logXLSX2_Almacen_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_almacen', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Valoracion.forEach(function(subArray) {\r\n            // gs.log('Valoracion: '+SysIDTask+ ' Pre Valoracion: '+JSON.stringify(subArray),'logXLSX2_Valoracion_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_valoracion', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Ventas.forEach(function(subArray) {\r\n            // gs.log('Ventas: '+SysIDTask+ ' Pre Ventas: '+JSON.stringify(subArray),'logXLSX2_Ventas_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_ventas', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Calidad.forEach(function(subArray) {\r\n            //gs.log('Calidad: '+SysIDTask+ ' Pre Calidad: '+JSON.stringify(subArray),'logXLSX2_Calidad_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_calidad', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        parser.doUpdateEAN(SysIDTask, esAlta);\r\n    }\r\n\r\n    //gs.eventQueue('custom.async.notification', current, 'Proceso finalizado correctamente', current.sys_id);\r\n\r\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\r\n\r\n    //gs.eventQueue('custom.async.notification', current, 'Proceso iniciado correctamente', current.sys_id);\r\n\r\n\r\n\r\n    var logs = 'logXLSX_jj_001',\r\n        lecturaEXCEL = 'JJ', // \"Martin\" o \"JJ\"\r\n        attachmentSysId = '',\r\n        esAlta = true,\r\n        SysIDTask = current.sys_id,\r\n        SysIDTaskNumber = current.number,\r\n        tipoDeMovimiento = current.request_item.cat_item;\r\n\r\n    // Material Cambio \tac6f02961bbf8210a9f8766dcc4bcbc1, \r\n    // Material alta \t96f6425c1be58610a9f8766dcc4bcbab\r\n\r\n    if (tipoDeMovimiento == 'ac6f02961bbf8210a9f8766dcc4bcbc1') {\r\n        attachmentSysId = current.u_mdm_mt_layout_mm_cambio;\r\n        esAlta = false;\r\n    } else {\r\n        attachmentSysId = current.u_mdm_mt_layout_mm;\r\n    }\r\n\r\n\r\n    var parser = new MDM_ExcelToJsonParser();\r\n\r\n    // Limpiar tablas relaccionadas a Task\r\n    parser.cleanDataByTask(SysIDTask, SysIDTaskNumber);\r\n\r\n\r\n\t\r\n    if (lecturaEXCEL == 'JJ') {\t // ===========================================================================================\r\n\r\n        var jsonResult = JSON.parse(parser.parseExcel_JJ(attachmentSysId, SysIDTask, SysIDTaskNumber, esAlta));\r\n\r\n    } else if (lecturaEXCEL == 'Martin') { // =================================================================================\r\n\r\n\r\n        var logs = 'logXLSX';\r\n        //gs.log('Alta: '+esAlta+' sysID Task: '+SysIDTask+' Attach: '+attachmentSysId+' Tipo Mov: '+tipoDeMovimiento,'logXLSX_'+SysIDTask);\r\n\r\n        parser = new MDM_ExcelToJsonParser();\r\n        var jsonResult = JSON.parse(parser.parseExcel(attachmentSysId));\r\n        // gs.log(JSON.stringify(jsonResult.DatosBasicos),'logXLSX2');\r\n\r\n        //Insert\r\n        jsonResult.DatosBasicos.forEach(function(subArray) {\r\n            // gs.log('SysIDTask: '+SysIDTask+ ' PreDatos Basicos: '+JSON.stringify(subArray),'logXLSX2_DatosBasicos_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_datos_basicos', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Caracteristicas.forEach(function(subArray) {\r\n            // gs.print(JSON.stringify(subArray));\r\n            parser.doInsert('u_cmdb_mdm_caracteristicas', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.UnidadesAlter.forEach(function(subArray) {\r\n            //gs.log('UnidadesAlter: '+SysIDTask+ ' Pre UnidadesAlter: '+JSON.stringify(subArray),'logXLSX2_UnidadesAlter_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_unidadesalter', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.TaxClassif.forEach(function(subArray) {\r\n            // gs.log('TaxClassif: '+SysIDTask+ ' Pre TaxClassif: '+JSON.stringify(subArray),'logXLSX2_TaxClassif_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_taxclassif', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Planta.forEach(function(subArray) {\r\n            // gs.log('Planta: '+SysIDTask+ ' Pre Planta: '+JSON.stringify(subArray),'logXLSX2_Planta_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_planta', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Almacen.forEach(function(subArray) {\r\n            // gs.log('Almacen: '+SysIDTask+ ' Pre Almacen: '+JSON.stringify(subArray),'logXLSX2_Almacen_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_almacen', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Valoracion.forEach(function(subArray) {\r\n            // gs.log('Valoracion: '+SysIDTask+ ' Pre Valoracion: '+JSON.stringify(subArray),'logXLSX2_Valoracion_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_valoracion', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Ventas.forEach(function(subArray) {\r\n            // gs.log('Ventas: '+SysIDTask+ ' Pre Ventas: '+JSON.stringify(subArray),'logXLSX2_Ventas_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_ventas', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        jsonResult.Calidad.forEach(function(subArray) {\r\n            //gs.log('Calidad: '+SysIDTask+ ' Pre Calidad: '+JSON.stringify(subArray),'logXLSX2_Calidad_'+SysIDTask);\r\n            parser.doInsert('u_cmdb_mdm_calidad', subArray, SysIDTask, esAlta);\r\n        });\r\n\r\n        parser.doUpdateEAN(SysIDTask, esAlta);\r\n    }\r\n\r\n    //gs.eventQueue('custom.async.notification', current, 'Proceso finalizado correctamente', current.sys_id);\r\n\r\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_mdm_mt_layout_mmVALCHANGES^ORu_mdm_mt_layout_mm_cambioVALCHANGES^EQ",
+      "value": "u_mdm_mt_layout_mmVALCHANGES^ORu_mdm_mt_layout_mm_cambioVALCHANGES^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_e2e34c5197c41a10cc1ebbdfe153af0e",
+      "value": "sys_script_e2e34c5197c41a10cc1ebbdfe153af0e"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - Task E08 XLSXchange",
+      "value": "jj MDM mt - Task E08 XLSXchange"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "u_marc_perkz=M^u_marc_dislk=^u_marc_beskz=^u_marc_ladgr=^u_marc_vrmod=^u_marc_vint1=^u_marc_vint2=^u_marc_strgr=^u_marc_lgfsb=^EQ",
+      "value": "u_marc_perkz=M^u_marc_dislk=^u_marc_beskz=^u_marc_ladgr=^u_marc_vrmod=^u_marc_vint1=^u_marc_vint2=^u_marc_strgr=^u_marc_lgfsb=^EQ"
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "19-12-2024 00:18:32",
+      "value": "2024-12-19 06:18:32"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "e87278ad97909210cc1ebbdfe153af3a",
+      "value": "e87278ad97909210cc1ebbdfe153af3a"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "28-08-2024 00:25:50",
+      "value": "2024-08-28 06:25:50"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "MDM DISMM ND",
+      "value": "MDM DISMM ND"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "600",
+      "value": "600"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "active": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_cmdb_mdm_planta",
+      "value": "u_cmdb_mdm_planta"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/) {\n\n\t// Add your code here\n\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_marc_dismm=ND^EQ",
+      "value": "u_marc_dismm=ND^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_e87278ad97909210cc1ebbdfe153af3a",
+      "value": "sys_script_e87278ad97909210cc1ebbdfe153af3a"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "MDM DISMM ND",
+      "value": "MDM DISMM ND"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "09-02-2025 15:15:10",
+      "value": "2025-02-09 21:15:10"
+    },
+    "when": {
+      "display_value": "before",
+      "value": "before"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "ec63f8ed97909210cc1ebbdfe153af36",
+      "value": "ec63f8ed97909210cc1ebbdfe153af36"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "28-08-2024 00:32:54",
+      "value": "2024-08-28 06:32:54"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "MDM  DISMM ChkValues",
+      "value": "MDM  DISMM ChkValues"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "order": {
+      "display_value": "200",
+      "value": "200"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "14",
+      "value": "14"
+    },
+    "active": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "u_cmdb_mdm_planta",
+      "value": "u_cmdb_mdm_planta"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n    if (current.u_marc_dismm.trim() != \"X0\" && current.u_marc_dismm.trim() != \"ND\") {\n        // gs.addInfoMessage(current.u_marc_dismm + \": DISSM No válido en centro: \" + current.u_marc_werks + \", asignando valor X0\");\n        current.u_marc_dismm = \"X0\";\n    }\n})(current, previous);",
+      "value": "(function executeRule(current, previous /*null when async*/ ) {\n\n\n    if (current.u_marc_dismm.trim() != \"X0\" && current.u_marc_dismm.trim() != \"ND\") {\n        // gs.addInfoMessage(current.u_marc_dismm + \": DISSM No válido en centro: \" + current.u_marc_werks + \", asignando valor X0\");\n        current.u_marc_dismm = \"X0\";\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "u_marc_dismmVALCHANGES^EQ",
+      "value": "u_marc_dismmVALCHANGES^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_ec63f8ed97909210cc1ebbdfe153af36",
+      "value": "sys_script_ec63f8ed97909210cc1ebbdfe153af36"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "MDM  DISMM ChkValues",
+      "value": "MDM  DISMM ChkValues"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "client_callable": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "template": {
+      "display_value": "",
+      "value": ""
+    },
+    "access": {
+      "display_value": "This application scope only",
+      "value": "package_private"
+    },
+    "action_insert": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_update": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "action_delete": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "change_fields": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "action_query": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "06-11-2025 10:13:16",
+      "value": "2025-11-06 16:13:16"
+    },
+    "when": {
+      "display_value": "after",
+      "value": "after"
+    },
+    "sys_class_name": {
+      "display_value": "Business Rule",
+      "value": "sys_script"
+    },
+    "sys_id": {
+      "display_value": "f5278c281b750a10a9f8766dcc4bcb96",
+      "value": "f5278c281b750a10a9f8766dcc4bcb96"
+    },
+    "is_rest": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "rest_method_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "rest_service_text": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "22-04-2024 12:09:41",
+      "value": "2024-04-22 18:09:41"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "jj MDM mt - RITM new 00 Padre Alta",
+      "value": "jj MDM mt - RITM new 00 Padre Alta"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "rest_method": {
+      "display_value": "",
+      "value": ""
+    },
+    "rest_service": {
+      "display_value": "",
+      "value": ""
+    },
+    "add_message": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_mod_count": {
+      "display_value": "135",
+      "value": "135"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "collection": {
+      "display_value": "sc_req_item",
+      "value": "sc_req_item"
+    },
+    "message": {
+      "display_value": null,
+      "value": ""
+    },
+    "priority": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "var msgLog = 'JJ_MDM_BR_Task_Padre_003';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // gs.log('Entro', msgLog);\n    // gs.log(current.sys_id.toString(), msgLog);\n\n    // var vaRitmID = '68dd7a851bf10e10a9f8766dcc4bcb32';\n    var vaRitmID = current.sys_id.toString();\n\n    var mdmID,\n        mtNum,\n        rvsTempEanPI,\n        rvsTempEanEMP,\n        rvsTempEanSUB,\n        rvsTempPI01,\n        rvsTempPI02,\n        rvsTempPI03,\n        rvsTempPI04,\n        rvsTempPI05,\n        rvsTempEMP01,\n        rvsTempEMP02,\n        rvsTempEMP03,\n        rvsTempEMP04,\n        rvsTempEMP05,\n        rvsTempSUB01,\n        rvsTempSUB02,\n        rvsTempSUB03,\n        rvsTempSUB04,\n        rvsTempSUB05,\n        rvsTempRegistroSanitario,\n        rvsTempProrroga,\n        rvsTempHojaSeguridad,\n        rvsTempOficioClasificacion,\n        rvsTempAvisoFuncionamiento,\n        rvsTempCartaPresentacionDocumento,\n        rvsTempListaPrecios,\n        rvsTempMarbeteEmpaqueArtesProducto,\n        rvsTempFichaTecnica,\n        rvsTempCompr,\n        rvsTempComprEmail,\n        rvsTempNeg,\n        rvsTempDGA,\n        gr787,\n        grNew00;\n\n\n\n\n    gr787 = new GlideRecord('sc_req_item');\n    gr787.addEncodedQuery('sys_id=' + vaRitmID);\n    gr787.query();\n    if (gr787.next()) {\n        gr787.u_mdm_etapa = '99';\n        gr787.update();\n    }\n\n\n    // Variables + Variables Sets --------------------------------------------------------------------------------------\n    var rPadreVariableSet = gr787.variables.vs_listado_de_registros,\n        rPadreNewArray = JSON.parse(rPadreVariableSet),\n        rPadreCount = rPadreNewArray.length,\n        rPadreID = gr787.sys_id, // RITM \"Padre\"\n        rPadreIDHijo,\n        rPadreReq = gr787.request,\n        rPadreOpen = gr787.opened_by,\n        rPadreRandom = gr787.variables.excel_id_random;\n\n    /*\n    gs.info(rPadreVariableSet[0]);\n    *** Script: {\n      \"vs_pi_img_01\" : \"null\",\n      \"vs_pi_img_02\" : \"null\",\n      \"vs_pi_img_03\" : \"null\",\n      \"vs_unidad_del_producto_id_pi\" : \"1111111111901\",\n      \"vs_nombre_completo_del_material\" : \"MATERIAL PRUEBA 03\"\n    }\n    *** Script: {\n      \"vs_pi_img_01\" : \"0acd36851bf10e10a9f8766dcc4bcb7c\",\n      \"vs_pi_img_02\" : \"90cdfe451bf10e10a9f8766dcc4bcbe4\",\n      \"vs_pi_img_03\" : \"27cdfe451bf10e10a9f8766dcc4bcb57\",\n      \"vs_unidad_del_producto_id_pi\" : \"1111111111901\"\n      \"vs_nombre_completo_del_material\" : \"MATERIAL PRUEBA 03\"\n    }\n    */\n\n\n\n    for (var i = 0; i < rPadreCount; i++) {\n\n        mtNum = i + 1;\n        mtNum = '000000' + mtNum;\n        mtNum = mtNum.substring(mtNum.length - 3, mtNum.length);\n\n        // Nuevo RITM \"Hijo\"\n        grNew00 = new GlideRecord('sc_req_item');\n        grNew00.initialize();\n        grNew00.request = rPadreReq;\n        grNew00.parent = vaRitmID;\n        grNew00.cat_item = '96f6425c1be58610a9f8766dcc4bcbab';\n        grNew00.short_description = 'MDM Material Nuevo_' + mtNum;\n        grNew00.quantity = 1;\n        // <-------------------------------------------------- Etapa en la que empieza\n        //\t\"1\"\t\t\t\t\t\tAntes del paralelo\n\t\t// \t\"Aprobacion multiple\"\tEn Paralelo\n\t\t// \t\"5\"\t\t\t\t\t\tTest rapido\n\t\t// \t\"8\"\t\t\t\t\t\tTest ERROR no usar esta etapa directamente mejor \"7\"\n\n\n\n\t\t// SECUENCIA DEL PROCESO ************************************************************************\n\n\t\t// PARALELO\n        grNew00.u_mdm_etapa = 'Aprobacion multiple';  // <------------------------ IMPORTANTE\n        grNew00.u_mdm_area = 'Comprador, Asuntos regulatorios, Mercadotecnia y Jefe de costos';\n\n\t\t// SECUENCIASL\n        // grNew00.u_mdm_etapa = '1';  // <------------------------ IMPORTANTE\n        // grNew00.u_mdm_area = 'Comprador';\n\n\t\t// SECUENCIA DEL PROCESO ************************************************************************\n\n\n\n\t\tgrNew00.u_mdm_enviado_sap_no = 0; \n\t\tgrNew00.u_mdm_ejecuciones_no = 1; \n        grNew00.opened_by = rPadreOpen;\n        rPadreIDHijo = grNew00.insert();\n\t\t\n\t\t// Aprobacion multiple [Anterior]\n        // gs.log(rPadreVariableSet[i], msgLog);\n        // gs.info(rPadreVariableSet[i]);\n\t\t\n        rvsTempEanPI = rPadreVariableSet[i].vs_unidad_del_producto_id_pi;\n        rvsTempPI01 = rPadreVariableSet[i].vs_pi_img_01;\n        rvsTempPI02 = rPadreVariableSet[i].vs_pi_img_02;\n        rvsTempPI03 = rPadreVariableSet[i].vs_pi_img_03;\n        rvsTempPI04 = rPadreVariableSet[i].vs_pi_img_04;\n        rvsTempPI05 = rPadreVariableSet[i].vs_pi_img_05;\n        rvsTempEanEMP = rPadreVariableSet[i].vs_unidad_del_producto_id_emp;\n        rvsTempEMP01 = rPadreVariableSet[i].vs_emp_img_01;\n        rvsTempEMP02 = rPadreVariableSet[i].vs_emp_img_02;\n        rvsTempEMP03 = rPadreVariableSet[i].vs_emp_img_03;\n        rvsTempEMP04 = rPadreVariableSet[i].vs_emp_img_04;\n        rvsTempEMP05 = rPadreVariableSet[i].vs_emp_img_05;\n        rvsTempEanSUB = rPadreVariableSet[i].vs_unidad_del_producto_id_sub;\n        rvsTempSUB01 = rPadreVariableSet[i].vs_sub_img_01;\n        rvsTempSUB02 = rPadreVariableSet[i].vs_sub_img_02;\n        rvsTempSUB03 = rPadreVariableSet[i].vs_sub_img_03;\n        rvsTempSUB04 = rPadreVariableSet[i].vs_sub_img_04;\n        rvsTempSUB05 = rPadreVariableSet[i].vs_sub_img_05;\n        // Archivos complementarios\n        rvsTempRegistroSanitario = rPadreVariableSet[i].vs_registro_sanitario;\n        rvsTempProrroga = rPadreVariableSet[i].vs_prorroga;\n        rvsTempHojaSeguridad = rPadreVariableSet[i].vs_hoja_de_seguridad;\n        rvsTempOficioClasificacion = rPadreVariableSet[i].vs_oficio_de_clasificacion;\n        rvsTempAvisoFuncionamiento = rPadreVariableSet[i].vs_aviso_de_funcionamiento;\n        rvsTempCartaPresentacionDocumento = rPadreVariableSet[i].vs_carta_de_presentacion_documento;\n        rvsTempListaPrecios = rPadreVariableSet[i].vs_lista_de_precios;\n        rvsTempMarbeteEmpaqueArtesProducto = rPadreVariableSet[i].vs_marbete_empaque_artes_de_producto;\n        rvsTempFichaTecnica = rPadreVariableSet[i].vs_ficha_tecnica;\n        rvsTempCompr = rPadreVariableSet[i].vs_comprador;\n        rvsTempNeg = rPadreVariableSet[i].vs_negaciador;\n        rvsTempDGA = rPadreVariableSet[i].vs_dga;\n\n        rvsTempComprEmail = rPadreVariableSet[i].vs_comprador.email.toString();\n\n\n\n        // Actuializar tabla \"MDM Registros\"\n        var gr00 = new GlideRecord('u_mdm_registros');\n        gr00.addEncodedQuery('u_mt_id_random=' + rPadreRandom + '^u_mt_pi_ean=' + rvsTempEanPI);\n        // gs.log('u_mt_id_random=' + rPadreRandom + '^u_mt_pi_ean=' + rvsTempEanPI, msgLog);\n        gr00.query();\n        if (gr00.next()) {\n\n            mdmID = gr00.sys_id;\n\n            gr00.u_mt_estatus = 'En Proceso';\n            gr00.u_mt_id_random = '';\n            gr00.u_mtr_cambio_material_origen = gr00.sys_id;\n            gr00.u_ritm = rPadreIDHijo;\n\n            /*\n            \tattachmentRenombrar()\n\n            \tWidget \t\t\t\t\"MDM - Form - Alta Mtr Cambio\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr Alta - mod\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr Cambio\"\n\n            \tScript Includes \t\"jj_MDM_Utils_Client\"\n\n            */\n\n            // Crea registro en table \"MDM Imagenes\" V02\n            // rvsTempEanPI\n            gr00.u_mt_img_pi_01 = attachmentRenombrar(mdmID, rvsTempPI01, rvsTempEanPI, 'pi_01');\n            gr00.u_mt_img_pi_02 = attachmentRenombrar(mdmID, rvsTempPI02, rvsTempEanPI, 'pi_02');\n            gr00.u_mt_img_pi_03 = attachmentRenombrar(mdmID, rvsTempPI03, rvsTempEanPI, 'pi_03');\n            gr00.u_mt_img_pi_04 = attachmentRenombrar(mdmID, rvsTempPI04, rvsTempEanPI, 'pi_04');\n            gr00.u_mt_img_pi_05 = attachmentRenombrar(mdmID, rvsTempPI05, rvsTempEanPI, 'pi_05');\n            // rvsTempEanEMP\n            gr00.u_mt_img_emp_01 = attachmentRenombrar(mdmID, rvsTempEMP01, rvsTempEanEMP, 'emp_01');\n            gr00.u_mt_img_emp_02 = attachmentRenombrar(mdmID, rvsTempEMP02, rvsTempEanEMP, 'emp_02');\n            gr00.u_mt_img_emp_03 = attachmentRenombrar(mdmID, rvsTempEMP03, rvsTempEanEMP, 'emp_03');\n            gr00.u_mt_img_emp_04 = attachmentRenombrar(mdmID, rvsTempEMP04, rvsTempEanEMP, 'emp_04');\n            gr00.u_mt_img_emp_05 = attachmentRenombrar(mdmID, rvsTempEMP05, rvsTempEanEMP, 'emp_05');\n            // rvsTempEanSUB\n            gr00.u_mt_img_sub_01 = attachmentRenombrar(mdmID, rvsTempSUB01, rvsTempEanSUB, 'sub_01');\n            gr00.u_mt_img_sub_02 = attachmentRenombrar(mdmID, rvsTempSUB02, rvsTempEanSUB, 'sub_02');\n            gr00.u_mt_img_sub_03 = attachmentRenombrar(mdmID, rvsTempSUB03, rvsTempEanSUB, 'sub_03');\n            gr00.u_mt_img_sub_04 = attachmentRenombrar(mdmID, rvsTempSUB04, rvsTempEanSUB, 'sub_04');\n            gr00.u_mt_img_sub_05 = attachmentRenombrar(mdmID, rvsTempSUB05, rvsTempEanSUB, 'sub_05');\n            // Archivos\n            gr00.u_mt_a_registro_sanitario = attachmentRenombrar(mdmID, rvsTempRegistroSanitario, rvsTempEanPI, 'Registro_sanitario');\n            gr00.u_mt_a_prorroga = attachmentRenombrar(mdmID, rvsTempProrroga, rvsTempEanPI, 'Prorroga');\n            gr00.u_mt_a_hoja_seguridad = attachmentRenombrar(mdmID, rvsTempHojaSeguridad, rvsTempEanPI, 'Hoja_de_seguridad');\n            gr00.u_mt_a_oficio_de_clasificacion = attachmentRenombrar(mdmID, rvsTempOficioClasificacion, rvsTempEanPI, 'Oficio_de_clasificacion');\n            gr00.u_mt_a_aviso_de_funcionamiento = attachmentRenombrar(mdmID, rvsTempAvisoFuncionamiento, rvsTempEanPI, 'Aviso_de_funcionamiento');\n            gr00.u_mt_a_carta_presentacion_documento = attachmentRenombrar(mdmID, rvsTempCartaPresentacionDocumento, rvsTempEanPI, 'Carta_presentacion_documento');\n            gr00.u_mt_a_lista_de_precios = attachmentRenombrar(mdmID, rvsTempListaPrecios, rvsTempEanPI, 'Lista_de_precios');\n            gr00.u_mt_a_marbete_empaque_artes_producto = attachmentRenombrar(mdmID, rvsTempMarbeteEmpaqueArtesProducto, rvsTempEanPI, 'Marbete_empaque_artes_producto');\n            gr00.u_mt_a_ficha_tecnica = attachmentRenombrar(mdmID, rvsTempFichaTecnica, rvsTempEanPI, 'Ficha_tecnica');\n            // Contacto\n            gr00.u_mt_comprador = rvsTempCompr;\n            gr00.u_mt_negaciador = rvsTempNeg;\n            gr00.u_mt_dga = rvsTempDGA;\n            // Update\n            gr00.update();\n\n\n            var gr11 = new GlideRecord('sc_task');\n            gr11.addEncodedQuery('request_item=' + rPadreIDHijo + '^u_mdm_etapa=1');\n            gr11.query();\n            if (gr11.next()) {\n                gr11.u_mdm_material = mdmID;\n                gr11.update();\n            }\n\n            var gr12 = new GlideRecord('sc_req_item');\n            gr12.addEncodedQuery('sys_id=' + rPadreIDHijo);\n            gr12.query();\n            if (gr12.next()) {\n                gr12.u_mdm_material = mdmID;\n                gr12.update();\n            }\n\n\n\n            var gr13 = new GlideRecord('u_mdm_registros');\n            gr13.addEncodedQuery('u_mt_estatus=NULL');\n            gr13.query();\n            gr13.deleteMultiple();\n        }\n\n    }\n\n\n\n\n\n\n\n\n    // Renombrar\n    function attachmentRenombrar(rID, nID, nEAN, nNombre) {\n        // Name por table \"MDM Options\"\n        var gr01 = new GlideRecord('u_mdm_options');\n        gr01.addEncodedQuery('u_key=mdm_archivo^u_labe=' + nNombre);\n        gr01.query();\n        if (gr01.next()) {\n            nNombre = gr01.u_value.toString();\n            // console.log('Ser 100 nID: ' + nID + ' - ' + nNombre + ' - ' + nExtencion);\n            var gr02 = new GlideRecord('sys_attachment');\n            gr02.addEncodedQuery('sys_id=' + nID);\n            gr02.query();\n            if (gr02.next()) {\n                gr02.setWorkflow(false);\n                gr02.file_name = nEAN + nNombre;\n                gr02.table_name = 'u_mdm_registros';\n                gr02.table_sys_id = rID;\n                gr02.update();\n            }\n        }\n        return nID;\n    }\n})(current, previous);",
+      "value": "var msgLog = 'JJ_MDM_BR_Task_Padre_003';\n\n(function executeRule(current, previous /*null when async*/ ) {\n\n    // gs.log('Entro', msgLog);\n    // gs.log(current.sys_id.toString(), msgLog);\n\n    // var vaRitmID = '68dd7a851bf10e10a9f8766dcc4bcb32';\n    var vaRitmID = current.sys_id.toString();\n\n    var mdmID,\n        mtNum,\n        rvsTempEanPI,\n        rvsTempEanEMP,\n        rvsTempEanSUB,\n        rvsTempPI01,\n        rvsTempPI02,\n        rvsTempPI03,\n        rvsTempPI04,\n        rvsTempPI05,\n        rvsTempEMP01,\n        rvsTempEMP02,\n        rvsTempEMP03,\n        rvsTempEMP04,\n        rvsTempEMP05,\n        rvsTempSUB01,\n        rvsTempSUB02,\n        rvsTempSUB03,\n        rvsTempSUB04,\n        rvsTempSUB05,\n        rvsTempRegistroSanitario,\n        rvsTempProrroga,\n        rvsTempHojaSeguridad,\n        rvsTempOficioClasificacion,\n        rvsTempAvisoFuncionamiento,\n        rvsTempCartaPresentacionDocumento,\n        rvsTempListaPrecios,\n        rvsTempMarbeteEmpaqueArtesProducto,\n        rvsTempFichaTecnica,\n        rvsTempCompr,\n        rvsTempComprEmail,\n        rvsTempNeg,\n        rvsTempDGA,\n        gr787,\n        grNew00;\n\n\n\n\n    gr787 = new GlideRecord('sc_req_item');\n    gr787.addEncodedQuery('sys_id=' + vaRitmID);\n    gr787.query();\n    if (gr787.next()) {\n        gr787.u_mdm_etapa = '99';\n        gr787.update();\n    }\n\n\n    // Variables + Variables Sets --------------------------------------------------------------------------------------\n    var rPadreVariableSet = gr787.variables.vs_listado_de_registros,\n        rPadreNewArray = JSON.parse(rPadreVariableSet),\n        rPadreCount = rPadreNewArray.length,\n        rPadreID = gr787.sys_id, // RITM \"Padre\"\n        rPadreIDHijo,\n        rPadreReq = gr787.request,\n        rPadreOpen = gr787.opened_by,\n        rPadreRandom = gr787.variables.excel_id_random;\n\n    /*\n    gs.info(rPadreVariableSet[0]);\n    *** Script: {\n      \"vs_pi_img_01\" : \"null\",\n      \"vs_pi_img_02\" : \"null\",\n      \"vs_pi_img_03\" : \"null\",\n      \"vs_unidad_del_producto_id_pi\" : \"1111111111901\",\n      \"vs_nombre_completo_del_material\" : \"MATERIAL PRUEBA 03\"\n    }\n    *** Script: {\n      \"vs_pi_img_01\" : \"0acd36851bf10e10a9f8766dcc4bcb7c\",\n      \"vs_pi_img_02\" : \"90cdfe451bf10e10a9f8766dcc4bcbe4\",\n      \"vs_pi_img_03\" : \"27cdfe451bf10e10a9f8766dcc4bcb57\",\n      \"vs_unidad_del_producto_id_pi\" : \"1111111111901\"\n      \"vs_nombre_completo_del_material\" : \"MATERIAL PRUEBA 03\"\n    }\n    */\n\n\n\n    for (var i = 0; i < rPadreCount; i++) {\n\n        mtNum = i + 1;\n        mtNum = '000000' + mtNum;\n        mtNum = mtNum.substring(mtNum.length - 3, mtNum.length);\n\n        // Nuevo RITM \"Hijo\"\n        grNew00 = new GlideRecord('sc_req_item');\n        grNew00.initialize();\n        grNew00.request = rPadreReq;\n        grNew00.parent = vaRitmID;\n        grNew00.cat_item = '96f6425c1be58610a9f8766dcc4bcbab';\n        grNew00.short_description = 'MDM Material Nuevo_' + mtNum;\n        grNew00.quantity = 1;\n        // <-------------------------------------------------- Etapa en la que empieza\n        //\t\"1\"\t\t\t\t\t\tAntes del paralelo\n\t\t// \t\"Aprobacion multiple\"\tEn Paralelo\n\t\t// \t\"5\"\t\t\t\t\t\tTest rapido\n\t\t// \t\"8\"\t\t\t\t\t\tTest ERROR no usar esta etapa directamente mejor \"7\"\n\n\n\n\t\t// SECUENCIA DEL PROCESO ************************************************************************\n\n\t\t// PARALELO\n        grNew00.u_mdm_etapa = 'Aprobacion multiple';  // <------------------------ IMPORTANTE\n        grNew00.u_mdm_area = 'Comprador, Asuntos regulatorios, Mercadotecnia y Jefe de costos';\n\n\t\t// SECUENCIASL\n        // grNew00.u_mdm_etapa = '1';  // <------------------------ IMPORTANTE\n        // grNew00.u_mdm_area = 'Comprador';\n\n\t\t// SECUENCIA DEL PROCESO ************************************************************************\n\n\n\n\t\tgrNew00.u_mdm_enviado_sap_no = 0; \n\t\tgrNew00.u_mdm_ejecuciones_no = 1; \n        grNew00.opened_by = rPadreOpen;\n        rPadreIDHijo = grNew00.insert();\n\t\t\n\t\t// Aprobacion multiple [Anterior]\n        // gs.log(rPadreVariableSet[i], msgLog);\n        // gs.info(rPadreVariableSet[i]);\n\t\t\n        rvsTempEanPI = rPadreVariableSet[i].vs_unidad_del_producto_id_pi;\n        rvsTempPI01 = rPadreVariableSet[i].vs_pi_img_01;\n        rvsTempPI02 = rPadreVariableSet[i].vs_pi_img_02;\n        rvsTempPI03 = rPadreVariableSet[i].vs_pi_img_03;\n        rvsTempPI04 = rPadreVariableSet[i].vs_pi_img_04;\n        rvsTempPI05 = rPadreVariableSet[i].vs_pi_img_05;\n        rvsTempEanEMP = rPadreVariableSet[i].vs_unidad_del_producto_id_emp;\n        rvsTempEMP01 = rPadreVariableSet[i].vs_emp_img_01;\n        rvsTempEMP02 = rPadreVariableSet[i].vs_emp_img_02;\n        rvsTempEMP03 = rPadreVariableSet[i].vs_emp_img_03;\n        rvsTempEMP04 = rPadreVariableSet[i].vs_emp_img_04;\n        rvsTempEMP05 = rPadreVariableSet[i].vs_emp_img_05;\n        rvsTempEanSUB = rPadreVariableSet[i].vs_unidad_del_producto_id_sub;\n        rvsTempSUB01 = rPadreVariableSet[i].vs_sub_img_01;\n        rvsTempSUB02 = rPadreVariableSet[i].vs_sub_img_02;\n        rvsTempSUB03 = rPadreVariableSet[i].vs_sub_img_03;\n        rvsTempSUB04 = rPadreVariableSet[i].vs_sub_img_04;\n        rvsTempSUB05 = rPadreVariableSet[i].vs_sub_img_05;\n        // Archivos complementarios\n        rvsTempRegistroSanitario = rPadreVariableSet[i].vs_registro_sanitario;\n        rvsTempProrroga = rPadreVariableSet[i].vs_prorroga;\n        rvsTempHojaSeguridad = rPadreVariableSet[i].vs_hoja_de_seguridad;\n        rvsTempOficioClasificacion = rPadreVariableSet[i].vs_oficio_de_clasificacion;\n        rvsTempAvisoFuncionamiento = rPadreVariableSet[i].vs_aviso_de_funcionamiento;\n        rvsTempCartaPresentacionDocumento = rPadreVariableSet[i].vs_carta_de_presentacion_documento;\n        rvsTempListaPrecios = rPadreVariableSet[i].vs_lista_de_precios;\n        rvsTempMarbeteEmpaqueArtesProducto = rPadreVariableSet[i].vs_marbete_empaque_artes_de_producto;\n        rvsTempFichaTecnica = rPadreVariableSet[i].vs_ficha_tecnica;\n        rvsTempCompr = rPadreVariableSet[i].vs_comprador;\n        rvsTempNeg = rPadreVariableSet[i].vs_negaciador;\n        rvsTempDGA = rPadreVariableSet[i].vs_dga;\n\n        rvsTempComprEmail = rPadreVariableSet[i].vs_comprador.email.toString();\n\n\n\n        // Actuializar tabla \"MDM Registros\"\n        var gr00 = new GlideRecord('u_mdm_registros');\n        gr00.addEncodedQuery('u_mt_id_random=' + rPadreRandom + '^u_mt_pi_ean=' + rvsTempEanPI);\n        // gs.log('u_mt_id_random=' + rPadreRandom + '^u_mt_pi_ean=' + rvsTempEanPI, msgLog);\n        gr00.query();\n        if (gr00.next()) {\n\n            mdmID = gr00.sys_id;\n\n            gr00.u_mt_estatus = 'En Proceso';\n            gr00.u_mt_id_random = '';\n            gr00.u_mtr_cambio_material_origen = gr00.sys_id;\n            gr00.u_ritm = rPadreIDHijo;\n\n            /*\n            \tattachmentRenombrar()\n\n            \tWidget \t\t\t\t\"MDM - Form - Alta Mtr Cambio\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr Alta - mod\"\n            \tWidget \t\t\t\t\"MDM - Form - Vista Mtr Cambio\"\n\n            \tScript Includes \t\"jj_MDM_Utils_Client\"\n\n            */\n\n            // Crea registro en table \"MDM Imagenes\" V02\n            // rvsTempEanPI\n            gr00.u_mt_img_pi_01 = attachmentRenombrar(mdmID, rvsTempPI01, rvsTempEanPI, 'pi_01');\n            gr00.u_mt_img_pi_02 = attachmentRenombrar(mdmID, rvsTempPI02, rvsTempEanPI, 'pi_02');\n            gr00.u_mt_img_pi_03 = attachmentRenombrar(mdmID, rvsTempPI03, rvsTempEanPI, 'pi_03');\n            gr00.u_mt_img_pi_04 = attachmentRenombrar(mdmID, rvsTempPI04, rvsTempEanPI, 'pi_04');\n            gr00.u_mt_img_pi_05 = attachmentRenombrar(mdmID, rvsTempPI05, rvsTempEanPI, 'pi_05');\n            // rvsTempEanEMP\n            gr00.u_mt_img_emp_01 = attachmentRenombrar(mdmID, rvsTempEMP01, rvsTempEanEMP, 'emp_01');\n            gr00.u_mt_img_emp_02 = attachmentRenombrar(mdmID, rvsTempEMP02, rvsTempEanEMP, 'emp_02');\n            gr00.u_mt_img_emp_03 = attachmentRenombrar(mdmID, rvsTempEMP03, rvsTempEanEMP, 'emp_03');\n            gr00.u_mt_img_emp_04 = attachmentRenombrar(mdmID, rvsTempEMP04, rvsTempEanEMP, 'emp_04');\n            gr00.u_mt_img_emp_05 = attachmentRenombrar(mdmID, rvsTempEMP05, rvsTempEanEMP, 'emp_05');\n            // rvsTempEanSUB\n            gr00.u_mt_img_sub_01 = attachmentRenombrar(mdmID, rvsTempSUB01, rvsTempEanSUB, 'sub_01');\n            gr00.u_mt_img_sub_02 = attachmentRenombrar(mdmID, rvsTempSUB02, rvsTempEanSUB, 'sub_02');\n            gr00.u_mt_img_sub_03 = attachmentRenombrar(mdmID, rvsTempSUB03, rvsTempEanSUB, 'sub_03');\n            gr00.u_mt_img_sub_04 = attachmentRenombrar(mdmID, rvsTempSUB04, rvsTempEanSUB, 'sub_04');\n            gr00.u_mt_img_sub_05 = attachmentRenombrar(mdmID, rvsTempSUB05, rvsTempEanSUB, 'sub_05');\n            // Archivos\n            gr00.u_mt_a_registro_sanitario = attachmentRenombrar(mdmID, rvsTempRegistroSanitario, rvsTempEanPI, 'Registro_sanitario');\n            gr00.u_mt_a_prorroga = attachmentRenombrar(mdmID, rvsTempProrroga, rvsTempEanPI, 'Prorroga');\n            gr00.u_mt_a_hoja_seguridad = attachmentRenombrar(mdmID, rvsTempHojaSeguridad, rvsTempEanPI, 'Hoja_de_seguridad');\n            gr00.u_mt_a_oficio_de_clasificacion = attachmentRenombrar(mdmID, rvsTempOficioClasificacion, rvsTempEanPI, 'Oficio_de_clasificacion');\n            gr00.u_mt_a_aviso_de_funcionamiento = attachmentRenombrar(mdmID, rvsTempAvisoFuncionamiento, rvsTempEanPI, 'Aviso_de_funcionamiento');\n            gr00.u_mt_a_carta_presentacion_documento = attachmentRenombrar(mdmID, rvsTempCartaPresentacionDocumento, rvsTempEanPI, 'Carta_presentacion_documento');\n            gr00.u_mt_a_lista_de_precios = attachmentRenombrar(mdmID, rvsTempListaPrecios, rvsTempEanPI, 'Lista_de_precios');\n            gr00.u_mt_a_marbete_empaque_artes_producto = attachmentRenombrar(mdmID, rvsTempMarbeteEmpaqueArtesProducto, rvsTempEanPI, 'Marbete_empaque_artes_producto');\n            gr00.u_mt_a_ficha_tecnica = attachmentRenombrar(mdmID, rvsTempFichaTecnica, rvsTempEanPI, 'Ficha_tecnica');\n            // Contacto\n            gr00.u_mt_comprador = rvsTempCompr;\n            gr00.u_mt_negaciador = rvsTempNeg;\n            gr00.u_mt_dga = rvsTempDGA;\n            // Update\n            gr00.update();\n\n\n            var gr11 = new GlideRecord('sc_task');\n            gr11.addEncodedQuery('request_item=' + rPadreIDHijo + '^u_mdm_etapa=1');\n            gr11.query();\n            if (gr11.next()) {\n                gr11.u_mdm_material = mdmID;\n                gr11.update();\n            }\n\n            var gr12 = new GlideRecord('sc_req_item');\n            gr12.addEncodedQuery('sys_id=' + rPadreIDHijo);\n            gr12.query();\n            if (gr12.next()) {\n                gr12.u_mdm_material = mdmID;\n                gr12.update();\n            }\n\n\n\n            var gr13 = new GlideRecord('u_mdm_registros');\n            gr13.addEncodedQuery('u_mt_estatus=NULL');\n            gr13.query();\n            gr13.deleteMultiple();\n        }\n\n    }\n\n\n\n\n\n\n\n\n    // Renombrar\n    function attachmentRenombrar(rID, nID, nEAN, nNombre) {\n        // Name por table \"MDM Options\"\n        var gr01 = new GlideRecord('u_mdm_options');\n        gr01.addEncodedQuery('u_key=mdm_archivo^u_labe=' + nNombre);\n        gr01.query();\n        if (gr01.next()) {\n            nNombre = gr01.u_value.toString();\n            // console.log('Ser 100 nID: ' + nID + ' - ' + nNombre + ' - ' + nExtencion);\n            var gr02 = new GlideRecord('sys_attachment');\n            gr02.addEncodedQuery('sys_id=' + nID);\n            gr02.query();\n            if (gr02.next()) {\n                gr02.setWorkflow(false);\n                gr02.file_name = nEAN + nNombre;\n                gr02.table_name = 'u_mdm_registros';\n                gr02.table_sys_id = rID;\n                gr02.update();\n            }\n        }\n        return nID;\n    }\n})(current, previous);"
+    },
+    "abort_action": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "execute_function": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "filter_condition": {
+      "display_value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISEMPTY^EQ",
+      "value": "cat_item=96f6425c1be58610a9f8766dcc4bcbab^u_mdm_etapaISEMPTY^EQ"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sys_script_f5278c281b750a10a9f8766dcc4bcb96",
+      "value": "sys_script_f5278c281b750a10a9f8766dcc4bcb96"
+    },
+    "rest_variables": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "jj MDM mt - RITM new 00 Padre Alta",
+      "value": "jj MDM mt - RITM new 00 Padre Alta"
+    },
+    "role_conditions": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

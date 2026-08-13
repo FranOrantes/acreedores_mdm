@@ -1,0 +1,512 @@
+[
+  {
+    "applies_catalog": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "va_supported": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "isolate_script": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "applies_extended": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "global": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_updated_on": {
+      "display_value": "03-11-2025 21:39:32",
+      "value": "2025-11-04 03:39:32"
+    },
+    "type": {
+      "display_value": "onChange",
+      "value": "onChange"
+    },
+    "applies_target_record": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "cat_variable": {
+      "display_value": "IO:e3374a5c1be58610a9f8766dcc4bcbda",
+      "value": "IO:e3374a5c1be58610a9f8766dcc4bcbda"
+    },
+    "sys_class_name": {
+      "display_value": "Catalog Client Scripts",
+      "value": "catalog_script_client"
+    },
+    "applies_req_item": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "045b42901b298610a9f8766dcc4bcb9e",
+      "value": "045b42901b298610a9f8766dcc4bcb9e"
+    },
+    "ui_type": {
+      "display_value": "All",
+      "value": "10"
+    },
+    "view": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "applies_to": {
+      "display_value": "A Catalog Item",
+      "value": "item"
+    },
+    "sys_created_on": {
+      "display_value": "09-04-2024 16:49:20",
+      "value": "2024-04-09 22:49:20"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "onChange - Excel Archivo",
+      "value": "onChange - Excel Archivo"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "47",
+      "value": "47"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "function onChange(control, oldValue, newValue, isLoading) {\n    if (isLoading || newValue == '') {\n        return;\n    }\n    g_form.setValue('excel_id_random', '');\n    g_form.setValue('excel_resultado', '');\n    g_form.setValue('excel_informacion', '');\t\n    g_form.setValue('excel_no_de_registros', '');\n    // alert(g_form.getValue('vs_listado_de_registros'));\n    g_form.setValue('vs_listado_de_registros', '');\n    g_form.setValue('archivos_informacion', '');\n\tg_form.setVisible('archivos_informacion',false); \n\n    var numRandom = crearRandom();\n\n    var gr = new GlideAjax('jj_MDM_Utils_Client');\n    gr.addParam('sysparm_name', 'lecturaExcel');\n\tgr.addParam('sysparm_vUser', g_user.userID);\n\tgr.addParam('sysparm_vTipoSolicitud', 'Alta');\n    gr.addParam('sysparm_sysid', newValue); // ID del temporal archivo\n    gr.addParam('sysparm_numRandom', numRandom);\n    gr.getXML(response_archivo);\n\n    function response_archivo(response) {\n        var answer = response.responseXML.documentElement.getAttribute('answer');\n\t\t// alert(answer); \n\t\tconsole.log(answer);\n\n        var strArray = answer.toString().split('zzRespUestazz');\n        g_form.setValue('excel_resultado', strArray[0]);\n\n        if (strArray[1] == 'NoEsExcel') {\n            alert('Error con el archivo Actual. \\nFavor de subir un archivo con extencion \".XLSX\"');\n            g_form.setValue('excel_informacion', 'Archivo invalido.');\n        } else {\n            g_form.setValue('excel_id_random', numRandom);\n            g_form.setValue('excel_informacion', strArray[1]);\n            g_form.setValue('excel_no_de_registros', strArray[3]);\n\n            // console.log(strArray[2]); // Texto\n            if (strArray[2] != '') {\n                var objVariableSets = JSON.parse(strArray[2]);\n                // console.log(obj02); // Objet\t\n                g_form.setValue('vs_listado_de_registros', JSON.stringify(objVariableSets)); // Llenar Varible Sets\n            } else {\n                g_form.setValue('vs_listado_de_registros', '');\n            }\n\n        }\n    }\n\n\n\n\n\n\n    function crearRandom() {\n        var newRandom = '';\n        var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        for (var i = 0; i < 12; i++) {\n            newRandom += charSet.charAt(Math.floor(Math.random() * charSet.length));\n        }\n        return newRandom;\n    }\n\n}",
+      "value": "function onChange(control, oldValue, newValue, isLoading) {\n    if (isLoading || newValue == '') {\n        return;\n    }\n    g_form.setValue('excel_id_random', '');\n    g_form.setValue('excel_resultado', '');\n    g_form.setValue('excel_informacion', '');\t\n    g_form.setValue('excel_no_de_registros', '');\n    // alert(g_form.getValue('vs_listado_de_registros'));\n    g_form.setValue('vs_listado_de_registros', '');\n    g_form.setValue('archivos_informacion', '');\n\tg_form.setVisible('archivos_informacion',false); \n\n    var numRandom = crearRandom();\n\n    var gr = new GlideAjax('jj_MDM_Utils_Client');\n    gr.addParam('sysparm_name', 'lecturaExcel');\n\tgr.addParam('sysparm_vUser', g_user.userID);\n\tgr.addParam('sysparm_vTipoSolicitud', 'Alta');\n    gr.addParam('sysparm_sysid', newValue); // ID del temporal archivo\n    gr.addParam('sysparm_numRandom', numRandom);\n    gr.getXML(response_archivo);\n\n    function response_archivo(response) {\n        var answer = response.responseXML.documentElement.getAttribute('answer');\n\t\t// alert(answer); \n\t\tconsole.log(answer);\n\n        var strArray = answer.toString().split('zzRespUestazz');\n        g_form.setValue('excel_resultado', strArray[0]);\n\n        if (strArray[1] == 'NoEsExcel') {\n            alert('Error con el archivo Actual. \\nFavor de subir un archivo con extencion \".XLSX\"');\n            g_form.setValue('excel_informacion', 'Archivo invalido.');\n        } else {\n            g_form.setValue('excel_id_random', numRandom);\n            g_form.setValue('excel_informacion', strArray[1]);\n            g_form.setValue('excel_no_de_registros', strArray[3]);\n\n            // console.log(strArray[2]); // Texto\n            if (strArray[2] != '') {\n                var objVariableSets = JSON.parse(strArray[2]);\n                // console.log(obj02); // Objet\t\n                g_form.setValue('vs_listado_de_registros', JSON.stringify(objVariableSets)); // Llenar Varible Sets\n            } else {\n                g_form.setValue('vs_listado_de_registros', '');\n            }\n\n        }\n    }\n\n\n\n\n\n\n    function crearRandom() {\n        var newRandom = '';\n        var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        for (var i = 0; i < 12; i++) {\n            newRandom += charSet.charAt(Math.floor(Math.random() * charSet.length));\n        }\n        return newRandom;\n    }\n\n}"
+    },
+    "applies_sc_task": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_script_client_045b42901b298610a9f8766dcc4bcb9e",
+      "value": "catalog_script_client_045b42901b298610a9f8766dcc4bcb9e"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "onChange - Excel Archivo",
+      "value": "onChange - Excel Archivo"
+    },
+    "messages": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "applies_catalog": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "va_supported": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "isolate_script": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "applies_extended": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "global": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_updated_on": {
+      "display_value": "24-02-2026 20:54:03",
+      "value": "2026-02-25 02:54:03"
+    },
+    "type": {
+      "display_value": "onSubmit",
+      "value": "onSubmit"
+    },
+    "applies_target_record": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "cat_variable": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_class_name": {
+      "display_value": "Catalog Client Scripts",
+      "value": "catalog_script_client"
+    },
+    "applies_req_item": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "1c90bca41b790a10a9f8766dcc4bcbbf",
+      "value": "1c90bca41b790a10a9f8766dcc4bcbbf"
+    },
+    "ui_type": {
+      "display_value": "All",
+      "value": "10"
+    },
+    "view": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "applies_to": {
+      "display_value": "A Catalog Item",
+      "value": "item"
+    },
+    "sys_created_on": {
+      "display_value": "22-04-2024 15:11:48",
+      "value": "2024-04-22 21:11:48"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "onSubmit - Validacion",
+      "value": "onSubmit - Validacion"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "83",
+      "value": "83"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "function onSubmit() {\n    //Type appropriate comment here, and begin script below\n\n    var varRespuesta = false,\n        varVariableSetMsg = '',\n        varVariableSetMsgAll = '',\n        varVariableSetMsgTemp = '';\n\n    var varValidacionExcel = g_form.getValue('excel_resultado'),\n        varContador = g_form.getValue('excel_no_de_registros');\n\n    if (varValidacionExcel == 'Correcto') {\n\n        g_form.setDisplay('archivos_informacion', true);\n\n        // Variables Sets --------------------------------------------------------------------------------------\n        var varVariableSet = g_form.getValue('vs_listado_de_registros');\n\n        var count = 0;\n        if (varVariableSet != '') {\n            var newArray = JSON.parse(varVariableSet);\n            count = newArray.length;\n        }\n\n\n        if (varContador != count) {\n            g_form.setValue('archivos_resultado', 'Error');\n            g_form.setValue('archivos_informacion', 'Los registros mostrados no coinciden con el excel.\\nFavor de carcar nuevamente el archivo layout.');\n            alert('Error.\\nLos registros mostrados no coinciden con el excel.\\nFavor de carcar nuevamente el archivo layout.');\n            varRespuesta = false;\n\n        } else {\n\n            for (var i = 0; i < count; i++) {\n                varVariableSetMsg = '';\n                varVariableSetMsgTemp = '';\n                varVariableSetMsgTemp += newArray[i].vs_nombre_completo_del_material + ' (' + newArray[i].vs_unidad_del_producto_id_pi + ')\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_01) ? '' : 'PI - Frente\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_02) ? '' : 'PI - Trasera\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_03) ? '' : 'PI - Lateral\\n';\n                // varVariableSetMsg += (newArray[i].vs_aviso_de_funcionamiento) ? '' : 'Aviso de funcionamiento\\n';\n                varVariableSetMsg += (newArray[i].vs_carta_de_presentacion_documento) ? '' : 'Carta de presentación/Documento\\n';\n                varVariableSetMsg += (newArray[i].vs_lista_de_precios) ? '' : 'Lista de precios\\n';\n                varVariableSetMsg += (newArray[i].vs_marbete_empaque_artes_de_producto) ? '' : 'Marbete/Empaque/Artes de Producto\\n';\n                varVariableSetMsg += (newArray[i].vs_ficha_tecnica) ? '' : 'Ficha técnica\\n';\n\n                varVariableSetMsgAll += (varVariableSetMsg == '') ? '' : varVariableSetMsgTemp + varVariableSetMsg + '\\n';\n            }\n\n            if (varVariableSetMsgAll != '') {\n                g_form.setValue('archivos_resultado', 'Error');\n                varVariableSetMsgAll = '\\nMateriales con achivos pendientes:\\n\\n' + varVariableSetMsgAll;\n                g_form.setValue('archivos_informacion', varVariableSetMsgAll);\n                // alert('Error');\n                alert('Favor de cargar los archivos obligatorios en listados en el campo \"Archivos Informacion\".');\n                varRespuesta = false;\n            } else {\n                g_form.setValue('archivos_resultado', 'Correcto');\n                g_form.setValue('archivos_informacion', 'Materiales con todos los archivos obligatorios cargados.');\n                // alert('Correcto');\n                varRespuesta = true;\n            }\n\n        }\n\n    } else {\n\n        var varExcelResultado = g_form.getValue('excel_resultado');\n        if (varExcelResultado == '') {\n            alert('Favor de cargar layout de materiales.');\n        } else {\n            alert('Es necesario corregir el archivo excel con respecto a los comentarios del campo \"Excel Informacion\".');\n        }\n        varRespuesta = false;\n    }\n\n    return varRespuesta;\n\n}",
+      "value": "function onSubmit() {\n    //Type appropriate comment here, and begin script below\n\n    var varRespuesta = false,\n        varVariableSetMsg = '',\n        varVariableSetMsgAll = '',\n        varVariableSetMsgTemp = '';\n\n    var varValidacionExcel = g_form.getValue('excel_resultado'),\n        varContador = g_form.getValue('excel_no_de_registros');\n\n    if (varValidacionExcel == 'Correcto') {\n\n        g_form.setDisplay('archivos_informacion', true);\n\n        // Variables Sets --------------------------------------------------------------------------------------\n        var varVariableSet = g_form.getValue('vs_listado_de_registros');\n\n        var count = 0;\n        if (varVariableSet != '') {\n            var newArray = JSON.parse(varVariableSet);\n            count = newArray.length;\n        }\n\n\n        if (varContador != count) {\n            g_form.setValue('archivos_resultado', 'Error');\n            g_form.setValue('archivos_informacion', 'Los registros mostrados no coinciden con el excel.\\nFavor de carcar nuevamente el archivo layout.');\n            alert('Error.\\nLos registros mostrados no coinciden con el excel.\\nFavor de carcar nuevamente el archivo layout.');\n            varRespuesta = false;\n\n        } else {\n\n            for (var i = 0; i < count; i++) {\n                varVariableSetMsg = '';\n                varVariableSetMsgTemp = '';\n                varVariableSetMsgTemp += newArray[i].vs_nombre_completo_del_material + ' (' + newArray[i].vs_unidad_del_producto_id_pi + ')\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_01) ? '' : 'PI - Frente\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_02) ? '' : 'PI - Trasera\\n';\n                varVariableSetMsg += (newArray[i].vs_pi_img_03) ? '' : 'PI - Lateral\\n';\n                // varVariableSetMsg += (newArray[i].vs_aviso_de_funcionamiento) ? '' : 'Aviso de funcionamiento\\n';\n                varVariableSetMsg += (newArray[i].vs_carta_de_presentacion_documento) ? '' : 'Carta de presentación/Documento\\n';\n                varVariableSetMsg += (newArray[i].vs_lista_de_precios) ? '' : 'Lista de precios\\n';\n                varVariableSetMsg += (newArray[i].vs_marbete_empaque_artes_de_producto) ? '' : 'Marbete/Empaque/Artes de Producto\\n';\n                varVariableSetMsg += (newArray[i].vs_ficha_tecnica) ? '' : 'Ficha técnica\\n';\n\n                varVariableSetMsgAll += (varVariableSetMsg == '') ? '' : varVariableSetMsgTemp + varVariableSetMsg + '\\n';\n            }\n\n            if (varVariableSetMsgAll != '') {\n                g_form.setValue('archivos_resultado', 'Error');\n                varVariableSetMsgAll = '\\nMateriales con achivos pendientes:\\n\\n' + varVariableSetMsgAll;\n                g_form.setValue('archivos_informacion', varVariableSetMsgAll);\n                // alert('Error');\n                alert('Favor de cargar los archivos obligatorios en listados en el campo \"Archivos Informacion\".');\n                varRespuesta = false;\n            } else {\n                g_form.setValue('archivos_resultado', 'Correcto');\n                g_form.setValue('archivos_informacion', 'Materiales con todos los archivos obligatorios cargados.');\n                // alert('Correcto');\n                varRespuesta = true;\n            }\n\n        }\n\n    } else {\n\n        var varExcelResultado = g_form.getValue('excel_resultado');\n        if (varExcelResultado == '') {\n            alert('Favor de cargar layout de materiales.');\n        } else {\n            alert('Es necesario corregir el archivo excel con respecto a los comentarios del campo \"Excel Informacion\".');\n        }\n        varRespuesta = false;\n    }\n\n    return varRespuesta;\n\n}"
+    },
+    "applies_sc_task": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_script_client_1c90bca41b790a10a9f8766dcc4bcbbf",
+      "value": "catalog_script_client_1c90bca41b790a10a9f8766dcc4bcbbf"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "onSubmit - Validacion",
+      "value": "onSubmit - Validacion"
+    },
+    "messages": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "applies_catalog": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "va_supported": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "isolate_script": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "applies_extended": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": "",
+      "value": ""
+    },
+    "global": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_updated_on": {
+      "display_value": "15-04-2025 13:27:35",
+      "value": "2025-04-15 19:27:35"
+    },
+    "type": {
+      "display_value": "onLoad",
+      "value": "onLoad"
+    },
+    "applies_target_record": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "cat_variable": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_class_name": {
+      "display_value": "Catalog Client Scripts",
+      "value": "catalog_script_client"
+    },
+    "applies_req_item": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "c7ddff67973cea10cc1ebbdfe153afe0",
+      "value": "c7ddff67973cea10cc1ebbdfe153afe0"
+    },
+    "ui_type": {
+      "display_value": "Mobile / Service Portal",
+      "value": "1"
+    },
+    "view": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "applies_to": {
+      "display_value": "A Catalog Item",
+      "value": "item"
+    },
+    "sys_created_on": {
+      "display_value": "15-04-2025 13:05:12",
+      "value": "2025-04-15 19:05:12"
+    },
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user_group/global",
+      "value": "global"
+    },
+    "sys_name": {
+      "display_value": "CheckBrowser",
+      "value": "CheckBrowser"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "order": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "11",
+      "value": "11"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "sys_overrides": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_domain_path": {
+      "display_value": "/",
+      "value": "/"
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "script": {
+      "display_value": "function onLoad() {\n  try {\n    var userAgent = navigator.userAgent;\n\tvar mensaje =\"es posible que la solicitud no sea creada de manera adecuada, favor de utiliza Google Chrome, Firefox, Opera\";\n\n    if (userAgent.indexOf(\"MSIE \") > -1 || userAgent.indexOf(\"Trident/\") > -1) {\n      reedirectChrome(\"Estás usando Internet Explorer, \" + mensaje);\n    } else if (userAgent.indexOf(\"Edge/\") > -1) {\n      reedirectChrome(\"Estás usando Microsoft Edge (Legacy), \"+mensaje);\n    } else if (userAgent.indexOf(\"Edg/\") > -1) {\n      reedirectChrome(\"Estás usando Microsoft Edge (Chromium), \"+mensaje);\n    }\n  } catch (e) {\n    console.error(\"Error detectando el navegador:\", e);\n  }\n}\n\nfunction reedirectChrome(mensaje){\n\talert(mensaje);\n   top.window.location.replace(\"https://www.google.com/intl/es_us/chrome/\");\n}",
+      "value": "function onLoad() {\n  try {\n    var userAgent = navigator.userAgent;\n\tvar mensaje =\"es posible que la solicitud no sea creada de manera adecuada, favor de utiliza Google Chrome, Firefox, Opera\";\n\n    if (userAgent.indexOf(\"MSIE \") > -1 || userAgent.indexOf(\"Trident/\") > -1) {\n      reedirectChrome(\"Estás usando Internet Explorer, \" + mensaje);\n    } else if (userAgent.indexOf(\"Edge/\") > -1) {\n      reedirectChrome(\"Estás usando Microsoft Edge (Legacy), \"+mensaje);\n    } else if (userAgent.indexOf(\"Edg/\") > -1) {\n      reedirectChrome(\"Estás usando Microsoft Edge (Chromium), \"+mensaje);\n    }\n  } catch (e) {\n    console.error(\"Error detectando el navegador:\", e);\n  }\n}\n\nfunction reedirectChrome(mensaje){\n\talert(mensaje);\n   top.window.location.replace(\"https://www.google.com/intl/es_us/chrome/\");\n}"
+    },
+    "applies_sc_task": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "sys_update_name": {
+      "display_value": "catalog_script_client_c7ddff67973cea10cc1ebbdfe153afe0",
+      "value": "catalog_script_client_c7ddff67973cea10cc1ebbdfe153afe0"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "CheckBrowser",
+      "value": "CheckBrowser"
+    },
+    "messages": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

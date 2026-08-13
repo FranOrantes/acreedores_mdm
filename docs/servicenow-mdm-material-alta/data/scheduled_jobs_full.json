@@ -1,0 +1,1262 @@
+[
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 13:00:03",
+      "value": "2026-08-13 19:00:03"
+    },
+    "document_key": {
+      "display_value": "5f27d7aa2b683650677df2f9ed91bf5a",
+      "value": "5f27d7aa2b683650677df2f9ed91bf5a"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "17-02-2026 19:09:17",
+      "value": "2026-02-18 01:09:17"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Thu Aug 13 12:00:03 PDT 2026\nfcDocumentName=jj MDM Estatus RITM pendientes\nfcDocumentKey=5f27d7aa2b683650677df2f9ed91bf5a\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Thu Aug 13 12:00:03 PDT 2026\nfcDocumentName=jj MDM Estatus RITM pendientes\nfcDocumentKey=5f27d7aa2b683650677df2f9ed91bf5a\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.jj MDM Estatus RITM pendientes",
+      "value": "Recurring.jj MDM Estatus RITM pendientes"
+    },
+    "processing_duration": {
+      "display_value": "3,349",
+      "value": "3349"
+    },
+    "name": {
+      "display_value": "jj MDM Estatus RITM pendientes",
+      "value": "jj MDM Estatus RITM pendientes"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "4,242",
+      "value": "4242"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "4bea5376474b3e50f71cbf12516d4350",
+      "value": "4bea5376474b3e50f71cbf12516d4350"
+    },
+    "repeat": {
+      "display_value": "1 Hour",
+      "value": "1970-01-01 01:00:00"
+    },
+    "run_start": {
+      "display_value": "16-10-2025 18:00:00",
+      "value": "2025-10-17 00:00:00"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "4,242",
+      "value": "4242"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "13-08-2026 14:00:00",
+      "value": "2026-08-13 20:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "trigger_type": {
+      "display_value": "Daily",
+      "value": "11"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 05:00:01",
+      "value": "2026-08-13 11:00:01"
+    },
+    "document_key": {
+      "display_value": "96dbdcccc3c43210a0626a1599013192",
+      "value": "96dbdcccc3c43210a0626a1599013192"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "17-02-2026 19:09:17",
+      "value": "2026-02-18 01:09:17"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 11:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Thu Aug 13 04:00:01 PDT 2026\nfcDocumentName=jj MDM Borrar Registros Vacios AprovacionMultiple\nfcDocumentKey=96dbdcccc3c43210a0626a1599013192\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Thu Aug 13 04:00:01 PDT 2026\nfcDocumentName=jj MDM Borrar Registros Vacios AprovacionMultiple\nfcDocumentKey=96dbdcccc3c43210a0626a1599013192\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.jj MDM Borrar Registros Vacios AprovacionMultiple",
+      "value": "Recurring.jj MDM Borrar Registros Vacios AprovacionMultiple"
+    },
+    "processing_duration": {
+      "display_value": "50",
+      "value": "50"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Registros Vacios AprovacionMultiple",
+      "value": "jj MDM Borrar Registros Vacios AprovacionMultiple"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 05:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "177",
+      "value": "177"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "4fea5376474b3e50f71cbf12516d433f",
+      "value": "4fea5376474b3e50f71cbf12516d433f"
+    },
+    "repeat": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "177",
+      "value": "177"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 05:00:00",
+      "value": "2026-08-14 11:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 13:00:00",
+      "value": "2026-08-13 19:00:00"
+    },
+    "document_key": {
+      "display_value": "b5b1fc172bc17250677df2f9ed91bf9c",
+      "value": "b5b1fc172bc17250677df2f9ed91bf9c"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "17-02-2026 19:09:17",
+      "value": "2026-02-18 01:09:17"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Thu Aug 13 12:00:00 PDT 2026\nfcDocumentName=jj MDM Alta sin RITM\nfcDocumentKey=b5b1fc172bc17250677df2f9ed91bf9c\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Thu Aug 13 12:00:00 PDT 2026\nfcDocumentName=jj MDM Alta sin RITM\nfcDocumentKey=b5b1fc172bc17250677df2f9ed91bf9c\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.jj MDM Alta sin RITM",
+      "value": "Recurring.jj MDM Alta sin RITM"
+    },
+    "processing_duration": {
+      "display_value": "15",
+      "value": "15"
+    },
+    "name": {
+      "display_value": "jj MDM Alta sin RITM",
+      "value": "jj MDM Alta sin RITM"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "4,242",
+      "value": "4242"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "c7ea5376474b3e50f71cbf12516d4354",
+      "value": "c7ea5376474b3e50f71cbf12516d4354"
+    },
+    "repeat": {
+      "display_value": "1 Hour",
+      "value": "1970-01-01 01:00:00"
+    },
+    "run_start": {
+      "display_value": "11-11-2025 10:00:00",
+      "value": "2025-11-11 16:00:00"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "4,242",
+      "value": "4242"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "13-08-2026 14:00:00",
+      "value": "2026-08-13 20:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "trigger_type": {
+      "display_value": "Daily",
+      "value": "11"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "13-08-2026 05:00:01",
+      "value": "2026-08-13 11:00:01"
+    },
+    "document_key": {
+      "display_value": "7618938e1be14e10a9f8766dcc4bcb8c",
+      "value": "7618938e1be14e10a9f8766dcc4bcb8c"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "17-02-2026 19:09:17",
+      "value": "2026-02-18 01:09:17"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 11:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Thu Aug 13 04:00:01 PDT 2026\nfcDocumentName=jj MDM Borrar Random en Registros estado lectura\nfcDocumentKey=7618938e1be14e10a9f8766dcc4bcb8c\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Thu Aug 13 04:00:01 PDT 2026\nfcDocumentName=jj MDM Borrar Random en Registros estado lectura\nfcDocumentKey=7618938e1be14e10a9f8766dcc4bcb8c\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.jj MDM Borrar Random en Registros estado lectura",
+      "value": "Recurring.jj MDM Borrar Random en Registros estado lectura"
+    },
+    "processing_duration": {
+      "display_value": "369",
+      "value": "369"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Random en Registros estado lectura",
+      "value": "jj MDM Borrar Random en Registros estado lectura"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 05:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "177",
+      "value": "177"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "cbea5376474b3e50f71cbf12516d433a",
+      "value": "cbea5376474b3e50f71cbf12516d433a"
+    },
+    "repeat": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "177",
+      "value": "177"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 05:00:00",
+      "value": "2026-08-14 11:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "trigger_type": {
+      "display_value": "Repeat",
+      "value": "1"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "12-08-2026 22:00:00",
+      "value": "2026-08-13 04:00:00"
+    },
+    "document_key": {
+      "display_value": "87424fb293f9da102f6cb70e1dba1035",
+      "value": "87424fb293f9da102f6cb70e1dba1035"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "sys_created_on": {
+      "display_value": "17-02-2026 19:09:17",
+      "value": "2026-02-18 01:09:17"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Wed Aug 12 21:00:00 PDT 2026\nfcDocumentName=MDM Materiales Styrk - No SAP - SUPER API\nfcDocumentKey=87424fb293f9da102f6cb70e1dba1035\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Wed Aug 12 21:00:00 PDT 2026\nfcDocumentName=MDM Materiales Styrk - No SAP - SUPER API\nfcDocumentKey=87424fb293f9da102f6cb70e1dba1035\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.MDM Materiales Styrk - No SAP - SUPER API",
+      "value": "Recurring.MDM Materiales Styrk - No SAP - SUPER API"
+    },
+    "processing_duration": {
+      "display_value": "290",
+      "value": "290"
+    },
+    "name": {
+      "display_value": "MDM Materiales Styrk - No SAP - SUPER API",
+      "value": "MDM Materiales Styrk - No SAP - SUPER API"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "59",
+      "value": "59"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "cbea5376474b3e50f71cbf12516d4359",
+      "value": "cbea5376474b3e50f71cbf12516d4359"
+    },
+    "repeat": {
+      "display_value": "3 Days",
+      "value": "1970-01-04 00:00:00"
+    },
+    "run_start": {
+      "display_value": "17-11-2024 23:00:00",
+      "value": "2024-11-18 05:00:00"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "",
+      "value": ""
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "59",
+      "value": "59"
+    },
+    "run_month": {
+      "display_value": "",
+      "value": ""
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "15-08-2026 22:00:00",
+      "value": "2026-08-16 04:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "parent": {
+      "display_value": "",
+      "value": ""
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_daysofweek": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "trigger_type": {
+      "display_value": "Days in Week",
+      "value": "3"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_on": {
+      "display_value": "07-08-2026 17:00:01",
+      "value": "2026-08-07 23:00:01"
+    },
+    "document_key": {
+      "display_value": "17b2ad14973b0290cc1ebbdfe153afde",
+      "value": "17b2ad14973b0290cc1ebbdfe153afde"
+    },
+    "rollback_context_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "02-07-2026 11:16:26",
+      "value": "2026-07-02 17:16:26"
+    },
+    "state": {
+      "display_value": "Ready",
+      "value": "0"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "transaction_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "17:00:00",
+      "value": "1970-01-01 23:00:00"
+    },
+    "priority": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "job_context": {
+      "display_value": "#Fri Aug 07 16:00:01 PDT 2026\nfcDocumentName=jj MDM cancelar por N dias\nfcDocumentKey=17b2ad14973b0290cc1ebbdfe153afde\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n",
+      "value": "#Fri Aug 07 16:00:01 PDT 2026\nfcDocumentName=jj MDM cancelar por N dias\nfcDocumentKey=17b2ad14973b0290cc1ebbdfe153afde\nfcDocumentClass=sysauto_script\nfcDocumentScope=global\n"
+    },
+    "script": {
+      "display_value": "",
+      "value": ""
+    },
+    "replication_originator": {
+      "display_value": "a6f9baf8db5fe850431011f848961922",
+      "value": "a6f9baf8db5fe850431011f848961922"
+    },
+    "job_classification": {
+      "display_value": "Recurring.jj MDM cancelar por N dias",
+      "value": "Recurring.jj MDM cancelar por N dias"
+    },
+    "processing_duration": {
+      "display_value": "680",
+      "value": "680"
+    },
+    "name": {
+      "display_value": "jj MDM cancelar por N dias",
+      "value": "jj MDM cancelar por N dias"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "log": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "17:00:00",
+      "value": "1970-01-01 17:00:00"
+    },
+    "document": {
+      "display_value": "sysauto_script",
+      "value": "sysauto_script"
+    },
+    "error_count": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "trigger_class": {
+      "display_value": "com.snc.automation.ScriptJob",
+      "value": "com.snc.automation.ScriptJob"
+    },
+    "run_count": {
+      "display_value": "6",
+      "value": "6"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "ec5d741e93f94b106af0b6cd1dba1071",
+      "value": "ec5d741e93f94b106af0b6cd1dba1071"
+    },
+    "repeat": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_start": {
+      "display_value": "03-07-2026 00:00:00",
+      "value": "2026-07-03 06:00:00"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "last_error": {
+      "display_value": "",
+      "value": ""
+    },
+    "calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "system_id": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_mod_count": {
+      "display_value": "6",
+      "value": "6"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "application": {
+      "display_value": "",
+      "value": ""
+    },
+    "job_id": {
+      "display_value": "",
+      "value": ""
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "next_action": {
+      "display_value": "14-08-2026 17:00:00",
+      "value": "2026-08-14 23:00:00"
+    },
+    "entered_run_start": {
+      "display_value": "03-07-2026 00:00:00",
+      "value": "2026-07-03 00:00:00"
+    },
+    "maintenance": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "claimed_by": {
+      "display_value": "",
+      "value": ""
+    }
+  }
+]

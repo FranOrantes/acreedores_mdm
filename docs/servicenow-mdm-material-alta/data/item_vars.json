@@ -1,0 +1,3354 @@
+[
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "23-07-2026 13:45:49",
+      "value": "2026-07-23 19:45:49"
+    },
+    "type": {
+      "display_value": "Rich Text Label",
+      "value": "32"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "layout_ultimo",
+      "value": "layout_ultimo"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "50",
+      "value": "50"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_d3ad5ca097e7ce10cc1ebbdfe153afcb",
+      "value": "item_option_new_d3ad5ca097e7ce10cc1ebbdfe153afcb"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": "<p>Descargar ultimo Layout.</p>\r\n<p><a href=\"sys_attachment.do?sys_id&#61;9cd8210947960b10f71cbf12516d43cc\" rel=\"nofollow\">Layout Alta - 2026-07-23 V20 .xlsx</a></p>",
+      "value": "<p>Descargar ultimo Layout.</p>\r\n<p><a href=\"sys_attachment.do?sys_id&#61;9cd8210947960b10f71cbf12516d43cc\" rel=\"nofollow\">Layout Alta - 2026-07-23 V20 .xlsx</a></p>"
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "18-07-2024 13:36:31",
+      "value": "2024-07-18 19:36:31"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "layout_ultimo",
+      "value": "layout_ultimo"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "d3ad5ca097e7ce10cc1ebbdfe153afcb",
+      "value": "d3ad5ca097e7ce10cc1ebbdfe153afcb"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "26",
+      "value": "26"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "18-07-2024 13:33:52",
+      "value": "2024-07-18 19:33:52"
+    },
+    "type": {
+      "display_value": "Attachment",
+      "value": "33"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Cargar Layout",
+      "value": "Cargar Layout"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "100",
+      "value": "100"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_e3374a5c1be58610a9f8766dcc4bcbda",
+      "value": "item_option_new_e3374a5c1be58610a9f8766dcc4bcbda"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Cargar Layout",
+      "value": "Cargar Layout"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "09-04-2024 16:31:35",
+      "value": "2024-04-09 22:31:35"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "excel_archivo",
+      "value": "excel_archivo"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "e3374a5c1be58610a9f8766dcc4bcbda",
+      "value": "e3374a5c1be58610a9f8766dcc4bcbda"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "3",
+      "value": "3"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 14:54:02",
+      "value": "2024-06-03 20:54:02"
+    },
+    "type": {
+      "display_value": "Single Line Text",
+      "value": "6"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "ID random",
+      "value": "ID random"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "150",
+      "value": "150"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_adfed8411bed0a10a9f8766dcc4bcbf7",
+      "value": "item_option_new_adfed8411bed0a10a9f8766dcc4bcbf7"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "ID random",
+      "value": "ID random"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "11-04-2024 16:51:44",
+      "value": "2024-04-11 22:51:44"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "excel_id_random",
+      "value": "excel_id_random"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "adfed8411bed0a10a9f8766dcc4bcbf7",
+      "value": "adfed8411bed0a10a9f8766dcc4bcbf7"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "8",
+      "value": "8"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 11:41:34",
+      "value": "2024-06-03 17:41:34"
+    },
+    "type": {
+      "display_value": "Single Line Text",
+      "value": "6"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Excel resultado",
+      "value": "Excel resultado"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "200",
+      "value": "200"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_a7826ce41b390a10a9f8766dcc4bcb22",
+      "value": "item_option_new_a7826ce41b390a10a9f8766dcc4bcb22"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Excel resultado",
+      "value": "Excel resultado"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "22-04-2024 14:05:56",
+      "value": "2024-04-22 20:05:56"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "excel_resultado",
+      "value": "excel_resultado"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "a7826ce41b390a10a9f8766dcc4bcb22",
+      "value": "a7826ce41b390a10a9f8766dcc4bcb22"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "4",
+      "value": "4"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 17:40:17",
+      "value": "2024-06-03 23:40:17"
+    },
+    "type": {
+      "display_value": "Single Line Text",
+      "value": "6"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Excel No de registros",
+      "value": "Excel No de registros"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "225",
+      "value": "225"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_67b0cd4297a68a14cc1ebbdfe153af19",
+      "value": "item_option_new_67b0cd4297a68a14cc1ebbdfe153af19"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Excel No de registros",
+      "value": "Excel No de registros"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "03-06-2024 14:56:12",
+      "value": "2024-06-03 20:56:12"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "excel_no_de_registros",
+      "value": "excel_no_de_registros"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "67b0cd4297a68a14cc1ebbdfe153af19",
+      "value": "67b0cd4297a68a14cc1ebbdfe153af19"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 12:48:18",
+      "value": "2024-06-03 18:48:18"
+    },
+    "type": {
+      "display_value": "Multi Line Text",
+      "value": "2"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Excel Informacion",
+      "value": "Excel Informacion"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "250",
+      "value": "250"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_ea57465c1be58610a9f8766dcc4bcbb2",
+      "value": "item_option_new_ea57465c1be58610a9f8766dcc4bcbb2"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Excel Informacion",
+      "value": "Excel Informacion"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "09-04-2024 16:32:13",
+      "value": "2024-04-09 22:32:13"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "excel_informacion",
+      "value": "excel_informacion"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "ea57465c1be58610a9f8766dcc4bcbb2",
+      "value": "ea57465c1be58610a9f8766dcc4bcbb2"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "3",
+      "value": "3"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "13-02-2025 17:01:57",
+      "value": "2025-02-13 23:01:57"
+    },
+    "type": {
+      "display_value": "Single Line Text",
+      "value": "6"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Archivos resultado",
+      "value": "Archivos resultado"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "300",
+      "value": "300"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_5eb3dc8a97a28a14cc1ebbdfe153aff9",
+      "value": "item_option_new_5eb3dc8a97a28a14cc1ebbdfe153aff9"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Archivos resultado",
+      "value": "Archivos resultado"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "03-06-2024 11:39:25",
+      "value": "2024-06-03 17:39:25"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "archivos_resultado",
+      "value": "archivos_resultado"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "5eb3dc8a97a28a14cc1ebbdfe153aff9",
+      "value": "5eb3dc8a97a28a14cc1ebbdfe153aff9"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  },
+  {
+    "dynamic_ref_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "rec_price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "display_title": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "tooltip": {
+      "display_value": null,
+      "value": ""
+    },
+    "show_help_on_load": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_updated_on": {
+      "display_value": "03-06-2024 12:48:11",
+      "value": "2024-06-03 18:48:11"
+    },
+    "type": {
+      "display_value": "Multi Line Text",
+      "value": "2"
+    },
+    "published_ref": {
+      "display_value": "",
+      "value": ""
+    },
+    "lookup_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_only": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "record": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_name": {
+      "display_value": "Archivos Informacion",
+      "value": "Archivos Informacion"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "order": {
+      "display_value": "350",
+      "value": "350"
+    },
+    "map_to_field": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "choice_direction": {
+      "display_value": "Down",
+      "value": "down"
+    },
+    "delivery_plan": {
+      "display_value": "",
+      "value": ""
+    },
+    "delete_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "dynamic_value_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "item_option_new_e604588a97a28a14cc1ebbdfe153af32",
+      "value": "item_option_new_e604588a97a28a14cc1ebbdfe153af32"
+    },
+    "field": {
+      "display_value": "",
+      "value": ""
+    },
+    "unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "macroponent": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_width": {
+      "display_value": null,
+      "value": ""
+    },
+    "help_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "global": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mandatory": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_class_name": {
+      "display_value": "Variable",
+      "value": "item_option_new"
+    },
+    "dynamic_default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "example_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "conversational_label": {
+      "display_value": null,
+      "value": ""
+    },
+    "pricing_implications": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "read_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "visible_bundle": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "create_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "dynamic_value_dot_walk_path": {
+      "display_value": "",
+      "value": ""
+    },
+    "table": {
+      "display_value": "",
+      "value": ""
+    },
+    "disable_initial_slot_fill": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "mask_use_encryption": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "include_none": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "default_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "price_if_checked": {
+      "display_value": "$0.00",
+      "currency_display_value": "MXN;0.00",
+      "value": "0"
+    },
+    "help_tag": {
+      "display_value": "More information",
+      "value": "More information"
+    },
+    "question_text": {
+      "display_value": "Archivos Informacion",
+      "value": "Archivos Informacion"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "cat_item": {
+      "display_value": "Material Alta",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sc_cat_item/96f6425c1be58610a9f8766dcc4bcbab",
+      "value": "96f6425c1be58610a9f8766dcc4bcbab"
+    },
+    "lookup_source": {
+      "display_value": null,
+      "value": ""
+    },
+    "validate_regex": {
+      "display_value": "",
+      "value": ""
+    },
+    "rich_text": {
+      "display_value": null,
+      "value": ""
+    },
+    "record_producer_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "attributes": {
+      "display_value": "",
+      "value": ""
+    },
+    "not_available_conversation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "lookup_unique": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual": {
+      "display_value": "",
+      "value": ""
+    },
+    "default_html_value": {
+      "display_value": null,
+      "value": ""
+    },
+    "instructions": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_label": {
+      "display_value": "",
+      "value": ""
+    },
+    "choice_field": {
+      "display_value": "",
+      "value": ""
+    },
+    "save_script": {
+      "display_value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */",
+      "value": "/** This script is executed before the Record is generated \n * `current`- GlideRecord produced by Record Producer\n * Don't use `current.update()` or `current.insert()` as the record is generated by Record Producer\n * Don't use `current.setValue('sys_class_name', 'xxx')` as this will trigger reparent flow and can cause data loss\n * Avoid `current.setAbortAction()` and generate a separate record\n * Use `producer.var1` to access variables\n */"
+    },
+    "ui_page": {
+      "display_value": "",
+      "value": ""
+    },
+    "reference": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "lookup_value": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_created_on": {
+      "display_value": "03-06-2024 11:40:59",
+      "value": "2024-06-03 17:40:59"
+    },
+    "roles_to_use_also_request_for": {
+      "display_value": "",
+      "value": ""
+    },
+    "mask_use_confirmation": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "reference_qual_condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "read_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "visibility": {
+      "display_value": "Always",
+      "value": "1"
+    },
+    "choice_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "name": {
+      "display_value": "archivos_informacion",
+      "value": "archivos_informacion"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    },
+    "lookup_dependent_question": {
+      "display_value": "",
+      "value": ""
+    },
+    "hidden": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "use_dynamic_default": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "description": {
+      "display_value": null,
+      "value": ""
+    },
+    "scale_min": {
+      "display_value": "0",
+      "value": "0"
+    },
+    "show_help": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "visible_guide": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "visible_standalone": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "do_not_select_first": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "sys_id": {
+      "display_value": "e604588a97a28a14cc1ebbdfe153af32",
+      "value": "e604588a97a28a14cc1ebbdfe153af32"
+    },
+    "variable_set": {
+      "display_value": "",
+      "value": ""
+    },
+    "write_roles": {
+      "display_value": "",
+      "value": ""
+    },
+    "variable_name": {
+      "display_value": "",
+      "value": ""
+    },
+    "list_table": {
+      "display_value": "",
+      "value": ""
+    },
+    "sp_widget": {
+      "display_value": "",
+      "value": ""
+    },
+    "macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "use_reference_qualifier": {
+      "display_value": "Simple",
+      "value": "simple"
+    },
+    "sys_mod_count": {
+      "display_value": "3",
+      "value": "3"
+    },
+    "visible_summary": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "lookup_price": {
+      "display_value": "",
+      "value": ""
+    },
+    "post_insert_script": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_tags": {
+      "display_value": "",
+      "value": ""
+    },
+    "layout": {
+      "display_value": "1 Column Wide",
+      "value": "normal"
+    },
+    "enable_also_request_for": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "summary_macro": {
+      "display_value": "",
+      "value": ""
+    },
+    "scale_max": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "category": {
+      "display_value": "",
+      "value": ""
+    },
+    "topic_block": {
+      "display_value": "",
+      "value": ""
+    }
+  }
+]

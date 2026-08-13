@@ -1,0 +1,992 @@
+[
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "17:00:00",
+      "value": "1970-01-01 17:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "5",
+      "value": "5"
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "run_type": {
+      "display_value": "Weekly",
+      "value": "weekly"
+    },
+    "sys_updated_on": {
+      "display_value": "02-07-2026 11:16:25",
+      "value": "2026-07-02 17:16:25"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "17b2ad14973b0290cc1ebbdfe153afde",
+      "value": "17b2ad14973b0290cc1ebbdfe153afde"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "30-07-2024 10:23:00",
+      "value": "2024-07-30 16:23:00"
+    },
+    "run_start": {
+      "display_value": "03-07-2026 00:00:00",
+      "value": "2026-07-03 06:00:00"
+    },
+    "sys_name": {
+      "display_value": "jj MDM cancelar por N dias",
+      "value": "jj MDM cancelar por N dias"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "17:00:00",
+      "value": "1970-01-01 23:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "25",
+      "value": "25"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "script": {
+      "display_value": "// Cancelar RITM sin movimientos en \"N\" dias MDM_Materiales\n// var varCancelacionLista = new jj_MDM_Utils_Client().jobTaskLimpiarRegPre();\n\nvar msgJobs = 'JJ_Job_MDM_N_dias_01',\n    varMSG = '',\n    varEstatus = '';\n\nvar gr001 = new GlideRecord('u_mdm_options');\ngr001.addEncodedQuery('u_key=mdm_config_mtr^u_labe=ritm_cancelar_programada_estatus');\ngr001.query();\nif (gr001.next()) {\n    varEstatus = gr001.u_value;\n    if (varEstatus == 'Postergar') {\n        gr001.u_value = 'Activo';\n        gr001.update();\n        varMSG = 'De estatus \"Postergar\" a \"Activo\".';\n    } else {\n        // Si esta \"Activo\"\n        varMSG = 'Estatus \"Activo\" limpiar RITMs';\n\t\tvar varNotificacionEjecuta = new jj_MDM_Utils_Client().jobTaskLimpiarRegCancela();\n    }\n} else {\n    varMSG = 'No se encontro estatus en tabla \"u_mdm_options\".';\n}\n\ngs.log(varMSG, msgJobs);",
+      "value": "// Cancelar RITM sin movimientos en \"N\" dias MDM_Materiales\n// var varCancelacionLista = new jj_MDM_Utils_Client().jobTaskLimpiarRegPre();\n\nvar msgJobs = 'JJ_Job_MDM_N_dias_01',\n    varMSG = '',\n    varEstatus = '';\n\nvar gr001 = new GlideRecord('u_mdm_options');\ngr001.addEncodedQuery('u_key=mdm_config_mtr^u_labe=ritm_cancelar_programada_estatus');\ngr001.query();\nif (gr001.next()) {\n    varEstatus = gr001.u_value;\n    if (varEstatus == 'Postergar') {\n        gr001.u_value = 'Activo';\n        gr001.update();\n        varMSG = 'De estatus \"Postergar\" a \"Activo\".';\n    } else {\n        // Si esta \"Activo\"\n        varMSG = 'Estatus \"Activo\" limpiar RITMs';\n\t\tvar varNotificacionEjecuta = new jj_MDM_Utils_Client().jobTaskLimpiarRegCancela();\n    }\n} else {\n    varMSG = 'No se encontro estatus en tabla \"u_mdm_options\".';\n}\n\ngs.log(varMSG, msgJobs);"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_17b2ad14973b0290cc1ebbdfe153afde",
+      "value": "sysauto_script_17b2ad14973b0290cc1ebbdfe153afde"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "jj MDM cancelar por N dias",
+      "value": "jj MDM cancelar por N dias"
+    },
+    "entered_run_start": {
+      "display_value": "03-07-2026 00:00:00",
+      "value": "2026-07-03 00:00:00"
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "run_type": {
+      "display_value": "Periodically",
+      "value": "periodically"
+    },
+    "sys_updated_on": {
+      "display_value": "12-11-2025 09:49:18",
+      "value": "2025-11-12 15:49:18"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "5f27d7aa2b683650677df2f9ed91bf5a",
+      "value": "5f27d7aa2b683650677df2f9ed91bf5a"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "15-10-2025 17:40:22",
+      "value": "2025-10-15 23:40:22"
+    },
+    "run_start": {
+      "display_value": "16-10-2025 18:00:00",
+      "value": "2025-10-17 00:00:00"
+    },
+    "sys_name": {
+      "display_value": "jj MDM Estatus RITM pendientes",
+      "value": "jj MDM Estatus RITM pendientes"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "7",
+      "value": "7"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "script": {
+      "display_value": "// Validar RITM de Alta Material en estatus Pendiente y validar que campo MDM Registro -> Valido = \"Corregir\"\n\nvar varLimpiarEnProcesos = new jj_MDM_Utils_Client().jobTRitmPendienteS();\n\n// JJ_job_MDM_RegPending_001\n\n",
+      "value": "// Validar RITM de Alta Material en estatus Pendiente y validar que campo MDM Registro -> Valido = \"Corregir\"\n\nvar varLimpiarEnProcesos = new jj_MDM_Utils_Client().jobTRitmPendienteS();\n\n// JJ_job_MDM_RegPending_001\n\n"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_5f27d7aa2b683650677df2f9ed91bf5a",
+      "value": "sysauto_script_5f27d7aa2b683650677df2f9ed91bf5a"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "jj MDM Estatus RITM pendientes",
+      "value": "jj MDM Estatus RITM pendientes"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "1 Hour",
+      "value": "1970-01-01 01:00:00"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 05:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "run_type": {
+      "display_value": "Daily",
+      "value": "daily"
+    },
+    "sys_updated_on": {
+      "display_value": "14-11-2025 14:37:59",
+      "value": "2025-11-14 20:37:59"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "7618938e1be14e10a9f8766dcc4bcb8c",
+      "value": "7618938e1be14e10a9f8766dcc4bcb8c"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "15-04-2024 08:55:52",
+      "value": "2024-04-15 14:55:52"
+    },
+    "run_start": {
+      "display_value": "15-04-2024 08:53:53",
+      "value": "2024-04-15 14:53:53"
+    },
+    "sys_name": {
+      "display_value": "jj MDM Borrar Random en Registros estado lectura",
+      "value": "jj MDM Borrar Random en Registros estado lectura"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 11:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "4",
+      "value": "4"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "script": {
+      "display_value": "// Limpia tabla \"MDM Registros\" \n\nvar delectGlobal = new jj_MDM_Utils().borrarRegistrosEnLectura();\nvar delectTables = new x_nsadc_tables.jj_MDM_Utils_Tables().borrarRegistrosEnLectura();\n \n// Sin log\n\n/* \t\n\tif( u_mt_id_random != NULL )\n\t\tif( u_mt_estatus == 'Lectura' )\n\t\t\tdeleteRecord();\n\t\telse\n\t\t\tu_mt_id_random = '';\n           \tupdate();\n*/",
+      "value": "// Limpia tabla \"MDM Registros\" \n\nvar delectGlobal = new jj_MDM_Utils().borrarRegistrosEnLectura();\nvar delectTables = new x_nsadc_tables.jj_MDM_Utils_Tables().borrarRegistrosEnLectura();\n \n// Sin log\n\n/* \t\n\tif( u_mt_id_random != NULL )\n\t\tif( u_mt_estatus == 'Lectura' )\n\t\t\tdeleteRecord();\n\t\telse\n\t\t\tu_mt_id_random = '';\n           \tupdate();\n*/"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_7618938e1be14e10a9f8766dcc4bcb8c",
+      "value": "sysauto_script_7618938e1be14e10a9f8766dcc4bcb8c"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Random en Registros estado lectura",
+      "value": "jj MDM Borrar Random en Registros estado lectura"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Martin Crespo",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/389694ec1bc8f850a9f8766dcc4bcbbc",
+      "value": "389694ec1bc8f850a9f8766dcc4bcbbc"
+    },
+    "run_type": {
+      "display_value": "Periodically",
+      "value": "periodically"
+    },
+    "sys_updated_on": {
+      "display_value": "31-10-2025 20:54:51",
+      "value": "2025-11-01 02:54:51"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "87424fb293f9da102f6cb70e1dba1035",
+      "value": "87424fb293f9da102f6cb70e1dba1035"
+    },
+    "sys_updated_by": {
+      "display_value": "system",
+      "value": "system"
+    },
+    "sys_created_on": {
+      "display_value": "14-11-2024 21:42:31",
+      "value": "2024-11-15 03:42:31"
+    },
+    "run_start": {
+      "display_value": "17-11-2024 23:00:00",
+      "value": "2024-11-18 05:00:00"
+    },
+    "sys_name": {
+      "display_value": "MDM Materiales Styrk - No SAP - SUPER API",
+      "value": "MDM Materiales Styrk - No SAP - SUPER API"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "martin.crespo",
+      "value": "martin.crespo"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "2",
+      "value": "2"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "",
+      "value": ""
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "script": {
+      "display_value": "/*\n\n\t\tTIEMPO APROXIMADO 30 MINUTOS\n\n*/\nvar logs = \"logTaxonomiaDetails\";\n\nvar urls = [\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D26487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=first&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?viewPublication=Especificaciones&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true&pageRecordFilter=./ID%3D2000\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D4000&viewPublication=Especificaciones&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true&pageFirstRecordFilter=\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D6000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D8000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D10000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D12000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D14000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D16000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D18000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D20000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D22000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D24000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D26000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D28000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D30000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D32000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D34000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D36000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D38000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D40000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D42000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D44000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D46000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D28487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D30487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n];\nvar logEBXNoSAP = \"dataNoSAP\";\nvar gdt = new GlideDateTime(); // Obtén la fecha y hora actual\nvar hora = gdt.getDisplayValue(); // Devuelve la fecha y hora en formato legible\ngs.log(\"Inicio: \" + hora, logEBXNoSAP);\n\n// Ejecutar las URLs de forma secuencial\nfunction processURLsSequentially(index) {\n    if (index >= urls.length) {\n\t\tgdt = new GlideDateTime();\n\t\thora = gdt.getDisplayValue();\n        gs.info(\"Se completaron todas las URL.\");\n        gs.log(\"Fin: \" + hora, logEBXNoSAP);\n        return; // Finalizar cuando todas las URLs se hayan procesado\n    }\n\n    var url = urls[index];\n    getData(url, function() {\n        processURLsSequentially(index + 1); // Ejecutar la siguiente URL después de que la actual haya terminado\n    });\n}\n\n// Función modificada para obtener datos y luego ejecutar el siguiente paso\nfunction getData(url, callback) {\n    gs.print(\"Entro a getData\")\n    // Crear una instancia del mensaje REST\n    var restMessage = new sn_ws.RESTMessageV2('MDM_Materiales', 'SuperAPI');\n    restMessage.setEndpoint(url);\n\n    // Enviar la solicitud\n    var response = restMessage.execute();\n\n    // Obtener la respuesta\n    var responseBody = response.getBody();\n    var httpStatus = response.getStatusCode();\n\n    // Parsear la respuesta JSON si es necesario\n    gs.log(\"Response body: \" + responseBody)\n    var responseJSON = JSON.parse(responseBody);\n    obtenerSysIDJson(responseJSON);\n\n    // Llamar al callback cuando se haya completado la solicitud actual\n    if (callback) callback();\n}\n\n\n\n\nfunction actualizarDetails() {\n    var gr = new GlideRecord('u_mdm_materiales_no_sap');\n    gr.addEncodedQuery('u_taxonomia_categoria_detailsISNOTEMPTY^ORu_taxonomia_departamento_detailsISNOTEMPTY');\n    gr.setLimit(1);\n    gr.query();\n\n    while (gr.next()) {\n        gs.print('Buscando: ' + gr.u_id);\n        obtenerDetails(gr.u_taxonomia_departamento_details, gr, \"departamento\");\n        obtenerDetails(gr.u_taxonomia_categoria_details, gr, \"categoria\");\n        obtenerDetails(gr.u_taxonomia_subcategoria_details, gr, \"subcategoria\");\n\n    }\n}\n\n\n\nfunction obtenerDetails(url, gr, tipo) {\n    var restMessage = new sn_ws.RESTMessageV2('MDM_Materiales', 'SuperAPI');\n    restMessage.setEndpoint(url);\n\n    // Enviar la solicitud\n    var response = restMessage.execute();\n\n    // Obtener la respuesta\n    var responseBody = response.getBody();\n    var httpStatus = response.getStatusCode();\n\n    gs.print(responseBody);\n    // Parsear la respuesta JSON si es necesario\n    var responseJSON = JSON.parse(responseBody);\n\n    gs.print(\"Campos\");\n    gs.print(\"ID: \" + responseJSON.ID);\n    gs.print(\"Depto_Cat_SuCat: \" + responseJSON.Depto_Cat_SuCat);\n    gs.print(\"Nombre: \" + responseJSON.Nombre);\n\n\n    if (tipo === \"departamento\") {\n        gr.u_taxonomia_departamento_details = responseBody;\n        gr.u_details_departamento_id = responseJSON.ID;\n        gr.u_details_departamento_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_departamento_nombre = responseJSON.Nombre;\n        gr.u_details_departamento_padre_key = responseJSON.padre.label;\n    } else if (tipo === \"categoria\") {\n        gr.u_taxonomia_categoria_details = responseBody;\n        gr.u_details_categoria_id = responseJSON.ID;\n        gr.u_details_categoria_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_categoria_nombre = responseJSON.Nombre;\n        gr.u_details_categoria_padre_key = responseJSON.padre.label;\n    }\n    if (tipo === \"subcategoria\") {\n        gr.u_taxonomia_subcategoria_details = responseBody;\n        gr.u_details_subcategoria_id = responseJSON.ID;\n        gr.u_details_subcategoria_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_subcategoria_nombre = responseJSON.Nombre;\n        gr.u_details_subcategoria_padre = responseJSON.padre.label;\n    } else {\n        gr.log(tipo + \" / Tipo no identificado\", logs);\n        return true;\n    }\n\n    gr.update();\n}\n\n\n\nfunction obtenerSysIDJson(jsonData) {\n    // Verifica si el contenido se leyó correctamente\n    var nextPage = jsonData.pagination ? jsonData.pagination.nextPage : null;\n    gs.print(\"Siguiente página: \" + nextPage);\n\n    if (jsonData && jsonData.rows) {\n        gs.print(\"JSON: \" + JSON.stringify(jsonData))\n        for (var i = 0; i < jsonData.rows.length; i++) {\n            var record = jsonData.rows[i];\n\n            var gr = new GlideRecord('u_mdm_materiales_no_sap');\n\n            // Busca el registro por la clave 'ID'\n            gr.addQuery('u_id', record.ID);\n            gr.query();\n            var actualiza = false;\n            if (gr.next()) {\n                // Si el registro existe, actualizarlo\n                gs.print(\"Actualizando registro con ID: \" + record.ID);\n                actualiza == true;\n            } else {\n                // Si el registro no existe, inicializar para insertarlo\n                gs.print(\"Insertando nuevo registro con ID: \" + record.ID);\n                gr.initialize();\n                gr.setWorkflow(false);\n                gr.u_id = record.ID;\n            }\n\n            // Asignar valores a los campos\n            if (record && Object.keys(record).length > 0) {\n                gr.u_ebx = record.EBX;\n                gr.u_ean11 = record.EAN11;\n                gr.u_taxonomia_departamento_key = record.TAXONOMIA.DEPARTAMENTO.key || '';\n                gr.u_taxonomia_departamento_label = record.TAXONOMIA.DEPARTAMENTO.label || '';\n                gr.u_taxonomia_departamento_details = record.TAXONOMIA.DEPARTAMENTO.details || ''; // Nuevo campo 'details'\n                gr.u_taxonomia_categoria_key = record.TAXONOMIA.CATEGORIA.key || '';\n                gr.u_taxonomia_categoria_label = record.TAXONOMIA.CATEGORIA.label || '';\n                gr.u_taxonomia_categoria_details = record.TAXONOMIA.CATEGORIA.details || ''; // Nuevo campo 'details'\n                gr.u_taxonomia_sub_categoria_key = record.TAXONOMIA.SUB_CATEGORIA.key || '';\n                gr.u_taxonomia_sub_categoria_label = record.TAXONOMIA.SUB_CATEGORIA.label || '';\n                gr.u_taxonomia_subcategoria_details = record.TAXONOMIA.SUB_CATEGORIA.details || ''; // Nuevo campo \n                gr.u_descripcion_larga_ebx = record.DESCRIPCION_LARGA_EBX || '';\n                gr.u_beneficios_del_producto = record.BENEFICIOS_DEL_PRODUCTO || '';\n                gr.u_keywords = record.Keywords || '';\n                gr.u_metadescripcion = record.Metadescripcion || '';\n                gr.u_indicacion_terapeutica = record.Indicacion_terapeutica || '';\n                gr.u_contraindicacion = record.Contraindicacion || '';\n                gr.u_leyendas_de_proteccion = record.Leyendas_de_proteccion || '';\n                gr.u_prescripcion = record.Prescripcion || '';\n                gr.u_advertencias = record.Advertencias || '';\n                gr.u_interaccion_medicamentosa = record.Interaccion_medicamentosa || '';\n                gr.u_reacciones_adversas = record.Reacciones_adversas || '';\n                gr.u_manejo_de_sobredosificacion = record.Manejo_de_sobredosificacion || '';\n                gr.u_propiedad_farmaceutica = record.Propiedad_Farmaceutica || '';\n                gr.u_dosis = record.Dosis || '';\n                gr.u_via_de_administracion = record.Via_de_administracion || '';\n                gr.u_clave_cnis = record.Clave_CNIS || '';\n                gr.u_embarazo = record.Embarazo || '';\n                gr.u_lactancia = record.Lactancia || '';\n                gr.u_denominacion_generica = record.Denominacion_Generica || '';\n                gr.u_datosbasicos_matnr = record.DatosBasicos.MATNR || '';\n                gr.u_datosbasicos_lvorm = record.DatosBasicos.LVORM || '';\n                gr.u_mercadotecnia_keywords_com = record.Mercadotecnia.Keywords_Com || '';\n                gr.u_mercadotecnia_captionlinkdq = record.Mercadotecnia.CaptionLinkDQ || '';\n                gr.u_mercadotecnia_imagen_1 = record.Mercadotecnia.Imagen_1 || '';\n                gr.u_mercadotecnia_imagen_2 = record.Mercadotecnia.Imagen_2 || '';\n                gr.u_mercadotecnia_imagen_3 = record.Mercadotecnia.Imagen_3 || '';\n                gr.u_ersda = record.ERSDA ? new GlideDateTime(record.ERSDA) : null;\n                gr.u_laeda = record.LAEDA ? new GlideDateTime(record.LAEDA) : null;\n                gr.u_id_vtex = record.ID_VTEX || '';\n\n                // Insertar o actualizar\n                //inserta_ActualizaMDMRegistros(record.DatosBasicos.LVORM, record.EAN11, record.EBX);\n\n                gr.update();\n\n            }\n\n        }\n\n        gs.info('Process completed for ' + jsonData.rows.length + ' records.');\n    } else {\n        gs.error('Failed to parse JSON or no records found.');\n    }\n}\n\n\nfunction inserta_ActualizaMDMRegistros(materialID, ean, nombre) {\n\n    var gr = new GlideRecord('u_mdm_registros');\n\n    // Busca el registro por la clave 'ID'\n    gr.addQuery('u_mt_no_materia', materialID);\n    gr.query();\n    var actualiza = false;\n\n    //Si no existe el material, se crea\n    if (!gr.next()) {\n        gr = new GlideRecord('u_mdm_registros');\n        gr.initialize();\n        gr.setWorkflow(false);\n        gr.u_mt_no_materia = materialID;\n        gr.u_ean11 = ean;\n        gr.u_mt_nominacion_generica = nombre;\n        gr.insert();\n    }\n}\n\n// Iniciar la ejecución de las URLs de manera secuencial\nprocessURLsSequentially(0);\n",
+      "value": "/*\n\n\t\tTIEMPO APROXIMADO 30 MINUTOS\n\n*/\nvar logs = \"logTaxonomiaDetails\";\n\nvar urls = [\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D26487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=first&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?viewPublication=Especificaciones&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true&pageRecordFilter=./ID%3D2000\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D4000&viewPublication=Especificaciones&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true&pageFirstRecordFilter=\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D6000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D8000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D10000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D12000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D14000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D16000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D18000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D20000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D22000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D24000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D26000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D28000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D30000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D32000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D34000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D36000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D38000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D40000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D42000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n    \"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D44000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D46000&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D28487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n\t\"https://laboratorios-mdm.nadro.mx/ebx-dataservices/rest/data-compact/v1/BMateriales_Maestro/Materiales_Maestros/root/Captura_Materiales/CapMat_ComInf?pageRecordFilter=./ID%3D30487&viewPublication=Especificaciones&pageFirstRecordFilter=&pageAction=next&includeLabel=yes&pageSize=2000&includeDetails=true\",\n];\nvar logEBXNoSAP = \"dataNoSAP\";\nvar gdt = new GlideDateTime(); // Obtén la fecha y hora actual\nvar hora = gdt.getDisplayValue(); // Devuelve la fecha y hora en formato legible\ngs.log(\"Inicio: \" + hora, logEBXNoSAP);\n\n// Ejecutar las URLs de forma secuencial\nfunction processURLsSequentially(index) {\n    if (index >= urls.length) {\n\t\tgdt = new GlideDateTime();\n\t\thora = gdt.getDisplayValue();\n        gs.info(\"Se completaron todas las URL.\");\n        gs.log(\"Fin: \" + hora, logEBXNoSAP);\n        return; // Finalizar cuando todas las URLs se hayan procesado\n    }\n\n    var url = urls[index];\n    getData(url, function() {\n        processURLsSequentially(index + 1); // Ejecutar la siguiente URL después de que la actual haya terminado\n    });\n}\n\n// Función modificada para obtener datos y luego ejecutar el siguiente paso\nfunction getData(url, callback) {\n    gs.print(\"Entro a getData\")\n    // Crear una instancia del mensaje REST\n    var restMessage = new sn_ws.RESTMessageV2('MDM_Materiales', 'SuperAPI');\n    restMessage.setEndpoint(url);\n\n    // Enviar la solicitud\n    var response = restMessage.execute();\n\n    // Obtener la respuesta\n    var responseBody = response.getBody();\n    var httpStatus = response.getStatusCode();\n\n    // Parsear la respuesta JSON si es necesario\n    gs.log(\"Response body: \" + responseBody)\n    var responseJSON = JSON.parse(responseBody);\n    obtenerSysIDJson(responseJSON);\n\n    // Llamar al callback cuando se haya completado la solicitud actual\n    if (callback) callback();\n}\n\n\n\n\nfunction actualizarDetails() {\n    var gr = new GlideRecord('u_mdm_materiales_no_sap');\n    gr.addEncodedQuery('u_taxonomia_categoria_detailsISNOTEMPTY^ORu_taxonomia_departamento_detailsISNOTEMPTY');\n    gr.setLimit(1);\n    gr.query();\n\n    while (gr.next()) {\n        gs.print('Buscando: ' + gr.u_id);\n        obtenerDetails(gr.u_taxonomia_departamento_details, gr, \"departamento\");\n        obtenerDetails(gr.u_taxonomia_categoria_details, gr, \"categoria\");\n        obtenerDetails(gr.u_taxonomia_subcategoria_details, gr, \"subcategoria\");\n\n    }\n}\n\n\n\nfunction obtenerDetails(url, gr, tipo) {\n    var restMessage = new sn_ws.RESTMessageV2('MDM_Materiales', 'SuperAPI');\n    restMessage.setEndpoint(url);\n\n    // Enviar la solicitud\n    var response = restMessage.execute();\n\n    // Obtener la respuesta\n    var responseBody = response.getBody();\n    var httpStatus = response.getStatusCode();\n\n    gs.print(responseBody);\n    // Parsear la respuesta JSON si es necesario\n    var responseJSON = JSON.parse(responseBody);\n\n    gs.print(\"Campos\");\n    gs.print(\"ID: \" + responseJSON.ID);\n    gs.print(\"Depto_Cat_SuCat: \" + responseJSON.Depto_Cat_SuCat);\n    gs.print(\"Nombre: \" + responseJSON.Nombre);\n\n\n    if (tipo === \"departamento\") {\n        gr.u_taxonomia_departamento_details = responseBody;\n        gr.u_details_departamento_id = responseJSON.ID;\n        gr.u_details_departamento_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_departamento_nombre = responseJSON.Nombre;\n        gr.u_details_departamento_padre_key = responseJSON.padre.label;\n    } else if (tipo === \"categoria\") {\n        gr.u_taxonomia_categoria_details = responseBody;\n        gr.u_details_categoria_id = responseJSON.ID;\n        gr.u_details_categoria_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_categoria_nombre = responseJSON.Nombre;\n        gr.u_details_categoria_padre_key = responseJSON.padre.label;\n    }\n    if (tipo === \"subcategoria\") {\n        gr.u_taxonomia_subcategoria_details = responseBody;\n        gr.u_details_subcategoria_id = responseJSON.ID;\n        gr.u_details_subcategoria_depto_cat_sucat = responseJSON.Depto_Cat_SuCat;\n        gr.u_details_subcategoria_nombre = responseJSON.Nombre;\n        gr.u_details_subcategoria_padre = responseJSON.padre.label;\n    } else {\n        gr.log(tipo + \" / Tipo no identificado\", logs);\n        return true;\n    }\n\n    gr.update();\n}\n\n\n\nfunction obtenerSysIDJson(jsonData) {\n    // Verifica si el contenido se leyó correctamente\n    var nextPage = jsonData.pagination ? jsonData.pagination.nextPage : null;\n    gs.print(\"Siguiente página: \" + nextPage);\n\n    if (jsonData && jsonData.rows) {\n        gs.print(\"JSON: \" + JSON.stringify(jsonData))\n        for (var i = 0; i < jsonData.rows.length; i++) {\n            var record = jsonData.rows[i];\n\n            var gr = new GlideRecord('u_mdm_materiales_no_sap');\n\n            // Busca el registro por la clave 'ID'\n            gr.addQuery('u_id', record.ID);\n            gr.query();\n            var actualiza = false;\n            if (gr.next()) {\n                // Si el registro existe, actualizarlo\n                gs.print(\"Actualizando registro con ID: \" + record.ID);\n                actualiza == true;\n            } else {\n                // Si el registro no existe, inicializar para insertarlo\n                gs.print(\"Insertando nuevo registro con ID: \" + record.ID);\n                gr.initialize();\n                gr.setWorkflow(false);\n                gr.u_id = record.ID;\n            }\n\n            // Asignar valores a los campos\n            if (record && Object.keys(record).length > 0) {\n                gr.u_ebx = record.EBX;\n                gr.u_ean11 = record.EAN11;\n                gr.u_taxonomia_departamento_key = record.TAXONOMIA.DEPARTAMENTO.key || '';\n                gr.u_taxonomia_departamento_label = record.TAXONOMIA.DEPARTAMENTO.label || '';\n                gr.u_taxonomia_departamento_details = record.TAXONOMIA.DEPARTAMENTO.details || ''; // Nuevo campo 'details'\n                gr.u_taxonomia_categoria_key = record.TAXONOMIA.CATEGORIA.key || '';\n                gr.u_taxonomia_categoria_label = record.TAXONOMIA.CATEGORIA.label || '';\n                gr.u_taxonomia_categoria_details = record.TAXONOMIA.CATEGORIA.details || ''; // Nuevo campo 'details'\n                gr.u_taxonomia_sub_categoria_key = record.TAXONOMIA.SUB_CATEGORIA.key || '';\n                gr.u_taxonomia_sub_categoria_label = record.TAXONOMIA.SUB_CATEGORIA.label || '';\n                gr.u_taxonomia_subcategoria_details = record.TAXONOMIA.SUB_CATEGORIA.details || ''; // Nuevo campo \n                gr.u_descripcion_larga_ebx = record.DESCRIPCION_LARGA_EBX || '';\n                gr.u_beneficios_del_producto = record.BENEFICIOS_DEL_PRODUCTO || '';\n                gr.u_keywords = record.Keywords || '';\n                gr.u_metadescripcion = record.Metadescripcion || '';\n                gr.u_indicacion_terapeutica = record.Indicacion_terapeutica || '';\n                gr.u_contraindicacion = record.Contraindicacion || '';\n                gr.u_leyendas_de_proteccion = record.Leyendas_de_proteccion || '';\n                gr.u_prescripcion = record.Prescripcion || '';\n                gr.u_advertencias = record.Advertencias || '';\n                gr.u_interaccion_medicamentosa = record.Interaccion_medicamentosa || '';\n                gr.u_reacciones_adversas = record.Reacciones_adversas || '';\n                gr.u_manejo_de_sobredosificacion = record.Manejo_de_sobredosificacion || '';\n                gr.u_propiedad_farmaceutica = record.Propiedad_Farmaceutica || '';\n                gr.u_dosis = record.Dosis || '';\n                gr.u_via_de_administracion = record.Via_de_administracion || '';\n                gr.u_clave_cnis = record.Clave_CNIS || '';\n                gr.u_embarazo = record.Embarazo || '';\n                gr.u_lactancia = record.Lactancia || '';\n                gr.u_denominacion_generica = record.Denominacion_Generica || '';\n                gr.u_datosbasicos_matnr = record.DatosBasicos.MATNR || '';\n                gr.u_datosbasicos_lvorm = record.DatosBasicos.LVORM || '';\n                gr.u_mercadotecnia_keywords_com = record.Mercadotecnia.Keywords_Com || '';\n                gr.u_mercadotecnia_captionlinkdq = record.Mercadotecnia.CaptionLinkDQ || '';\n                gr.u_mercadotecnia_imagen_1 = record.Mercadotecnia.Imagen_1 || '';\n                gr.u_mercadotecnia_imagen_2 = record.Mercadotecnia.Imagen_2 || '';\n                gr.u_mercadotecnia_imagen_3 = record.Mercadotecnia.Imagen_3 || '';\n                gr.u_ersda = record.ERSDA ? new GlideDateTime(record.ERSDA) : null;\n                gr.u_laeda = record.LAEDA ? new GlideDateTime(record.LAEDA) : null;\n                gr.u_id_vtex = record.ID_VTEX || '';\n\n                // Insertar o actualizar\n                //inserta_ActualizaMDMRegistros(record.DatosBasicos.LVORM, record.EAN11, record.EBX);\n\n                gr.update();\n\n            }\n\n        }\n\n        gs.info('Process completed for ' + jsonData.rows.length + ' records.');\n    } else {\n        gs.error('Failed to parse JSON or no records found.');\n    }\n}\n\n\nfunction inserta_ActualizaMDMRegistros(materialID, ean, nombre) {\n\n    var gr = new GlideRecord('u_mdm_registros');\n\n    // Busca el registro por la clave 'ID'\n    gr.addQuery('u_mt_no_materia', materialID);\n    gr.query();\n    var actualiza = false;\n\n    //Si no existe el material, se crea\n    if (!gr.next()) {\n        gr = new GlideRecord('u_mdm_registros');\n        gr.initialize();\n        gr.setWorkflow(false);\n        gr.u_mt_no_materia = materialID;\n        gr.u_ean11 = ean;\n        gr.u_mt_nominacion_generica = nombre;\n        gr.insert();\n    }\n}\n\n// Iniciar la ejecución de las URLs de manera secuencial\nprocessURLsSequentially(0);\n"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_87424fb293f9da102f6cb70e1dba1035",
+      "value": "sysauto_script_87424fb293f9da102f6cb70e1dba1035"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "MDM Materiales Styrk - No SAP - SUPER API",
+      "value": "MDM Materiales Styrk - No SAP - SUPER API"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "3 Days",
+      "value": "1970-01-04 00:00:00"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 05:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "run_type": {
+      "display_value": "Daily",
+      "value": "daily"
+    },
+    "sys_updated_on": {
+      "display_value": "14-11-2025 11:52:02",
+      "value": "2025-11-14 17:52:02"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "96dbdcccc3c43210a0626a1599013192",
+      "value": "96dbdcccc3c43210a0626a1599013192"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "12-09-2025 13:08:02",
+      "value": "2025-09-12 19:08:02"
+    },
+    "run_start": {
+      "display_value": "12-09-2025 13:02:49",
+      "value": "2025-09-12 19:02:49"
+    },
+    "sys_name": {
+      "display_value": "jj MDM Borrar Registros Vacios AprovacionMultiple",
+      "value": "jj MDM Borrar Registros Vacios AprovacionMultiple"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "05:00:00",
+      "value": "1970-01-01 11:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": "America/Mexico_City",
+      "value": "America/Mexico_City"
+    },
+    "script": {
+      "display_value": "// Limpia los registros vacions en la tabla \"Aprobacion Multiple\" solo Alta\n\nvar delect = new jj_MDM_Utils().borrarRegistrosVaciosAprovMultiple();\n\n// Sin log",
+      "value": "// Limpia los registros vacions en la tabla \"Aprobacion Multiple\" solo Alta\n\nvar delect = new jj_MDM_Utils().borrarRegistrosVaciosAprovMultiple();\n\n// Sin log"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_96dbdcccc3c43210a0626a1599013192",
+      "value": "sysauto_script_96dbdcccc3c43210a0626a1599013192"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "jj MDM Borrar Registros Vacios AprovacionMultiple",
+      "value": "jj MDM Borrar Registros Vacios AprovacionMultiple"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  },
+  {
+    "conditional": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "advanced": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "business_calendar": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 00:00:00"
+    },
+    "run_as_tz": {
+      "display_value": null,
+      "value": ""
+    },
+    "run_daysofweek": {
+      "display_value": "",
+      "value": ""
+    },
+    "entered_run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "repeat_every": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_as": {
+      "display_value": "Juan Julian",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_user/146c611b1ba51950a9f8766dcc4bcb0d",
+      "value": "146c611b1ba51950a9f8766dcc4bcb0d"
+    },
+    "run_type": {
+      "display_value": "Periodically",
+      "value": "periodically"
+    },
+    "sys_updated_on": {
+      "display_value": "12-11-2025 09:47:46",
+      "value": "2025-11-12 15:47:46"
+    },
+    "sys_class_name": {
+      "display_value": "Scheduled Script Execution",
+      "value": "sysauto_script"
+    },
+    "run_end": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_id": {
+      "display_value": "b5b1fc172bc17250677df2f9ed91bf9c",
+      "value": "b5b1fc172bc17250677df2f9ed91bf9c"
+    },
+    "sys_updated_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "sys_created_on": {
+      "display_value": "11-11-2025 10:02:47",
+      "value": "2025-11-11 16:02:47"
+    },
+    "run_start": {
+      "display_value": "11-11-2025 10:00:00",
+      "value": "2025-11-11 16:00:00"
+    },
+    "sys_name": {
+      "display_value": "jj MDM Alta sin RITM",
+      "value": "jj MDM Alta sin RITM"
+    },
+    "run_dayofmonth": {
+      "display_value": "1",
+      "value": "1"
+    },
+    "run_weekinmonth": {
+      "display_value": "First",
+      "value": "1"
+    },
+    "sys_scope": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_scope/global",
+      "value": "global"
+    },
+    "run_dayofweek": {
+      "display_value": "Monday",
+      "value": "1"
+    },
+    "sys_created_by": {
+      "display_value": "juan.julian",
+      "value": "juan.julian"
+    },
+    "upgrade_safe": {
+      "display_value": "false",
+      "value": "false"
+    },
+    "offset": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_time": {
+      "display_value": "00:00:00",
+      "value": "1970-01-01 06:00:00"
+    },
+    "sys_mod_count": {
+      "display_value": "4",
+      "value": "4"
+    },
+    "active": {
+      "display_value": "true",
+      "value": "true"
+    },
+    "run_month": {
+      "display_value": "January",
+      "value": "1"
+    },
+    "time_zone": {
+      "display_value": null,
+      "value": ""
+    },
+    "script": {
+      "display_value": "// Validar RITM de Alta Material en estatus Pendiente y validar que campo MDM Registro -> Valido = \"Corregir\"\n\nvar varLimpiarAltasSinRITM = new jj_MDM_Utils_Client().jobTRitmSinAlta();\n\n// JJ_job_MDM_AltaSinRITM_001",
+      "value": "// Validar RITM de Alta Material en estatus Pendiente y validar que campo MDM Registro -> Valido = \"Corregir\"\n\nvar varLimpiarAltasSinRITM = new jj_MDM_Utils_Client().jobTRitmSinAlta();\n\n// JJ_job_MDM_AltaSinRITM_001"
+    },
+    "sys_package": {
+      "display_value": "Global",
+      "link": "https://nadrocomercialprod.service-now.com/api/now/table/sys_package/global",
+      "value": "global"
+    },
+    "condition": {
+      "display_value": "",
+      "value": ""
+    },
+    "sys_update_name": {
+      "display_value": "sysauto_script_b5b1fc172bc17250677df2f9ed91bf9c",
+      "value": "sysauto_script_b5b1fc172bc17250677df2f9ed91bf9c"
+    },
+    "offset_type": {
+      "display_value": null,
+      "value": "0"
+    },
+    "name": {
+      "display_value": "jj MDM Alta sin RITM",
+      "value": "jj MDM Alta sin RITM"
+    },
+    "entered_run_start": {
+      "display_value": "",
+      "value": ""
+    },
+    "max_drift": {
+      "display_value": "",
+      "value": ""
+    },
+    "run_period": {
+      "display_value": "1 Hour",
+      "value": "1970-01-01 01:00:00"
+    },
+    "sys_policy": {
+      "display_value": null,
+      "value": ""
+    }
+  }
+]

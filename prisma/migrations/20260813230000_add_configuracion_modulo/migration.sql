@@ -1,16 +1,18 @@
 -- CreateTable
 CREATE TABLE "ConfiguracionModulo" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "modulo" TEXT NOT NULL,
     "clave" TEXT NOT NULL,
-    "valor" TEXT NOT NULL,
+    "valor" JSONB NOT NULL,
     "tipo" TEXT NOT NULL DEFAULT 'string',
     "grupo" TEXT NOT NULL DEFAULT 'General',
     "descripcion" TEXT,
     "sensible" BOOLEAN NOT NULL DEFAULT false,
     "actualizadoPor" TEXT,
-    "creadoEn" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "actualizadoEn" DATETIME NOT NULL
+    "creadoEn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "actualizadoEn" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ConfiguracionModulo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

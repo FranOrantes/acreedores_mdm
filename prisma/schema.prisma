@@ -780,3 +780,23 @@ model LogEmail {
   @@index([usuarioId])
   @@index([creadoEn])
 }
+
+// --- Configuración parametrizable por módulo ---
+// URLs, API keys, métodos, bodies, límites, prefijos y etapas de integraciones.
+// Editable por admin en caliente desde el módulo Configuración (sin reiniciar).
+model ConfiguracionModulo {
+  id             String   @id @default(uuid())
+  modulo         String   // "materiales" | "acreedores" | "proveedores" | ...
+  clave          String   // ej. "integracion.rixie.url"
+  valor          Json
+  tipo           String   @default("string") // string | url | secret | json | number | boolean
+  grupo          String   @default("General") // Integraciones | Validaciones | Flujo | General
+  descripcion    String?
+  sensible       Boolean  @default(false) // true = enmascarar en UI (solo reemplazo)
+  actualizadoPor String?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+
+  @@unique([modulo, clave])
+  @@index([modulo])
+}

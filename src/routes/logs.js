@@ -108,10 +108,11 @@ router.use(soloAdmin);
 // GET /api/logs/sistema — Listar logs del sistema con filtros y paginación
 router.get('/sistema', async (req, res) => {
   try {
-    const { tipo, nivel, usuarioId, desde, hasta, buscar, page = 1, limit = 50 } = req.query;
+    const { tipo, nivel, usuarioId, desde, hasta, buscar, modulo, page = 1, limit = 50 } = req.query;
     const where = {};
 
     if (tipo) where.tipo = tipo;
+    if (modulo) where.modulo = modulo;
     if (nivel) where.nivel = nivel;
     if (usuarioId) where.usuarioId = usuarioId;
 

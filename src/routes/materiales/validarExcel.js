@@ -2,114 +2,106 @@ const { Router } = require('express');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const config = require('./configService');
+const catalogosSN = require('./data/catalogosSN.json');
+const jerarquia = require('./data/jerarquia.json');
 
 const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 25 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-// Columnas (1-based, como en Excel) de la hoja DatosBasicos — ver docs/05-proceso-excel.md
-const COLS_DATOS = {
-  ID_CARGA: 1, BISMT: 2, MATNR: 3, MTART: 4, MBRSH: 5, MATKL: 6, MEINS: 7, GROES: 8,
-  NTGEW: 9, GEWEI: 10, TEMPB: 11, TRAGR: 12, SPART: 13, PRDHA: 14, CADKZ: 15, XCHPF: 16,
-  EXTWG: 17, MSTAE: 18, MSTAV: 19, MSTDE: 20, MSTDV: 21, MHDRZ: 22, MHDLP: 23, NRFHG: 24,
-  MFRNR: 25, IPRKZ: 26, RDMHD: 27, MTPOS_MARA: 28, SLED_BBD: 29, WHSTC: 30, HNDLCODE: 31,
-  QGRP: 32, SPRAS: 33, MAKTX: 34, LABOR: 35,
-};
-// Columnas de UnidadesAlter
-const COLS_UNIDADES = {
-  ID_CARGA: 1, MEINH: 2, UMREZ: 3, UMREN: 4, EAN11: 5, NUMTP: 6, LAENG: 7,
-  BREIT: 8, HOEHE: 9, MEABM: 10, VOLUM: 11, VOLEH: 12, BRGEW: 13, GEWEI: 14,
-};
+// ─────────────────────────────────────────────────────────────────────────────
+// Réplica de jj_MDM_Utils_Client.lecturaExcel (Alta) sobre el layout KEY real:
+// hoja "Info - Correcto", datos desde la fila 5 (filas 1-4 = encabezados/tipos).
+// Referencia de columnas y reglas: docs/servicenow-mdm-material-alta/05-proceso-excel.md
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ── Réplicas de los validadores de jj_MDM_Utils_Client ──────────────────────
-const msg = (linea, col, texto) => `Linea ${linea}, Columna ${col}: ${texto}`;
-const esVacio = (v) => v === undefined || v === null || String(v).trim() === '';
+const norm = (s) => String(s ?? '').trim();
+const esVacio = (v) => norm(v) === '';
 const esNumero = (v) => !esVacio(v) && !Number.isNaN(Number(v));
 const esEntero = (v) => esNumero(v) && Number.isInteger(Number(v));
-const esEnteroDigitos = (v, min, max) => esEntero(v) && String(Math.abs(Number(v))).length >= min && String(Math.abs(Number(v))).length <= max;
-const esEanValido = (v, min, max) => new RegExp(`^\\d{${min},${max}}$`).test(String(v));
 
-function leerHoja(wb, nombre) {
-  const ws = wb.Sheets[nombre];
-  if (!ws) return [];
-  // Las primeras 4 filas son encabezados del layout; los datos empiezan en la fila 5
-  return XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }).slice(4)
-    .map((row, i) => ({ row, linea: i + 5 }))
-    .filter(({ row }) => row.some((c) => !esVacio(c)));
+// buscarMDMoption: la opción existe si labe = valor OR labe termina con el valor
+function existeOpcion(claveCatalogo, valor) {
+  const lista = catalogosSN[claveCatalogo] || [];
+  const v = norm(valor);
+  return lista.some((o) => o.labe === v || o.labe.endsWith(v));
 }
 
-function validarHojaDatosBasicos(filas, errores, camposRequeridos) {
-  const materiales = [];
-  for (const { row, linea } of filas) {
-    const val = (campo) => row[COLS_DATOS[campo] - 1];
-    // Obligatorios (réplica validarVacio) — parametrizable desde Configuración
-    for (const campo of camposRequeridos) {
-      if (COLS_DATOS[campo] && esVacio(val(campo))) errores.push(msg(linea, campo, 'Valor requerido (vacio)'));
-    }
-    // Numéricos (réplica validarVacioNumero)
-    if (!esVacio(val('NTGEW')) && !esNumero(val('NTGEW'))) errores.push(msg(linea, 'NTGEW', 'Debe ser numerico'));
-    // Enteros
-    for (const campo of ['MHDRZ', 'MHDLP']) {
-      if (!esVacio(val(campo)) && !esEntero(val(campo))) errores.push(msg(linea, campo, 'Debe ser numero entero'));
-    }
-    // Jerarquía Departamento → Categoría → Subcategoría (PRDHA "dep/cat/sub")
-    const prdha = String(val('PRDHA') || '');
-    if (!esVacio(prdha) && prdha.split('/').filter(Boolean).length > 3) {
-      errores.push(msg(linea, 'PRDHA', 'Jerarquia invalida (max 3 niveles Dep/Cat/Sub)'));
-    }
-    materiales.push({
-      idCarga: String(val('ID_CARGA')),
-      nombre: String(val('MAKTX') || ''),
-      materialSap: String(val('MATNR') || ''),
-      tipoMaterial: String(val('MTART') || ''),
-      unidadBase: String(val('MEINS') || ''),
-    });
-  }
-  return materiales;
-}
+// Columnas del layout KEY (índice 0-based) con sus reglas.
+// req: requerido | tipo: numero|entero|digitos8|ean | ref: catálogo SN | grupo: 'I'|'P' (requerido si el grupo trae valor)
+const COLUMNAS = [
+  { col: 0, letra: 'A', campo: 'razonSocial' },
+  { col: 1, letra: 'B', campo: 'rfc', req: true },
+  { col: 2, letra: 'C', campo: 'nombre', req: true },
+  { col: 3, letra: 'D', campo: 'pi_ean', req: true, tipo: 'ean', unico: 'PI' },
+  { col: 4, letra: 'E', campo: 'pi_longitud_cm', req: true, tipo: 'numero' },
+  { col: 5, letra: 'F', campo: 'pi_ancho_cm', req: true, tipo: 'numero' },
+  { col: 6, letra: 'G', campo: 'pi_altura_cm', req: true, tipo: 'numero' },
+  { col: 7, letra: 'H', campo: 'pi_peso_gr', req: true, tipo: 'numero' },
+  // EMP: en SN el bloque activo pasa '00Vacio00' → todo opcional; si se llena, se valida tipo/referencia
+  { col: 8, letra: 'I', campo: 'emp_unidad', ref: 'mdm_mt_emp_unidad' },
+  { col: 9, letra: 'J', campo: 'emp_ean', tipo: 'ean', unico: 'EMP' },
+  { col: 10, letra: 'K', campo: 'emp_piezas', tipo: 'entero' },
+  { col: 11, letra: 'L', campo: 'emp_longitud_cm', tipo: 'numero' },
+  { col: 12, letra: 'M', campo: 'emp_ancho_cm', tipo: 'numero' },
+  { col: 13, letra: 'N', campo: 'emp_altura_cm', tipo: 'numero' },
+  { col: 14, letra: 'O', campo: 'emp_peso_gr', tipo: 'numero' },
+  // SUB: en SN el bloque pasa eEnGrupoValor real → requerido si P trae valor
+  { col: 15, letra: 'P', campo: 'sub_unidad', ref: 'mdm_mt_sub_unidad' },
+  { col: 16, letra: 'Q', campo: 'sub_ean', tipo: 'ean', unico: 'SUB', grupo: 'P' },
+  { col: 17, letra: 'R', campo: 'sub_piezas', tipo: 'entero', grupo: 'P' },
+  { col: 18, letra: 'S', campo: 'sub_longitud_cm', tipo: 'numero', grupo: 'P' },
+  { col: 19, letra: 'T', campo: 'sub_ancho_cm', tipo: 'numero', grupo: 'P' },
+  { col: 20, letra: 'U', campo: 'sub_altura_cm', tipo: 'numero', grupo: 'P' },
+  { col: 21, letra: 'V', campo: 'sub_peso_gr', tipo: 'numero', grupo: 'P' },
+  { col: 22, letra: 'W', campo: 'tipo_articulo', req: true, ref: 'mdm_mt_tipo' },
+  { col: 23, letra: 'X', campo: 'forma_producto', req: true, ref: 'mdm_mt_formula' },
+  { col: 24, letra: 'Y', campo: 'clasificacion_fiscal', req: true, ref: 'mdm_mt_clasificacion_fiscal' },
+  { col: 25, letra: 'Z', campo: 'gpo_trat_logistico', req: true, ref: 'mdm_mt_gpo_trat_logistico' },
+  { col: 26, letra: 'AA', campo: 'antibiotico', req: true, ref: 'mdm_mt_antibiotico' },
+  { col: 27, letra: 'AB', campo: 'division_factura', req: true, ref: 'mdm_fac_div' },
+  { col: 28, letra: 'AC', campo: 'anexo_20_sat', req: true },
+  { col: 29, letra: 'AD', campo: 'forma_farmaceutica', req: true, ref: 'mdm_mt_formula_farmaceutica' },
+  { col: 30, letra: 'AE', campo: 'registro_sanitario' },
+  { col: 31, letra: 'AF', campo: 'registro_sanitario_vigencia', tipo: 'digitos8' },
+  { col: 32, letra: 'AG', campo: 'prorroga' },
+  ...Array.from({ length: 15 }, (_, i) => ({
+    col: 33 + i, letra: XLSX.utils.encode_col(33 + i), campo: `principio_activo_${String(i + 1).padStart(2, '0')}`, ref: 'mdm_mt_activo',
+  })),
+  ...[0, 1, 2].map((i) => ({
+    col: 48 + i, letra: XLSX.utils.encode_col(48 + i), campo: `gramaje_tipo_0${i + 1}`, ref: 'mdm_mt_gramaje_tipo',
+  })),
+  ...[0, 1, 2].map((i) => ({
+    col: 51 + i, letra: XLSX.utils.encode_col(51 + i), campo: `gramaje_contenido_0${i + 1}`, tipo: 'numero',
+  })),
+  { col: 54, letra: 'BC', campo: 'num_piezas_por_unidad', tipo: 'entero' },
+  { col: 55, letra: 'BD', campo: 'precio_farmacia', tipo: 'numero' },
+  { col: 56, letra: 'BE', campo: 'precio_publico', tipo: 'numero' },
+  { col: 57, letra: 'BF', campo: 'precio_lista', tipo: 'numero' },
+  { col: 58, letra: 'BG', campo: 'precio_costo', tipo: 'numero' },
+  { col: 59, letra: 'BH', campo: 'departamento', req: true, ref: 'mdm_d_dep' },
+  { col: 60, letra: 'BI', campo: 'categoria', req: true, ref: 'mdm_d_cat' },
+  { col: 61, letra: 'BJ', campo: 'subcategoria', ref: 'mdm_d_sub' },
+  { col: 62, letra: 'BK', campo: 'descripcion_mercadologica', req: true },
+  { col: 63, letra: 'BL', campo: 'beneficios', req: true },
+  { col: 64, letra: 'BM', campo: 'keywords', req: true },
+  // BN-CB (65-79): textos opcionales (indicación, contraindicación, leyendas, etc.)
+  ...['indicacion_terapeutica', 'contraindicacion', 'leyendas_proteccion', 'prescripcion', 'advertencias',
+    'interaccion_medicamentosa', 'reacciones_adversas', 'sobredosificacion', 'propiedad_farmaceutica',
+    'dosis', 'via_administracion', 'clave_cnis', 'embarazo', 'lactancia', 'denominacion_generica',
+  ].map((campo, i) => ({ col: 65 + i, letra: XLSX.utils.encode_col(65 + i), campo })),
+  { col: 80, letra: 'CC', campo: 'linea_proveedor', req: true, ref: 'mdm_mt_linea_del_proveedor' },
+  { col: 81, letra: 'CD', campo: 'marca_producto', req: true, ref: 'mdm_mt_marca_del_producto' },
+];
 
-function validarHojaUnidades(filas, errores, eanMin, eanMax) {
-  const eansVistos = new Map(); // EAN -> linea (réplica validarUnicoEAN)
-  const porCarga = {}; // idCarga -> [{ meinh, ean }]
-  for (const { row, linea } of filas) {
-    const val = (campo) => row[COLS_UNIDADES[campo] - 1];
-    const idCarga = String(val('ID_CARGA'));
-    if (esVacio(idCarga)) { errores.push(msg(linea, 'ID_CARGA', 'Valor requerido (vacio)')); continue; }
-    if (esVacio(val('MEINH'))) errores.push(msg(linea, 'MEINH', 'Valor requerido (vacio)'));
-    for (const campo of ['UMREZ', 'UMREN']) {
-      if (!esVacio(val(campo)) && !esEntero(val(campo))) errores.push(msg(linea, campo, 'Debe ser numero entero'));
-    }
-    for (const campo of ['LAENG', 'BREIT', 'HOEHE', 'VOLUM', 'BRGEW']) {
-      if (!esVacio(val(campo)) && !esNumero(val(campo))) errores.push(msg(linea, campo, 'Debe ser numerico'));
-    }
-    // EAN: entero de N dígitos y único (réplica validarVacioNumeroEnteroDigitosDos + validarUnicoEAN)
-    // Rango de dígitos parametrizable desde Configuración (SN: 3-16)
-    const ean = String(val('EAN11') || '').trim();
-    if (!esVacio(ean)) {
-      if (!esEanValido(ean, eanMin, eanMax)) {
-        errores.push(msg(linea, 'EAN11', `EAN invalido (entero de ${eanMin} a ${eanMax} digitos)`));
-      } else if (eansVistos.has(ean)) {
-        errores.push(msg(linea, 'EAN11', `EAN duplicado (ya usado en linea ${eansVistos.get(ean)})`));
-      } else {
-        eansVistos.set(ean, linea);
-      }
-    }
-    (porCarga[idCarga] = porCarga[idCarga] || []).push({ meinh: String(val('MEINH') || ''), ean });
-  }
-  return porCarga;
-}
-
-// POST /api/materiales/validar-excel — réplica de jj_MDM_Utils_Client.lecturaExcel (Alta)
-// Respuesta espejo del delimitador zzRespUestazz: { resultado, informacion, registros, noRegistros }
+// POST /api/materiales/validar-excel — réplica lecturaExcel (Alta)
 router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ resultado: 'Error', informacion: 'No se recibio archivo.', registros: [], noRegistros: 0 });
     }
-
-    // Réplica getExtensio: solo .xlsx
     const nombre = req.file.originalname || '';
     if (!nombre.toLowerCase().endsWith('.xlsx')) {
       return res.json({
@@ -120,44 +112,94 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
       });
     }
 
-    const [eanMin, eanMax, camposRequeridos] = await Promise.all([
+    const [eanMin, eanMax] = await Promise.all([
       config.get('validacion.excel.ean_min_digitos'),
       config.get('validacion.excel.ean_max_digitos'),
-      config.get('validacion.excel.campos_requeridos'),
     ]);
+    const reEan = new RegExp(`^\\d{${eanMin || 3},${eanMax || 16}}$`);
 
     const wb = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const errores = [];
-
-    const filasDatos = leerHoja(wb, 'DatosBasicos');
-    if (filasDatos.length === 0) {
+    const ws = wb.Sheets['Info - Correcto'];
+    if (!ws) {
       return res.json({
         resultado: 'Error',
-        informacion: 'La hoja "DatosBasicos" esta vacia o no existe. Usa el layout oficial.',
+        informacion: 'No se encontro la hoja "Info - Correcto". Usa el layout oficial de Alta (KEY).',
         registros: [],
         noRegistros: 0,
       });
     }
 
-    const materiales = validarHojaDatosBasicos(filasDatos, errores, camposRequeridos || []);
-    const unidadesPorCarga = validarHojaUnidades(leerHoja(wb, 'UnidadesAlter'), errores, eanMin || 3, eanMax || 16);
+    // Datos desde la fila 5 (idx 4) — filas 1-4 son encabezados/tipos
+    const filas = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }).slice(4)
+      .map((row, i) => ({ row, linea: i + 5 }))
+      .filter(({ row }) => row.some((c) => !esVacio(c)));
 
-    // Enlazar unidades (EANs) por ID_CARGA: PI = unidad base, EMP/SUB = siguientes
-    const registros = materiales.map((m) => {
-      const unidades = unidadesPorCarga[m.idCarga] || [];
-      const pi = unidades.find((u) => u.meinh === m.unidadBase) || unidades[0] || {};
-      const resto = unidades.filter((u) => u !== pi);
-      return {
-        vs_nombre_completo_del_material: m.nombre,
-        vs_unidad_del_producto_id_pi: pi.ean || '',
-        vs_unidad_del_producto_id_emp: resto[0]?.ean || '',
-        vs_unidad_del_producto_id_sub: resto[1]?.ean || '',
-        _idCarga: m.idCarga,
-        _materialSap: m.materialSap,
-        _tipoMaterial: m.tipoMaterial,
-        _unidadBase: m.unidadBase,
-      };
-    });
+    if (filas.length === 0) {
+      return res.json({ resultado: 'Error', informacion: 'El archivo no tiene registros (los datos inician en la fila 5).', registros: [], noRegistros: 0 });
+    }
+
+    const errores = [];
+    const eansVistos = { PI: new Map(), EMP: new Map(), SUB: new Map() };
+    const registros = [];
+
+    for (const { row, linea } of filas) {
+      const datos = {};
+      for (const spec of COLUMNAS) {
+        const valor = norm(row[spec.col]);
+        datos[spec.campo] = valor;
+        const celda = `"${spec.letra}${linea}"`;
+
+        // Condicional por grupo (SUB: requerido si P trae valor)
+        const grupoValor = spec.grupo ? norm(row[COLUMNAS.find((c) => c.letra === spec.grupo)?.col]) : '';
+        const requerido = spec.req || (spec.grupo && !esVacio(grupoValor));
+
+        if (esVacio(valor)) {
+          if (requerido) {
+            errores.push(spec.grupo
+              ? `${celda} Campo vacio, es necesario para columna "${spec.grupo}${linea}".`
+              : `${celda} Campo vacio.`);
+          }
+          continue;
+        }
+        if (spec.tipo === 'numero' && !esNumero(valor)) errores.push(`${celda} Debe se numero.`);
+        if (spec.tipo === 'entero' && !esEntero(valor)) errores.push(`${celda} Debe se un numero entero.`);
+        if (spec.tipo === 'digitos8' && !/^\d{8}$/.test(valor)) errores.push(`${celda} Debe ser numero entero de 8 digitos (AñoMesDia).`);
+        if (spec.tipo === 'ean') {
+          if (!reEan.test(valor)) {
+            errores.push(`${celda} EAN invalido (entero de ${eanMin || 3} a ${eanMax || 16} digitos).`);
+          } else {
+            const vistos = eansVistos[spec.unico];
+            if (vistos.has(valor)) errores.push(`${celda} EAN duplicado (ya usado en la linea ${vistos.get(valor)}).`);
+            else vistos.set(valor, linea);
+          }
+        }
+        if (spec.ref && !existeOpcion(spec.ref, valor)) {
+          errores.push(`${celda} La opcion NO fue encontrado en el listado.`);
+        }
+      }
+
+      // validarDepCatSub: categoría debe pertenecer al departamento, sub a dep+cat
+      if (!esVacio(datos.categoria) && jerarquia.catPorDep[datos.departamento]
+        && !jerarquia.catPorDep[datos.departamento].includes(datos.categoria)) {
+        errores.push(`"BI${linea}" Categoria no pertenece al Departamento.`);
+      }
+      if (!esVacio(datos.subcategoria)) {
+        const subsDeCat = jerarquia.subPorCat[datos.categoria] || [];
+        if (subsDeCat.length && !subsDeCat.includes(datos.subcategoria)) {
+          errores.push(`"BJ${linea}" Subcategoria no pertenece a la Categoria.`);
+        }
+      }
+
+      registros.push({
+        vs_nombre_completo_del_material: datos.nombre,
+        vs_unidad_del_producto_id_pi: datos.pi_ean,
+        vs_unidad_del_producto_id_emp: datos.emp_ean,
+        vs_unidad_del_producto_id_sub: datos.sub_ean,
+        _razonSocial: datos.razonSocial,
+        _rfc: datos.rfc,
+        _datos: datos,
+      });
+    }
 
     const resultado = errores.length === 0 ? 'Correcto' : 'Error';
     return res.json({
@@ -172,6 +214,13 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
     console.error('[Materiales] Error validando Excel:', err);
     return res.status(500).json({ resultado: 'Error', informacion: `Error procesando archivo: ${err.message}`, registros: [], noRegistros: 0 });
   }
+});
+
+// GET /api/materiales/catalogos-opciones?clave=mdm_mt_tipo — opciones de los catálogos SN
+router.get('/catalogos-opciones', (req, res) => {
+  const { clave } = req.query;
+  if (clave) return res.json(catalogosSN[clave] || []);
+  res.json(Object.keys(catalogosSN));
 });
 
 module.exports = router;

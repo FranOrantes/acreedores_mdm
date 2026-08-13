@@ -1,6 +1,49 @@
 # 05 — Proceso de carga Excel (layout MDM)
 
-## Layout del archivo (9 hojas)
+> **Corrección 2026-08-13:** el layout de **Alta** es el archivo KEY (`000 - JJ 001 - KEY.xlsx`): una sola hoja de datos **"Info - Correcto"** (82 columnas de negocio, datos desde la fila 5) + hojas de referencia **SN** (catálogos `mdm_*`), **Catálogos** (listas desplegables) y **Taxonomia** (jerarquía Dep→Cat→Sub). El layout de 9 hojas SAP (MARA/MARM/…) es el del **complemento (segunda fase)**, generado por `mdm_E08_excel` / `createExcelFile` en la etapa 08 — NO es el de alta.
+
+## Layout de Alta (KEY) — hoja "Info - Correcto"
+
+Fila 1: encabezados · Fila 3: tipos (`Texto`, `Numero`, `Numero (13)`, `Numero(Entero)`, `Numero (8)`, `Decimal`, `Select`, `Texto (Libre)`) · Datos desde la **fila 5**.
+
+| Col | Campo | Regla (réplica lecturaExcel) |
+|---|---|---|
+| A | Razón Social | texto libre |
+| B | RFC | requerido |
+| C | Nombre completo del material | requerido |
+| D | Código SKU/EAN/UPC **PI** | requerido, entero 3-16 dígitos, **único** |
+| E-H | Longitud/Ancho/Altura/Peso PI | requerido, número |
+| I | UNIDAD EMP | opcional, catálogo `mdm_mt_emp_unidad` |
+| J | Código EAN **EMP** | opcional, entero 3-16, único |
+| K-O | Piezas/dimensiones EMP | opcional, entero/número |
+| P | UNIDAD SUB | opcional, catálogo `mdm_mt_sub_unidad` |
+| Q | Código EAN **SUB** | **requerido si P tiene valor**, entero 3-16, único |
+| R-V | Piezas/dimensiones SUB | requerido si P tiene valor |
+| W | Tipo de artículo/Fracción | requerido, `mdm_mt_tipo` |
+| X | Forma del producto | requerido, `mdm_mt_formula` |
+| Y | Clasificación Fiscal | requerido, `mdm_mt_clasificacion_fiscal` |
+| Z | Gpo Trat. Logístico | requerido, `mdm_mt_gpo_trat_logistico` |
+| AA | Antibiótico | requerido, `mdm_mt_antibiotico` |
+| AB | División Factura | requerido, `mdm_fac_div` |
+| AC | Catálogo Anexo 20 SAT | requerido |
+| AD | Forma Farmacéutica | requerido, `mdm_mt_formula_farmaceutica` |
+| AE-AG | Registro Sanitario / Vigencia / Prorroga | opcional; vigencia = entero 8 dígitos (AñoMesDia) |
+| AH-AV | Principio Activo 1-15 | opcional, `mdm_mt_activo` |
+| AW-AY | Tipo de gramaje 1-3 | opcional, `mdm_mt_gramaje_tipo` |
+| AZ-BB | Contenido gramaje 1-3 | opcional, número |
+| BC | # piezas por unidad | opcional, entero |
+| BD-BG | P. Farmacia / P. Público / P. Lista / P. Costo | opcional, número |
+| BH | Departamento | requerido, `mdm_d_dep` |
+| BI | Categoría | requerido, `mdm_d_cat` + debe pertenecer al Depto |
+| BJ | Subcategoría | opcional, `mdm_d_sub` + debe pertenecer a Dep/Cat |
+| BK-BM | Descripción mercadológica / Beneficios / Keywords | requerido |
+| BN-CB | Campos farmacéuticos (indicación, dosis, etc.) | opcional |
+| CC | Línea del proveedor | requerido, `mdm_mt_linea_del_proveedor` |
+| CD | Marca del producto | requerido, `mdm_mt_marca_del_producto` |
+
+Validación de catálogos = réplica de `buscarMDMoption`: la opción existe si `labe = valor` o `labe ENDSWITH valor`. Jerarquía Dep→Cat→Sub = réplica de `validarDepCatSub` (vía `u_mdm_options` ref01/ref02, extraído en vivo de devtest).
+
+## Layout del complemento (fase 2, etapa 08) — 9 hojas SAP
 
 Definido en `jj_MDM_Utils_Client.createExcelFile()` (el sistema también genera el layout descargable). Cada hoja tiene 4 filas de encabezado: `[números de columna]`, `[tabla SAP]`, `[campo SAP]`, `[etiqueta español]`. Columna A siempre = `ID_CARGA` (liga todas las hojas de un mismo material).
 

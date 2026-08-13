@@ -1,0 +1,342 @@
+[
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Antonia Elsa Cruz Avila",
+      "email": "Elsa_Cruz@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Jhonatan Ricardo Barrera Cervantes",
+      "email": "Jhonatan_Barrera@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Jessica Gudiño Tome",
+      "email": "Jessica_Gudino@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Diana Valentina Cruz Leon",
+      "email": "Diana_Cruz@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Veronica Zavala Jimenez",
+      "email": "Veronica_Zavala@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Rocio Ruiz Piñal",
+      "email": "Rocio_Ruiz@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Juan Test 1",
+      "email": "Juan_Julian_Test@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Brenda Fabila Robles",
+      "email": "Brenda_Fabila@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Erika Jazmin Cristain Martinez",
+      "email": "Erica_Cristain@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Luis Enrique Flores Cuevas",
+      "email": "Luis_Flores@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Juan Luis Toral Aldaco",
+      "email": "Luis_Toral@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Pablo Escandón Matarazzo",
+      "email": "Pablo_Escandon_M@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Eunice Elena Jiménez Carrillo",
+      "email": "Eunice_Jimenez@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Veronica Zavala Jimenez",
+      "email": "Veronica_Zavala@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Rafael Acevedo Roa",
+      "email": "Rafael_Acevedo@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Nadia Alexandra Bueno Mendez",
+      "email": "Nadia_Bueno@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "PABLO ENRIQUE RUIZ MACIAS",
+      "email": "Pablo_Ruiz@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Alicia Salazar Hernández",
+      "email": "Alicia_Salazar@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Armando Romero Belmonte",
+      "email": "Armando_Romero@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Grecia Arlette Salazar Escorcia",
+      "email": "Grecia_Salazar@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Sandra Cecilia Contreras Zavala",
+      "email": "Sandra_Contreras@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Veronica Zavala Jimenez",
+      "email": "Veronica_Zavala@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Laura Lizbeth Cadena Torres",
+      "email": "Laura_Cadena@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Veronica Zavala Jimenez",
+      "email": "Veronica_Zavala@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "María de Lourdes Torres Urrutia",
+      "email": "Maria_Torres@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Sheila Barrios Lorenzo",
+      "email": "Sheila_Barrios@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "Ahtziri González Martínez",
+      "email": "AAAhtziri_Gonzalez@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Pablo Becerra Godoy",
+      "email": "Pablo_Becerra@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  },
+  {
+    "area": "",
+    "label": "",
+    "cdr": "",
+    "comprador": {
+      "nombre": "José Eduardo Benítez Pérez",
+      "email": "Jose_Benitez@nadro.com.mx"
+    },
+    "negociador": {
+      "nombre": "Pablo Becerra Godoy",
+      "email": "Pablo_Becerra@nadro.com.mx"
+    },
+    "dga": {
+      "nombre": "Fernando Torres Suárez",
+      "email": "Fernando_Torres@nadro.com.mx"
+    }
+  }
+]

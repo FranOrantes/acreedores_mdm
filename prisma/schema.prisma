@@ -933,3 +933,60 @@ model MaterialesSyncLog {
   @@map("materiales_sync_log")
   @@index([inicio])
 }
+
+// --- Table Builder (réplica del table builder de ServiceNow) ---
+model TablaCustom {
+  id          String   @id @default(uuid())
+  clave       String   // identificador (ej. "pedidos_api")
+  label       String
+  modulo      String   @default("todos") // "acreedores" | "proveedores" | "clientes" | "materiales" | "todos"
+  icono       String   @default("table")
+  descripcion String?
+  activa      Boolean  @default(true)
+  // Storage: "json" = tabla genérica custom_registros (JSONB) · "materiales_registros" = tabla física existente
+  storage     String   @default("json")
+  autoNumber  String?  // prefijo de folio (auto-number, ej. "PED")
+  permisos    Json     @default("{\"leer\":true,\"crear\":true,\"actualizar\":true,\"eliminar\":true}")
+  orden       Int      @default(0)
+  columnas    ColumnaCustom[]
+  creadoEn    DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([clave, modulo])
+  @@index([modulo])
+}
+
+// Dictionary entries (columnas de la tabla custom)
+model ColumnaCustom {
+  id           String   @id @default(uuid())
+  tablaId      String
+  tabla        TablaCustom @relation(fields: [tablaId], references: [id], onDelete: Cascade)
+  clave        String   // nombre de columna (snake_case)
+  etiqueta     String   // label visible
+  tipo         String   @default("string") // string|text|integer|float|boolean|choice|date|datetime|reference|attachment
+  opciones     Json?    // choices: ["a","b"]
+  referencia   String?  // tipo reference: tabla/entidad referenciada
+  maxLength    Int?
+  defaultValue String?
+  display      Boolean  @default(false) // aparece en vista lista
+  requerido    Boolean  @default(false)
+  orden        Int      @default(0)
+  activo       Boolean  @default(true)
+  creadoEn     DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([tablaId, clave])
+  @@index([tablaId])
+}
+
+// Registros de tablas custom con storage json
+model CustomRegistro {
+  id         String   @id @default(uuid())
+  tablaId    String
+  datos      Json     // { claveColumna: valor }
+  creadoEn   DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([tablaId])
+  @@map("custom_registros")
+}

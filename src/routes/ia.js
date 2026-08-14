@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const prisma = require('../lib/prisma');
 const { parsearIntencion, ejecutarReporte } = require('../lib/reportEngine');
+const { asistenteIA } = require('../lib/iaAsistente');
 const router = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -378,5 +379,19 @@ function generarRespuestaDemo(mensaje, solicitudContext) {
   }
   return 'Entiendo tu consulta. Para darte una respuesta más precisa, ¿podrías darme más detalles? Puedo ayudarte con documentación, estado de solicitudes, aprobaciones y más.';
 }
+
+// ══════════════════════════════════════════════════
+// POST /api/ia/asistente — Asistente IA de configuración (Concordia/Gemini)
+// ══════════════════════════════════════════════════
+router.post('/asistente', async (req, res) => {
+  try {
+    const { mensaje, systemInstruction, contexto, history } = req.body;
+    if (!mensaje) return res.status(400).json({ error: 'mensaje requerido' });
+    const respuesta = await asistenteIA(mensaje, { systemInstruction, contexto, history });
+    res.json({ ok: true, respuesta });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
 
 module.exports = router;

@@ -124,6 +124,54 @@ router.post('/:clave/enviar', async (req, res) => {
       },
     });
 
+    // Record producer (estilo SN): también puede escribir en una tabla custom + crear tareas/aprobaciones
+    const cfg = form.definicion?.config || {};
+    let registroTabla = null;
+    if (cfg.tablaDestino) {
+      const tabla = await prisma.tablaCustom.findFirst({ where: { clave: cfg.tablaDestino } });
+      if (tabla && tabla.storage === 'json') {
+        registroTabla = await prisma.customRegistro.create({
+          data: {
+            tablaId: tabla.id,
+            datos,
+            creadoPor: req.userId || 'sistema',
+            actualizadoPor: req.userId || 'sistema',
+          },
+        });
+        await prisma.solicitud.update({ where: { id: solicitud.id }, data: { camposExtra: { formularioClave: form.clave, datos, registroTablaId: registroTabla.id } } });
+      }
+    }
+    // Tareas ligadas a la solicitud (TareaFlujo)
+    for (const t of cfg.tareas || []) {
+      await prisma.tareaFlujo.create({
+        data: {
+          solicitudId: solicitud.id,
+          titulo: t.titulo || 'Tarea',
+          descripcion: t.detalle || t.descripcion || null,
+          estado: 'abierta',
+        },
+      }).catch((e) => console.error('[Formularios] tarea:', e.message));
+    }
+    // Aprobaciones ligadas (Aprobacion) — aprobador por email o primer usuario con el rol
+    for (const a of cfg.aprobaciones || []) {
+      let aprobador = null;
+      if (a.emailAprobador) {
+        aprobador = await prisma.usuario.findFirst({ where: { email: a.emailAprobador, activo: true } });
+      } else if (a.rol) {
+        aprobador = await prisma.usuario.findFirst({ where: { activo: true, roles: { contains: `"${a.rol}"` } } });
+      }
+      if (aprobador) {
+        await prisma.aprobacion.create({
+          data: {
+            solicitudId: solicitud.id,
+            aprobadorId: aprobador.id,
+            descripcionCorta: a.descripcion || `Aprobación de ${form.nombre}`,
+            estado: 'solicitado',
+          },
+        }).catch((e) => console.error('[Formularios] aprobación:', e.message));
+      }
+    }
+
     // Business Rules: after_create (entidad = clave del formulario)
     ejecutarBusinessRules({
       entidad: form.clave,
@@ -133,7 +181,7 @@ router.post('/:clave/enviar', async (req, res) => {
       dominioId: solicitud.dominioId,
     }).catch((err) => console.error('[BusinessRules] after_create formulario:', err.message));
 
-    res.status(201).json({ ok: true, folio: solicitud.folio, id: solicitud.id });
+    res.status(201).json({ ok: true, folio: solicitud.folio, id: solicitud.id, registroTablaId: registroTabla?.id || null });
   } catch (e) {
     console.error('[Formularios] Error al enviar:', e);
     res.status(500).json({ error: e.message });

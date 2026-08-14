@@ -183,6 +183,10 @@ router.get('/:id/preview', async (req, res) => {
       };
       claves.push(col.clave);
     }
+    // Sys ID siempre presente (estilo SN) — read-only, al final
+    campos.sys_id = { clave: 'sys_id', etiqueta: 'Sys ID', tipo: 'texto', readOnly: true, ayuda: 'Identificador interno de la plataforma (exports/imports/scripting)' };
+    claves.push('sys_id');
+
     // Layout: filas de 2 columnas
     const layout = [];
     for (let i = 0; i < claves.length; i += 2) {
@@ -314,7 +318,7 @@ router.get('/:id/registros', async (req, res) => {
         prisma.$queryRaw(Prisma.sql`SELECT COUNT(*)::int AS n FROM "materiales_registros" ${whereSql}`),
       ]);
       logSistema && null; // (export/log aparte)
-      return res.json({ data: rows, total: countRows[0].n, page, limit });
+      return res.json({ data: rows.map((r) => ({ sys_id: r.id, ...r })), total: countRows[0].n, page, limit });
     }
 
 
@@ -329,7 +333,7 @@ router.get('/:id/registros', async (req, res) => {
       prisma.customRegistro.findMany({ where, orderBy: ordenValido ? { datos: { path: [ordCampo], sort: ordDir === 'desc' ? 'desc' : 'asc' } } : { creadoEn: 'desc' }, skip: (page - 1) * limit, take: limit }),
       prisma.customRegistro.count({ where }),
     ]);
-    let lista = data.map((r) => ({ id: r.id, ...r.datos }));
+    let lista = data.map((r) => ({ id: r.id, sys_id: r.id, ...r.datos }));
     if (ordenValido) {
       lista.sort((a, b) => {
         const va = a[ordCampo] ?? ''; const vb = b[ordCampo] ?? '';
@@ -423,9 +427,9 @@ router.delete('/:id/registros/:regId', async (req, res) => {
 function aFilasPlano(tabla, registros) {
   const cols = tabla.columnas.filter((c) => c.activo);
   return {
-    headers: cols.map((c) => c.etiqueta),
-    claves: cols.map((c) => c.clave),
-    filas: registros.map((r) => cols.map((c) => r[c.clave] ?? '')),
+    headers: ['Sys ID', ...cols.map((c) => c.etiqueta)],
+    claves: ['sys_id', ...cols.map((c) => c.clave)],
+    filas: registros.map((r) => [r.id ?? r.sys_id ?? '', ...cols.map((c) => r[c.clave] ?? '')]),
   };
 }
 
@@ -456,7 +460,8 @@ router.get('/:id/registros/exportar', async (req, res) => {
     if (!tabla) return res.status(404).json({ error: 'No encontrada' });
     let filtros = {};
     try { filtros = JSON.parse(req.query.filtros || '{}'); } catch { filtros = {}; }
-    const registros = await obtenerRegistrosParaExport(tabla, filtros);
+    const registrosRaw = await obtenerRegistrosParaExport(tabla, filtros);
+    const registros = registrosRaw.map((r) => ({ sys_id: r.id, ...r }));
     const { headers, claves, filas } = aFilasPlano(tabla, registros);
     const formato = req.query.formato || 'csv';
     const nombre = `${tabla.clave}_${new Date().toISOString().slice(0, 10)}`;
@@ -524,6 +529,9 @@ router.get('/:id/registros/:regId/exportar', async (req, res) => {
     const reg = registros.find((r) => r.id === req.params.regId);
     if (!reg) return res.status(404).json({ error: 'Registro no encontrado' });
     const { headers, claves } = aFilasPlano(tabla, []);
+    headers.unshift('Sys ID');
+    claves.unshift('sys_id');
+    reg.sys_id = reg.id;
     const formato = req.query.formato || 'json';
     const nombre = `${tabla.clave}_${req.params.regId.slice(0, 8)}`;
     if (formato === 'csv') {
@@ -562,16 +570,27 @@ router.post('/:id/registros/importar', express.text({ type: ['text/xml', 'applic
 
     const clavesValidas = new Set(tabla.columnas.map((c) => c.clave));
     let insertados = 0;
+    let actualizados = 0;
     const errores = [];
     for (const [i, reg] of registros.entries()) {
       const datos = Object.fromEntries(Object.entries(reg).filter(([k]) => clavesValidas.has(k)));
       const falta = tabla.columnas.find((c) => c.requerido && (datos[c.clave] === undefined || datos[c.clave] === ''));
       if (falta) { errores.push(`Registro ${i + 1}: falta ${falta.etiqueta}`); continue; }
+      const sysId = reg.sys_id || reg.id || null;
+      if (sysId) {
+        // Upsert por sys_id (estilo SN import)
+        const existente = await prisma.customRegistro.findUnique({ where: { id: String(sysId) } }).catch(() => null);
+        if (existente && existente.tablaId === tabla.id) {
+          await prisma.customRegistro.update({ where: { id: existente.id }, data: { datos: { ...existente.datos, ...datos } } });
+          actualizados++;
+          continue;
+        }
+      }
       await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
       insertados++;
     }
-    logSistema('tabla_dinamica', `Importación masiva en ${tabla.label}: ${insertados} registros`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
-    res.json({ ok: true, insertados, errores });
+    logSistema('tabla_dinamica', `Importación masiva en ${tabla.label}: ${insertados} nuevos, ${actualizados} actualizados`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
+    res.json({ ok: true, insertados, actualizados, errores });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

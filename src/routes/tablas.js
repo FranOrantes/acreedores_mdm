@@ -13,7 +13,7 @@ const router = express.Router();
 // Storage "json" → custom_registros (JSONB). Storage "materiales_registros" → tabla física.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CLAVE_OK = /^[a-z][a-z0-9_]*$/;
+const CLAVE_OK = /^[a-z][a-zA-Z0-9_]*$/; // snake_case o camelCase (mapeo de columnas físicas existentes)
 
 // ── Tablas ──
 
@@ -209,29 +209,39 @@ router.get('/:id/registros', async (req, res) => {
     const [ordCampo, ordDir] = ordenar.split(':');
     const ordenValido = tabla.columnas.some((c) => c.clave === ordCampo) ? { [ordCampo]: ordDir === 'desc' ? 'desc' : 'asc' } : null;
 
-    // Tabla física existente (materiales_registros)
+    // Tabla física existente (materiales_registros): columnas del modelo o campos u_* en raw (plano)
     if (tabla.storage === 'materiales_registros') {
+      const CAMPOS_MODELO = ['noMateria', 'nombre', 'estatus', 'tipoSolicitud', 'eanPi', 'razonSocial', 'sysUpdatedOn'];
       const where = {};
       for (const [k, v] of Object.entries(filtros)) {
         if (v === '' || v === undefined || String(v).startsWith('!')) continue; // excluir se procesa aparte
         const col = tabla.columnas.find((c) => c.clave === k);
         if (!col) continue;
-        where[k] = ['integer', 'float'].includes(col.tipo) ? Number(v) : (col.tipo === 'choice' ? String(v) : { contains: String(v), mode: 'insensitive' });
+        const cond = ['integer', 'float'].includes(col.tipo) ? Number(v) : (col.tipo === 'choice' ? String(v) : { contains: String(v), mode: 'insensitive' });
+        if (CAMPOS_MODELO.includes(k)) where[k] = cond;
+        else where.raw = { path: [k], ...(col.tipo === 'choice' ? { equals: String(v) } : { string_contains: String(v) }) };
       }
       for (const [k, v] of Object.entries(filtros)) {
         if (String(v).startsWith('!')) {
           const col = tabla.columnas.find((c) => c.clave === k);
           if (col) {
             const cond = ['integer', 'float'].includes(col.tipo) ? Number(String(v).slice(1)) : (col.tipo === 'choice' ? String(v).slice(1) : { contains: String(v).slice(1), mode: 'insensitive' });
-            where.NOT = [...(where.NOT || []), { [k]: cond }];
+            where.NOT = [...(where.NOT || []), CAMPOS_MODELO.includes(k) ? { [k]: cond } : { raw: { path: [k], ...(col.tipo === 'choice' ? { equals: String(v).slice(1) } : { string_contains: String(v).slice(1) }) } }];
           }
         }
       }
       const [data, total] = await Promise.all([
-        prisma.materialesRegistro.findMany({ where, orderBy: ordenValido || { noMateria: 'asc' }, skip: (page - 1) * limit, take: limit }),
+        prisma.materialesRegistro.findMany({ where, orderBy: (ordenValido && CAMPOS_MODELO.includes(ordCampo)) ? ordenValido : { noMateria: 'asc' }, skip: (page - 1) * limit, take: limit }),
         prisma.materialesRegistro.count({ where }),
       ]);
-      return res.json({ data: data.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? null])) })), total, page, limit });
+      let lista = data.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? r.raw?.[c.clave] ?? null])) }));
+      if (ordenValido && !CAMPOS_MODELO.includes(ordCampo)) {
+        lista.sort((a, b) => {
+          const cmp = String(a[ordCampo] ?? '').localeCompare(String(b[ordCampo] ?? ''), 'es', { numeric: true });
+          return ordDir === 'desc' ? -cmp : cmp;
+        });
+      }
+      return res.json({ data: lista, total, page, limit });
     }
 
     // Storage JSON: filtrar con JSONB (sin eliminados; "!valor" = excluir)

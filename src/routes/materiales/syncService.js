@@ -45,7 +45,7 @@ async function extraerPagina(cred, query, offset) {
     sysparm_query: query + '^ORDERBYsys_id',
     sysparm_limit: String(cred.pageSize),
     sysparm_offset: String(offset),
-    sysparm_display_value: 'all', // value + display_value por campo (referencias legibles)
+    sysparm_display_value: 'true', // display value directo cuando es legible (con ACL de solo link)
   });
   const resp = await fetch(`${cred.baseUrl}/api/now/table/u_mdm_registros?${params}`, {
     headers: { Accept: 'application/json', Authorization: cred.auth },
@@ -58,7 +58,9 @@ async function extraerPagina(cred, query, offset) {
 function aplanar(r) {
   const plano = {};
   for (const [k, v] of Object.entries(r)) {
-    if (v && typeof v === 'object' && !Array.isArray(v)) plano[k] = v.display_value ?? v.value ?? '';
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      plano[k] = v.display_value ?? v.value ?? (v.link ? v.link.split('/').pop() : '');
+    }
     else plano[k] = v ?? '';
   }
   return plano;

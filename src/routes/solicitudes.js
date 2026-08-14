@@ -2,6 +2,7 @@ const express = require('express');
 const prisma = require('../lib/prisma');
 const { registrarCambios, registrarActividad } = require('../lib/auditoria');
 const { notificarN8N } = require('../lib/n8n');
+const { ejecutarBusinessRules } = require('../lib/scriptEngine');
 const router = express.Router();
 
 // Campos válidos del modelo Solicitud en Prisma (whitelist)
@@ -138,6 +139,15 @@ router.post('/', async (req, res) => {
     await registrarActividad('solicitud', data.id, 'sistema', `Solicitud creada con folio ${data.folio}`, {
       autorNombre: data.solicitanteNombre,
     });
+
+    // ── Business Rules: after_create (fire-and-forget, no bloquea la respuesta) ──
+    ejecutarBusinessRules({
+      entidad: 'solicitud',
+      evento: 'after_create',
+      datos: data,
+      modulo: data.modulo,
+      dominioId: data.dominioId,
+    }).catch((err) => console.error('[BusinessRules] after_create solicitud:', err.message));
 
     // ── Notificar a n8n (fire-and-forget) ──
     // Buscar objeto completo de cuenta asociada por código

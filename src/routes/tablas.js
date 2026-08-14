@@ -320,9 +320,9 @@ router.put('/:id/registros/:regId', async (req, res) => {
         cambios.push({ campo, anterior: anterior ?? null, nuevo });
       }
     }
+    const usr = usuarioSesion(req);
     const datos = { ...reg.datos, ...entrantes };
     const data = await prisma.customRegistro.update({ where: { id: reg.id }, data: { datos, actualizadoPor: usr?.id || 'sistema' } });
-    const usr = usuarioSesion(req);
     if (cambios.length) {
       logSistema('auditoria', `Edición de registro en ${tabla?.label || req.params.id}`, {
         usuarioId: usr?.id, usuarioEmail: usr?.email, usuarioNombre: usr?.nombre,

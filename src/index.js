@@ -105,7 +105,7 @@ app.use('/api/formularios', formulariosRouter);
 app.use('/api/tablas', tablasRouter);
 app.use('/api/preferencias', preferenciasRouter);
 app.use('/api/vistas', vistasRouter);
-app.use('/api/logs/ai', logsIARouter);
+app.use('/api/logs', logsIARouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

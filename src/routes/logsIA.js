@@ -103,6 +103,7 @@ router.post('/ai', async (req, res) => {
       evidencia: muestra.map((l) => ({
         id: l.id, cuando: l.creadoEn, nivel: l.nivel, tipo: l.tipo, modulo: l.modulo,
         accion: l.accion, detalle: l.detalle?.slice(0, 300), usuario: l.usuarioNombre || l.usuarioEmail, ip: l.ipAddress,
+        metadata: (() => { try { return JSON.parse(l.metadata || 'null'); } catch { return l.metadata?.slice(0, 300); } })(),
       })),
       sugerencias,
       modulosConocidos: MODULOS_SISTEMA,

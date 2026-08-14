@@ -27,6 +27,8 @@ function crearSandbox(extras = {}) {
     parseInt, parseFloat, isNaN, isFinite, encodeURIComponent, decodeURIComponent,
     Buffer,
     fetch, // para integraciones HTTP desde Script Includes / Business Rules
+    incluir: cargarInclude, // una línea: const utils = await incluir('MDM_Excel') → todas sus funciones
+    glideRecord, // queries estilo GlideRecord sobre tablas dinámicas y legacy
     ...extras,
   };
   return sandbox;
@@ -70,6 +72,85 @@ async function callScriptInclude(nombre, metodo, params) {
   const fn = api?.[metodo];
   if (typeof fn !== 'function') throw new Error(`Método "${metodo}" no existe en Script Include "${nombre}"`);
   return fn(params);
+}
+
+// GlideRecord-like: consulta tablas dinámicas (custom), materiales_registros y legacy de Postgres.
+// Uso: const gr = glideRecord('mi_tabla'); gr.addQuery('campo', 'contiene', 'x'); await gr.query();
+//      while (gr.next()) { gr.get('campo') }
+const LEGACY_MAP = {
+  solicitud: 'solicitud', usuario: 'usuario', aprobacion: 'aprobacion', grupo_aprobacion: 'grupoAprobacion',
+  dominio: 'dominio', documento: 'documento', incidente: 'incidente', ubicacion: 'ubicacion',
+  log_sistema: 'logSistema', formulario: 'formulario', tabla_custom: 'tablaCustom',
+};
+
+function glideRecord(tabla) {
+  const condiciones = [];
+  let resultado = [];
+  let idx = -1;
+
+  const aplicarCond = (datos) => datos.filter((row) => condiciones.every(([campo, op, valor]) => {
+    const v = row[campo];
+    switch (op) {
+      case '=': case '==': return v === valor;
+      case '!=': return v !== valor;
+      case 'contiene': return String(v ?? '').toLowerCase().includes(String(valor).toLowerCase());
+      case '>': return Number(v) > Number(valor);
+      case '<': return Number(v) < Number(valor);
+      case '>=': return Number(v) >= Number(valor);
+      case '<=': return Number(v) <= Number(valor);
+      case 'vacio': return v === null || v === undefined || v === '';
+      case 'no_vacio': return v !== null && v !== undefined && v !== '';
+      default: return true;
+    }
+  }));
+
+  const gr = {
+    addQuery: (campo, op, valor) => { condiciones.push([campo, op, valor]); return gr; },
+    query: async () => {
+      let datos = [];
+      if (tabla === 'materiales_registros') {
+        const rows = await prisma.materialesRegistro.findMany({
+          take: 50000,
+          select: { sysId: true, noMateria: true, nombre: true, estatus: true, tipoSolicitud: true, eanPi: true, razonSocial: true, sysUpdatedOn: true },
+        });
+        datos = rows.map((r) => ({ sys_id: r.sysId, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== 'sysId')) }));
+      } else if (LEGACY_MAP[tabla] && prisma[LEGACY_MAP[tabla]]) {
+        const rows = await prisma[LEGACY_MAP[tabla]].findMany({ take: 50000 });
+        datos = rows.map((r) => ({ sys_id: r.id, ...r }));
+      } else {
+        // Tabla dinámica por clave o id
+        const t = await prisma.tablaCustom.findFirst({ where: { OR: [{ clave: tabla }, { id: tabla }] } });
+        if (!t) throw new Error(`Tabla no encontrada: ${tabla}`);
+        const rows = await prisma.customRegistro.findMany({ where: { tablaId: t.id, eliminado: false }, take: 10000 });
+        datos = rows.map((r) => ({ sys_id: r.id, ...r.datos }));
+      }
+      resultado = aplicarCond(datos);
+      idx = -1;
+      return gr;
+    },
+    get: async (sysId) => {
+      let row = null;
+      if (tabla === 'materiales_registros') {
+        const r = await prisma.materialesRegistro.findUnique({ where: { sysId } });
+        if (r) row = { sys_id: r.sysId, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== 'raw')) };
+      } else if (LEGACY_MAP[tabla] && prisma[LEGACY_MAP[tabla]]) {
+        const r = await prisma[LEGACY_MAP[tabla]].findUnique({ where: { id: sysId } });
+        if (r) row = { sys_id: r.id, ...r };
+      } else {
+        const r = await prisma.customRegistro.findUnique({ where: { id: sysId } });
+        if (r) row = { sys_id: r.id, ...r.datos };
+      }
+      if (!row) return false;
+      resultado = [row];
+      idx = 0;
+      return true;
+    },
+    next: () => { idx++; return idx < resultado.length; },
+    getValue: (campo) => resultado[idx]?.[campo],
+    rowCount: () => resultado.length,
+    rows: () => resultado,
+  };
+  return gr;
 }
 
 function invalidarInclude(nombre) {

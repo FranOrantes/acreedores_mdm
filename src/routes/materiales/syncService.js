@@ -70,7 +70,8 @@ async function runSync(tipo) {
   if (corriendo) throw new Error(`Ya hay un sync corriendo (${corriendo.tipo}, página ${corriendo.pagina})`);
 
   const log = await prisma.materialesSyncLog.create({ data: { tipo } });
-  corriendo = { logId: log.id, tipo, pagina: 0 };
+  const estado = { logId: log.id, tipo, pagina: 0 }; // estado por corrida (no compartido)
+  corriendo = estado;
 
   // Fire and forget
   (async () => {
@@ -92,7 +93,7 @@ async function runSync(tipo) {
     while (true) {
       const rows = await extraerPagina(cred, query, offset);
       if (rows.length === 0) break;
-      corriendo.pagina = offset / cred.pageSize + 1;
+      estado.pagina = offset / cred.pageSize + 1;
 
       // Upsert en lote (1 query por página — jsonb_populate_recordset evita el bug binario de UNNEST+jsonb en Prisma)
       const ahora = new Date().toISOString();
@@ -147,7 +148,7 @@ async function runSync(tipo) {
         data: { estado: 'error', error: err.message, fin: new Date() },
       }).catch(() => {});
     })
-    .finally(() => { corriendo = null; });
+    .finally(() => { if (corriendo === estado) corriendo = null; });
 
   return log;
 }

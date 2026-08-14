@@ -946,6 +946,10 @@ model TablaCustom {
   // Storage: "json" = tabla genérica custom_registros (JSONB) · "materiales_registros" = tabla física existente
   storage     String   @default("json")
   autoNumber  String?  // prefijo de folio (auto-number, ej. "PED")
+  menuVisible Boolean  @default(false) // acceso en el sidebar de su módulo
+  menuLabel   String?  // etiqueta del menú (default: label)
+  menuIcono   String?  // ícono (default: icono de la tabla)
+  menuPadre   String?  // agrupar bajo un menú existente (label) o nuevo grupo
   permisos    Json     @default("{\"leer\":true,\"crear\":true,\"actualizar\":true,\"eliminar\":true}")
   orden       Int      @default(0)
   columnas    ColumnaCustom[]

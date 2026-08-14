@@ -285,13 +285,31 @@ router.post('/:id/registros', async (req, res) => {
   }
 });
 
-// PUT /api/tablas/:id/registros/:regId
+// PUT /api/tablas/:id/registros/:regId — con auditoría campo a campo (valor anterior → nuevo)
 router.put('/:id/registros/:regId', async (req, res) => {
   try {
     const reg = await prisma.customRegistro.findUnique({ where: { id: req.params.regId } });
     if (!reg || reg.tablaId !== req.params.id) return res.status(404).json({ error: 'No encontrado' });
-    const datos = { ...reg.datos, ...(req.body.datos || {}) };
+    const tabla = await prisma.tablaCustom.findUnique({ where: { id: req.params.id } });
+    const entrantes = req.body.datos || {};
+    const cambios = [];
+    for (const [campo, nuevo] of Object.entries(entrantes)) {
+      const anterior = reg.datos?.[campo];
+      if (JSON.stringify(anterior ?? null) !== JSON.stringify(nuevo ?? null)) {
+        cambios.push({ campo, anterior: anterior ?? null, nuevo });
+      }
+    }
+    const datos = { ...reg.datos, ...entrantes };
     const data = await prisma.customRegistro.update({ where: { id: reg.id }, data: { datos } });
+    if (cambios.length) {
+      logSistema('auditoria', `Edición de registro en ${tabla?.label || req.params.id}`, {
+        detalle: `${cambios.length} campo(s) modificados`,
+        metadata: { cambios, registroId: reg.id },
+        entidadTipo: 'tabla', entidadId: req.params.id,
+        modulo: tabla?.modulo,
+        ...reqInfo(req),
+      });
+    }
     res.json({ id: data.id, ...data.datos });
   } catch (e) {
     res.status(400).json({ error: e.message });

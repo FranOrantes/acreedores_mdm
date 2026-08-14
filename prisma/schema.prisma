@@ -755,6 +755,7 @@ model LogSistema {
   entidadTipo String?  // solicitud, aprobacion, usuario, etc.
   entidadId   String?  // ID de la entidad afectada
   metadata    String?  @db.Text // JSON libre para datos adicionales (ej: respuesta SAP, payload, etc.)
+  modulo      String?  // módulo de la app (acreedores, proveedores, clientes, materiales)
   creadoEn    DateTime @default(now())
 
   @@index([tipo])
@@ -762,6 +763,8 @@ model LogSistema {
   @@index([creadoEn])
   @@index([nivel])
   @@index([entidadTipo, entidadId])
+  @@index([modulo, creadoEn])
+  @@index([nivel, creadoEn])
 }
 
 model LogEmail {

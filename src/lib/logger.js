@@ -32,6 +32,7 @@ async function logSistema(tipo, accion, options = {}) {
         userAgent: options.userAgent || null,
         entidadTipo: options.entidadTipo || null,
         entidadId: options.entidadId || null,
+        modulo: options.modulo || null,
         metadata: options.metadata ? JSON.stringify(options.metadata) : null,
       },
     });

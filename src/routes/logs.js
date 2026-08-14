@@ -109,6 +109,13 @@ router.use(soloAdmin);
 router.get('/sistema', async (req, res) => {
   try {
     const { tipo, nivel, usuarioId, desde, hasta, buscar, modulo, page = 1, limit = 50 } = req.query;
+    // Default de primera entrada: solo logs de HOY (el usuario puede cambiar el filtro)
+    let desdeEfectivo = desde;
+    if (!desde && !hasta) {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      desdeEfectivo = hoy.toISOString();
+    }
     const where = {};
 
     if (tipo) where.tipo = tipo;
@@ -116,9 +123,9 @@ router.get('/sistema', async (req, res) => {
     if (nivel) where.nivel = nivel;
     if (usuarioId) where.usuarioId = usuarioId;
 
-    if (desde || hasta) {
+    if (desdeEfectivo || hasta) {
       where.creadoEn = {};
-      if (desde) where.creadoEn.gte = new Date(desde);
+      if (desdeEfectivo) where.creadoEn.gte = new Date(desdeEfectivo);
       if (hasta) where.creadoEn.lte = new Date(hasta);
     }
 
@@ -158,9 +165,9 @@ router.get('/emails', async (req, res) => {
     if (estado) where.estado = estado;
     if (solicitudId) where.solicitudId = solicitudId;
 
-    if (desde || hasta) {
+    if (desdeEfectivo || hasta) {
       where.creadoEn = {};
-      if (desde) where.creadoEn.gte = new Date(desde);
+      if (desdeEfectivo) where.creadoEn.gte = new Date(desdeEfectivo);
       if (hasta) where.creadoEn.lte = new Date(hasta);
     }
 

@@ -277,40 +277,45 @@ router.get('/:id/registros', async (req, res) => {
     const [ordCampo, ordDir] = ordenar.split(':');
     const ordenValido = tabla.columnas.some((c) => c.clave === ordCampo) ? { [ordCampo]: ordDir === 'desc' ? 'desc' : 'asc' } : null;
 
-    // Tabla física existente (materiales_registros): columnas del modelo o campos u_* en raw (plano)
+    // Tabla física existente (materiales_registros): SQL proyectado (solo columnas activas — sin el raw completo)
     if (tabla.storage === 'materiales_registros') {
+      const { Prisma } = require('@prisma/client');
       const CAMPOS_MODELO = ['noMateria', 'nombre', 'estatus', 'tipoSolicitud', 'eanPi', 'razonSocial', 'sysUpdatedOn'];
-      const where = {};
-      for (const [k, v] of Object.entries(filtros)) {
-        if (v === '' || v === undefined || String(v).startsWith('!')) continue; // excluir se procesa aparte
-        const col = tabla.columnas.find((c) => c.clave === k);
-        if (!col) continue;
-        const cond = ['integer', 'float'].includes(col.tipo) ? Number(v) : (col.tipo === 'choice' ? String(v) : { contains: String(v), mode: 'insensitive' });
-        if (CAMPOS_MODELO.includes(k)) where[k] = cond;
-        else where.raw = { path: [k], ...(col.tipo === 'choice' ? { equals: String(v) } : { string_contains: String(v) }) };
+      const cols = tabla.columnas.filter((c) => c.activo);
+      const clavesOk = new Set(cols.map((c) => c.clave));
+      const selectCols = [Prisma.raw('"sysId" AS "id"')];
+      for (const k of clavesOk) {
+        if (!/^[a-zA-Z0-9_]+$/.test(k)) continue;
+        selectCols.push(CAMPOS_MODELO.includes(k) ? Prisma.raw(`"${k}"`) : Prisma.raw(`raw->>'${k}' AS "${k}"`));
       }
+      const condiciones = [];
       for (const [k, v] of Object.entries(filtros)) {
-        if (String(v).startsWith('!')) {
-          const col = tabla.columnas.find((c) => c.clave === k);
-          if (col) {
-            const cond = ['integer', 'float'].includes(col.tipo) ? Number(String(v).slice(1)) : (col.tipo === 'choice' ? String(v).slice(1) : { contains: String(v).slice(1), mode: 'insensitive' });
-            where.NOT = [...(where.NOT || []), CAMPOS_MODELO.includes(k) ? { [k]: cond } : { raw: { path: [k], ...(col.tipo === 'choice' ? { equals: String(v).slice(1) } : { string_contains: String(v).slice(1) }) } }];
-          }
-        }
+        if (!clavesOk.has(k) || !/^[a-zA-Z0-9_]+$/.test(k)) continue;
+        const excluir = String(v).startsWith('!');
+        const valor = excluir ? String(v).slice(1) : String(v);
+        if (!valor) continue;
+        const col = cols.find((c) => c.clave === k);
+        const esNum = ['integer', 'float'].includes(col?.tipo);
+        const expr = CAMPOS_MODELO.includes(k) ? Prisma.raw(`"${k}"`) : Prisma.raw(`raw->>'${k}'`);
+        let cond;
+        if (esNum) cond = Prisma.sql`${expr} = ${Number(valor)}`;
+        else if (col?.tipo === 'choice') cond = Prisma.sql`${expr} = ${valor}`;
+        else cond = Prisma.sql`${expr} ILIKE ${'%' + valor + '%'}`;
+        condiciones.push(excluir ? Prisma.sql`NOT (${cond})` : cond);
       }
-      const [data, total] = await Promise.all([
-        prisma.materialesRegistro.findMany({ where, orderBy: (ordenValido && CAMPOS_MODELO.includes(ordCampo)) ? ordenValido : { noMateria: 'asc' }, skip: (page - 1) * limit, take: limit }),
-        prisma.materialesRegistro.count({ where }),
+      const whereSql = condiciones.length ? Prisma.sql`WHERE ${Prisma.join(condiciones, ' AND ')}` : Prisma.empty;
+      const ordenExpr = ordenValido
+        ? (CAMPOS_MODELO.includes(ordCampo) ? Prisma.raw(`"${ordCampo}"`) : Prisma.raw(`raw->>'${ordCampo}'`))
+        : Prisma.raw('"noMateria"');
+      const dir = ordDir === 'desc' ? Prisma.raw('DESC') : Prisma.raw('ASC');
+      const [rows, countRows] = await Promise.all([
+        prisma.$queryRaw(Prisma.sql`SELECT ${Prisma.join(selectCols, ', ')} FROM "materiales_registros" ${whereSql} ORDER BY ${ordenExpr} ${dir} LIMIT ${limit} OFFSET ${(page - 1) * limit}`),
+        prisma.$queryRaw(Prisma.sql`SELECT COUNT(*)::int AS n FROM "materiales_registros" ${whereSql}`),
       ]);
-      let lista = data.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? r.raw?.[c.clave] ?? null])) }));
-      if (ordenValido && !CAMPOS_MODELO.includes(ordCampo)) {
-        lista.sort((a, b) => {
-          const cmp = String(a[ordCampo] ?? '').localeCompare(String(b[ordCampo] ?? ''), 'es', { numeric: true });
-          return ordDir === 'desc' ? -cmp : cmp;
-        });
-      }
-      return res.json({ data: lista, total, page, limit });
+      logSistema && null; // (export/log aparte)
+      return res.json({ data: rows, total: countRows[0].n, page, limit });
     }
+
 
     // Storage JSON: filtrar con JSONB (sin eliminados; "!valor" = excluir)
     const where = { tablaId: tabla.id, eliminado: false };

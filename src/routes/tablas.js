@@ -189,6 +189,7 @@ router.get('/:id/preview', async (req, res) => {
     }
     res.json({
       clave: `preview_${tabla.clave}`,
+      tablaId: tabla.id,
       nombre: `Preview: ${tabla.label}`,
       tipo: 'simple',
       modulo: tabla.modulo,

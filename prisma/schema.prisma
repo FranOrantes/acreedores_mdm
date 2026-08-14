@@ -1032,3 +1032,31 @@ model VistaFormulario {
   @@index([tablaId])
   @@map("vistas_formulario")
 }
+
+// --- Tokens de aplicaciones (acceso de sistemas externos) ---
+model ApiToken {
+  id         String   @id @default(uuid())
+  nombre     String   // nombre de la aplicación
+  token      String   @unique // autogenerado
+  activo     Boolean  @default(true)
+  expiraEn   DateTime?
+  ultimoUso  DateTime?
+  creadoPor  String?
+  creadoEn   DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+}
+
+// --- Scripted REST APIs (exponer datos/lógica con scripts, estilo SN) ---
+model ScriptedApi {
+  id        String   @id @default(uuid())
+  nombre    String
+  metodo    String   @default("GET") // GET | POST | PUT | PATCH | DELETE
+  path      String   // expuesto en /api/ext/<path>
+  script    String   @db.Text // sandbox: { query, body, params, gs, glideRecord, incluir, prisma, fetch, respuesta }
+  authTipo  String   @default("token") // "token" (X-App-Token) | "ninguno"
+  activo    Boolean  @default(true)
+  creadoEn  DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([metodo, path])
+}

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const prisma = require('../../lib/prisma');
 const config = require('./configService');
+const { ejecutarBusinessRules } = require('../../lib/scriptEngine');
 
 const router = Router();
 
@@ -74,6 +75,15 @@ router.post('/alta', async (req, res) => {
         await prisma.documentoTemporal.delete({ where: { id: t.id } });
       }
     }
+
+    // Business Rules: after_create del formulario mt_alta (fire-and-forget)
+    ejecutarBusinessRules({
+      entidad: 'mt_alta',
+      evento: 'after_create',
+      datos: { solicitudId: solicitud.id, folio: solicitud.folio, materiales, noMateriales: materiales.length },
+      modulo: 'materiales',
+      dominioId: solicitud.dominioId,
+    }).catch((err) => console.error('[BusinessRules] mt_alta after_create:', err.message));
 
     res.status(201).json({ ok: true, folio: solicitud.folio, id: solicitud.id });
   } catch (err) {

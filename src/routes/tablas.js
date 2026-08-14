@@ -10,7 +10,33 @@ const router = express.Router();
 // ─────────────────────────────────────────────────────────────────────────────
 // Table Builder (réplica del de ServiceNow): tablas custom por módulo,
 // dictionary entries (columnas), vista lista con filtros, preview de formulario.
-// Storage "json" → custom_registros (JSONB). Storage "materiales_registros" → tabla física.
+// Storage "json" → custom_registros (JSONB). Storage físico → tabla sincronizada (ver FISICAS).
+const FISICAS = {
+  materiales_registros: { modelo: 'materialesRegistro', idCampo: 'sysId', ordenDefault: 'noMateria', camposModelo: ['noMateria', 'nombre', 'estatus', 'tipoSolicitud', 'eanPi', 'razonSocial', 'sysUpdatedOn'] },
+  materiales_options: { modelo: 'materialesOption', idCampo: 'sysId', ordenDefault: 'clave', camposModelo: ['clave', 'valor', 'etiqueta', 'sysUpdatedOn'] },
+  materiales_matriz_aprobadores: { modelo: 'materialesMatrizAprobador', idCampo: 'sysId', ordenDefault: 'comprador', camposModelo: ['comprador', 'negociador', 'dga', 'proyecto', 'sysUpdatedOn'] },
+};
+// Campos de auditoría por default en TODAS las tablas del builder (réplica SN sys_*)
+const CAMPOS_AUDITORIA = ['creadoEn', 'actualizadoEn', 'creadoPor', 'actualizadoPor'];
+// En físicas: creadoPor/actualizadoPor se leen del raw de ServiceNow (sys_created_by / sys_updated_by)
+const AUDIT_FISICA = { creadoEn: '"creadoEn"', actualizadoEn: '"actualizadoEn"', creadoPor: "raw->>'sys_created_by'", actualizadoPor: "raw->>'sys_updated_by'" };
+
+// Al crear una tabla: auto-registrar las 4 columnas de auditoría
+async function registrarCamposAuditoria(tablaId, ordenBase) {
+  const defs = [
+    { clave: 'creadoEn', etiqueta: 'Creado', tipo: 'datetime' },
+    { clave: 'actualizadoEn', etiqueta: 'Actualizado', tipo: 'datetime' },
+    { clave: 'creadoPor', etiqueta: 'Creado por', tipo: 'string' },
+    { clave: 'actualizadoPor', etiqueta: 'Actualizado por', tipo: 'string' },
+  ];
+  for (const [i, d] of defs.entries()) {
+    await prisma.columnaCustom.upsert({
+      where: { tablaId_clave: { tablaId, clave: d.clave } },
+      update: {},
+      create: { tablaId, ...d, display: false, orden: (ordenBase ?? 900) + i },
+    });
+  }
+}
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CLAVE_OK = /^[a-z][a-zA-Z0-9_]*$/; // snake_case o camelCase (mapeo de columnas físicas existentes)
@@ -84,6 +110,7 @@ router.post('/', async (req, res) => {
       data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos: permisosFinal, storage, menuVisible, menuLabel, menuIcono, menuPadre },
       include: { columnas: true },
     });
+    await registrarCamposAuditoria(data.id, 900);
     logSistema('tabla_dinamica', `Tabla creada: ${label} (${clave})`, { detalle: `Roles auto: ${rolesAuto.leer}, ${rolesAuto.escribir}, ${rolesAuto.eliminar}`, modulo: modulo || 'todos', ...reqInfo(req) });
     res.status(201).json(data);
   } catch (e) {
@@ -291,6 +318,7 @@ router.get('/:id/registros', async (req, res) => {
       const selectCols = [Prisma.raw('"sysId" AS "id"')];
       for (const k of clavesOk) {
         if (!/^[a-zA-Z0-9_]+$/.test(k)) continue;
+        if (CAMPOS_AUDITORIA.includes(k)) { selectCols.push(Prisma.raw(`${AUDIT_FISICA[k]} AS "${k}"`)); continue; }
         selectCols.push(CAMPOS_MODELO.includes(k) ? Prisma.raw(`"${k}"`) : Prisma.raw(`raw->>'${k}' AS "${k}"`));
       }
       const condiciones = [];
@@ -301,7 +329,7 @@ router.get('/:id/registros', async (req, res) => {
         if (!valor) continue;
         const col = cols.find((c) => c.clave === k);
         const esNum = ['integer', 'float'].includes(col?.tipo);
-        const expr = CAMPOS_MODELO.includes(k) ? Prisma.raw(`"${k}"`) : Prisma.raw(`raw->>'${k}'`);
+        const expr = CAMPOS_AUDITORIA.includes(k) ? Prisma.raw(AUDIT_FISICA[k]) : (CAMPOS_MODELO.includes(k) ? Prisma.raw(`"${k}"`) : Prisma.raw(`raw->>'${k}'`));
         let cond;
         if (esNum) cond = Prisma.sql`${expr} = ${Number(valor)}`;
         else if (col?.tipo === 'choice') cond = Prisma.sql`${expr} = ${valor}`;
@@ -310,8 +338,8 @@ router.get('/:id/registros', async (req, res) => {
       }
       const whereSql = condiciones.length ? Prisma.sql`WHERE ${Prisma.join(condiciones, ' AND ')}` : Prisma.empty;
       const ordenExpr = ordenValido
-        ? (CAMPOS_MODELO.includes(ordCampo) ? Prisma.raw(`"${ordCampo}"`) : Prisma.raw(`raw->>'${ordCampo}'`))
-        : Prisma.raw('"noMateria"');
+        ? (CAMPOS_AUDITORIA.includes(ordCampo) ? Prisma.raw(AUDIT_FISICA[ordCampo]) : (CAMPOS_MODELO.includes(ordCampo) ? Prisma.raw(`"${ordCampo}"`) : Prisma.raw(`raw->>'${ordCampo}'`)))
+        : Prisma.raw('"' + fisica.ordenDefault + '"');
       const dir = ordDir === 'desc' ? Prisma.raw('DESC') : Prisma.raw('ASC');
       const [rows, countRows] = await Promise.all([
         prisma.$queryRaw(Prisma.sql`SELECT ${Prisma.join(selectCols, ', ')} FROM "materiales_registros" ${whereSql} ORDER BY ${ordenExpr} ${dir} LIMIT ${limit} OFFSET ${(page - 1) * limit}`),
@@ -333,7 +361,11 @@ router.get('/:id/registros', async (req, res) => {
       prisma.customRegistro.findMany({ where, orderBy: ordenValido ? { datos: { path: [ordCampo], sort: ordDir === 'desc' ? 'desc' : 'asc' } } : { creadoEn: 'desc' }, skip: (page - 1) * limit, take: limit }),
       prisma.customRegistro.count({ where }),
     ]);
-    let lista = data.map((r) => ({ id: r.id, sys_id: r.id, ...r.datos }));
+    let lista = data.map((r) => ({
+      id: r.id, sys_id: r.id, ...r.datos,
+      creadoEn: r.creadoEn, actualizadoEn: r.actualizadoEn,
+      creadoPor: r.creadoPor, actualizadoPor: r.actualizadoPor,
+    }));
     if (ordenValido) {
       lista.sort((a, b) => {
         const va = a[ordCampo] ?? ''; const vb = b[ordCampo] ?? '';
@@ -446,8 +478,14 @@ async function obtenerRegistrosParaExport(tabla, filtros) {
       if (excluir) where.NOT = [...(where.NOT || []), { [k]: cond }];
       else where[k] = cond;
     }
-    const rows = await prisma.materialesRegistro.findMany({ where, take: 10000, orderBy: { noMateria: 'asc' } });
-    return rows.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? null])) }));
+    const rows = await prisma[fisicaExport.modelo].findMany({ where, take: 10000 });
+    return rows.map((r) => ({
+      id: r[fisicaExport.idCampo],
+      ...Object.fromEntries(tabla.columnas.map((c) => [c.clave,
+        c.clave === 'creadoPor' ? (r.raw?.sys_created_by ?? null)
+        : c.clave === 'actualizadoPor' ? (r.raw?.sys_updated_by ?? null)
+        : (r[c.clave] ?? r.raw?.[c.clave] ?? null)])),
+    }));
   }
   const rows = await prisma.customRegistro.findMany({ where: { tablaId: tabla.id, eliminado: false }, take: 10000 });
   return rows.map((r) => ({ id: r.id, ...r.datos }));

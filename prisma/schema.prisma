@@ -993,6 +993,8 @@ model CustomRegistro {
   datos      Json     // { claveColumna: valor }
   eliminado  Boolean  @default(false) // delete lógico (único tipo de delete)
   eliminadoEn DateTime?
+  creadoPor     String?  // réplica SN "Created by" (usuarioId o 'sistema')
+  actualizadoPor String? // réplica SN "Updated by"
   creadoEn   DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 

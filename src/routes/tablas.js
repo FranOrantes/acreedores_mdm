@@ -247,7 +247,8 @@ router.get('/:id/referencias/:colId', async (req, res) => {
       // Legacy: modelo prisma por nombre técnico
       const LEGACY = { solicitud: 'solicitud', usuario: 'usuario', grupo_aprobacion: 'grupoAprobacion', ubicacion: 'ubicacion', dominio: 'dominio' };
       const modelo = LEGACY[col.referencia];
-      if (!modelo || !prisma[modelo]) return res.status(400).json({ error: `Referencia desconocida: ${col.referencia}` });
+      // Referencias a tablas de ServiceNow u otras no resolubles localmente: lista vacía sin error
+      if (!modelo || !prisma[modelo]) return res.json([]);
       const rows = await prisma[modelo].findMany({ take: 50 });
       opciones = aplicaFiltro(rows).map((r) => ({ id: r.id, label: r.nombre || r.folio || r.label || r.email || r.id.slice(0, 8), raw: { folio: r.folio, email: r.email } }));
     }

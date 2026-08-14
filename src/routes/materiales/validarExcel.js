@@ -2,6 +2,7 @@ const { Router } = require('express');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const config = require('./configService');
+const prisma = require('../../lib/prisma');
 const { cargarInclude } = require('../../lib/scriptEngine');
 const catalogosSN = require('./data/catalogosSN.json');
 const jerarquia = require('./data/jerarquia.json');
@@ -112,11 +113,15 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
       });
     }
 
-    const [eanMin, eanMax, MDM_Excel] = await Promise.all([
+    const [eanMin, eanMax, MDM_Excel, formulario] = await Promise.all([
       config.get('validacion.excel.ean_min_digitos'),
       config.get('validacion.excel.ean_max_digitos'),
       cargarInclude('MDM_Excel'), // validadores desde Script Include
+      prisma.formulario.findFirst({ where: { clave: 'mt_alta', modulo: 'materiales', activo: true } }),
     ]);
+    // Reglas de columnas dinámicas: las define el builder (campo carga_excel.excelColumnas);
+    // si no hay, se usa el set default de ServiceNow (COLUMNAS)
+    const columnasActivas = formulario?.definicion?.campos?.carga_excel?.excelColumnas || COLUMNAS;
     const { esVacio, esNumero, esEntero, eanValido, esFecha8 } = MDM_Excel;
     const min = eanMin || 3;
     const max = eanMax || 16;
@@ -153,13 +158,13 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
 
     for (const { row, linea } of filas) {
       const datos = {};
-      for (const spec of COLUMNAS) {
+      for (const spec of columnasActivas) {
         const valor = norm(row[spec.col]);
         datos[spec.campo] = valor;
         const celda = `"${spec.letra}${linea}"`;
 
         // Condicional por grupo (SUB: requerido si P trae valor)
-        const grupoValor = spec.grupo ? norm(row[COLUMNAS.find((c) => c.letra === spec.grupo)?.col]) : '';
+        const grupoValor = spec.grupo ? norm(row[columnasActivas.find((c) => c.letra === spec.grupo)?.col]) : '';
         const requerido = spec.req || (spec.grupo && !esVacio(grupoValor));
 
         if (esVacio(valor)) {
@@ -233,3 +238,4 @@ router.get('/catalogos-opciones', (req, res) => {
 });
 
 module.exports = router;
+module.exports.COLUMNAS_DEFAULT = COLUMNAS;

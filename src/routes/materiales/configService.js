@@ -24,6 +24,7 @@ const DEFAULTS = [
   { clave: 'flujo.folio_prefijo', tipo: 'string', grupo: 'Flujo', descripcion: 'Prefijo del folio de solicitudes de materiales', default: 'MT' },
   { clave: 'flujo.etapa_inicial', tipo: 'string', grupo: 'Flujo', descripcion: 'Etapa inicial del flujo de aprobación', default: '01 - Comprador' },
   { clave: 'matriz.aprobadores', tipo: 'json', grupo: 'Flujo', descripcion: 'Matriz de aprobadores (comprador/negociador/DGA) — réplica u_matriz_area_aprobadores', default: [] },
+  { clave: 'layout.archivo', tipo: 'json', grupo: 'Validaciones', descripcion: 'Layout Excel vigente del alta (se sube desde el builder; vacío = empaquetado V20)', default: null },
 ];
 
 const cache = new Map(); // clave -> valor resuelto

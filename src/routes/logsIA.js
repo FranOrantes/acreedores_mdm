@@ -73,9 +73,15 @@ router.post('/ai', async (req, res) => {
     const { pregunta } = req.body;
     if (!pregunta) return res.status(400).json({ error: 'pregunta requerida' });
 
-    const where = parsearPregunta(pregunta);
-    const [total, muestra, porNivel, porTipo, porUsuario] = await Promise.all([
-      prisma.logSistema.count({ where }),
+    let where = parsearPregunta(pregunta);
+    let total = await prisma.logSistema.count({ where });
+    // Segundo pase: si el texto libre no trajo nada (acentos ES), reintentar sin él
+    if (total === 0 && where.AND) {
+      const { AND, ...sinTexto } = where;
+      where = sinTexto;
+      total = await prisma.logSistema.count({ where });
+    }
+    const [muestra, porNivel, porTipo, porUsuario] = await Promise.all([
       prisma.logSistema.findMany({ where, orderBy: { creadoEn: 'desc' }, take: 15 }),
       prisma.logSistema.groupBy({ by: ['nivel'], where, _count: true }),
       prisma.logSistema.groupBy({ by: ['tipo'], where, _count: true, orderBy: { _count: { tipo: 'desc' } } }),

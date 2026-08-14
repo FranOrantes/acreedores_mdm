@@ -10,7 +10,12 @@ const router = express.Router();
 // ─────────────────────────────────────────────────────────────────────────────
 // Table Builder (réplica del de ServiceNow): tablas custom por módulo,
 // dictionary entries (columnas), vista lista con filtros, preview de formulario.
-// Storage "json" → custom_registros (JSONB). Storage "materiales_registros" → tabla física.
+// Storage "json" → custom_registros (JSONB). Storage físico → tabla sincronizada (ver FISICAS).
+const FISICAS = {
+  materiales_registros: { modelo: 'materialesRegistro', idCampo: 'sysId', ordenDefault: 'noMateria', camposModelo: ['noMateria', 'nombre', 'estatus', 'tipoSolicitud', 'eanPi', 'razonSocial', 'sysUpdatedOn'] },
+  materiales_options: { modelo: 'materialesOption', idCampo: 'sysId', ordenDefault: 'clave', camposModelo: ['clave', 'valor', 'etiqueta', 'sysUpdatedOn'] },
+  materiales_matriz_aprobadores: { modelo: 'materialesMatrizAprobador', idCampo: 'sysId', ordenDefault: 'comprador', camposModelo: ['comprador', 'negociador', 'dga', 'proyecto', 'sysUpdatedOn'] },
+};
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CLAVE_OK = /^[a-z][a-zA-Z0-9_]*$/; // snake_case o camelCase (mapeo de columnas físicas existentes)
@@ -233,12 +238,13 @@ router.get('/:id/referencias/:colId', async (req, res) => {
     // Tabla custom por clave
     const refCustom = await prisma.tablaCustom.findFirst({ where: { clave: col.referencia } });
     if (refCustom) {
-      if (refCustom.storage === 'materiales_registros') {
-        const rows = await prisma.materialesRegistro.findMany({
-          where: buscar ? { OR: [{ nombre: { contains: buscar, mode: 'insensitive' } }, { noMateria: { contains: buscar } }, { eanPi: { contains: buscar } }] } : {},
-          take: 50, orderBy: { noMateria: 'asc' },
+      const refFisica = FISICAS[refCustom.storage];
+      if (refFisica) {
+        const rows = await prisma[refFisica.modelo].findMany({ take: 50 });
+        opciones = rows.map((r) => {
+          const vals = refFisica.camposModelo.filter((k) => r[k]).map((k) => r[k]);
+          return { id: r[refFisica.idCampo], label: vals.slice(0, 2).join(' — ') || r[refFisica.idCampo] };
         });
-        opciones = rows.map((r) => ({ id: r.sysId, label: `${r.noMateria} — ${r.nombre}`, estatus: r.estatus }));
       } else {
         const rows = await prisma.customRegistro.findMany({ where: { tablaId: refCustom.id, eliminado: false }, take: 500 });
         const labelCol = refCustom.columnas?.find?.(() => true); // n/a
@@ -282,10 +288,11 @@ router.get('/:id/registros', async (req, res) => {
     const [ordCampo, ordDir] = ordenar.split(':');
     const ordenValido = tabla.columnas.some((c) => c.clave === ordCampo) ? { [ordCampo]: ordDir === 'desc' ? 'desc' : 'asc' } : null;
 
-    // Tabla física existente (materiales_registros): SQL proyectado (solo columnas activas — sin el raw completo)
-    if (tabla.storage === 'materiales_registros') {
+    // Tabla física (cualquiera de FISICAS): SQL proyectado (solo columnas activas — sin el raw completo)
+    const fisica = FISICAS[tabla.storage];
+    if (fisica) {
       const { Prisma } = require('@prisma/client');
-      const CAMPOS_MODELO = ['noMateria', 'nombre', 'estatus', 'tipoSolicitud', 'eanPi', 'razonSocial', 'sysUpdatedOn'];
+      const CAMPOS_MODELO = fisica.camposModelo;
       const cols = tabla.columnas.filter((c) => c.activo);
       const clavesOk = new Set(cols.map((c) => c.clave));
       const selectCols = [Prisma.raw('"sysId" AS "id"')];
@@ -311,11 +318,11 @@ router.get('/:id/registros', async (req, res) => {
       const whereSql = condiciones.length ? Prisma.sql`WHERE ${Prisma.join(condiciones, ' AND ')}` : Prisma.empty;
       const ordenExpr = ordenValido
         ? (CAMPOS_MODELO.includes(ordCampo) ? Prisma.raw(`"${ordCampo}"`) : Prisma.raw(`raw->>'${ordCampo}'`))
-        : Prisma.raw('"noMateria"');
+        : Prisma.raw('"' + fisica.ordenDefault + '"');
       const dir = ordDir === 'desc' ? Prisma.raw('DESC') : Prisma.raw('ASC');
       const [rows, countRows] = await Promise.all([
-        prisma.$queryRaw(Prisma.sql`SELECT ${Prisma.join(selectCols, ', ')} FROM "materiales_registros" ${whereSql} ORDER BY ${ordenExpr} ${dir} LIMIT ${limit} OFFSET ${(page - 1) * limit}`),
-        prisma.$queryRaw(Prisma.sql`SELECT COUNT(*)::int AS n FROM "materiales_registros" ${whereSql}`),
+        prisma.$queryRaw(Prisma.sql`SELECT ${Prisma.join(selectCols, ', ')} FROM ${Prisma.raw('"' + tabla.storage + '"')} ${whereSql} ORDER BY ${ordenExpr} ${dir} LIMIT ${limit} OFFSET ${(page - 1) * limit}`),
+        prisma.$queryRaw(Prisma.sql`SELECT COUNT(*)::int AS n FROM ${Prisma.raw('"' + tabla.storage + '"')} ${whereSql}`),
       ]);
       logSistema && null; // (export/log aparte)
       return res.json({ data: rows.map((r) => ({ sys_id: r.id, ...r })), total: countRows[0].n, page, limit });
@@ -434,7 +441,8 @@ function aFilasPlano(tabla, registros) {
 }
 
 async function obtenerRegistrosParaExport(tabla, filtros) {
-  if (tabla.storage === 'materiales_registros') {
+  const fisicaExport = FISICAS[tabla.storage];
+  if (fisicaExport) {
     const where = {};
     for (const [k, v] of Object.entries(filtros)) {
       if (!v) continue;
@@ -446,8 +454,8 @@ async function obtenerRegistrosParaExport(tabla, filtros) {
       if (excluir) where.NOT = [...(where.NOT || []), { [k]: cond }];
       else where[k] = cond;
     }
-    const rows = await prisma.materialesRegistro.findMany({ where, take: 10000, orderBy: { noMateria: 'asc' } });
-    return rows.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? null])) }));
+    const rows = await prisma[fisicaExport.modelo].findMany({ where, take: 10000 });
+    return rows.map((r) => ({ id: r[fisicaExport.idCampo], ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? r.raw?.[c.clave] ?? null])) }));
   }
   const rows = await prisma.customRegistro.findMany({ where: { tablaId: tabla.id, eliminado: false }, take: 10000 });
   return rows.map((r) => ({ id: r.id, ...r.datos }));

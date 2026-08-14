@@ -381,9 +381,10 @@ function generarRespuestaDemo(mensaje, solicitudContext) {
 }
 
 // ══════════════════════════════════════════════════
-// POST /api/ia/asistente — Asistente IA de configuración (Concordia/Gemini)
+// POST /api/ia/config — Asistente IA de CONFIGURACIÓN (Concordia/Gemini)
+// Sabe cómo conectar módulos, crear tablas/forms/reglas/integraciones/APIs
 // ══════════════════════════════════════════════════
-router.post('/asistente', async (req, res) => {
+router.post('/config', async (req, res) => {
   try {
     const { mensaje, systemInstruction, contexto, history } = req.body;
     if (!mensaje) return res.status(400).json({ error: 'mensaje requerido' });

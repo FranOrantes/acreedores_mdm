@@ -954,6 +954,7 @@ model TablaCustom {
   menuIcono   String?  // ícono (default: icono de la tabla)
   menuPadre   String?  // agrupar bajo un menú existente (label) o nuevo grupo
   permisos    Json     @default("{\"leer\":true,\"crear\":true,\"actualizar\":true,\"eliminar\":true}")
+  configForm  Json?    // { clientScripts: [], uiActions: [] } — reglas independientes del formulario de la tabla
   orden       Int      @default(0)
   columnas    ColumnaCustom[]
   creadoEn    DateTime @default(now())

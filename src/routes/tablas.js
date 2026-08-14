@@ -121,11 +121,11 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:id/columnas', async (req, res) => {
   try {
-    const { clave, etiqueta, tipo, opciones, referencia, maxLength, defaultValue, display, requerido, orden } = req.body;
+    const { clave, etiqueta, tipo, opciones, referencia, filtroReferencia, maxLength, defaultValue, display, requerido, orden } = req.body;
     if (!clave || !etiqueta) return res.status(400).json({ error: 'clave y etiqueta son requeridos' });
     if (!CLAVE_OK.test(clave)) return res.status(400).json({ error: 'clave debe ser snake_case' });
     const data = await prisma.columnaCustom.create({
-      data: { tablaId: req.params.id, clave, etiqueta, tipo: tipo || 'string', opciones, referencia, maxLength, defaultValue, display: !!display, requerido: !!requerido, orden: orden ?? 0 },
+      data: { tablaId: req.params.id, clave, etiqueta, tipo: tipo || 'string', opciones, referencia, filtroReferencia, maxLength, defaultValue, display: !!display, requerido: !!requerido, orden: orden ?? 0 },
     });
     res.status(201).json(data);
   } catch (e) {
@@ -135,7 +135,7 @@ router.post('/:id/columnas', async (req, res) => {
 
 router.put('/:id/columnas/:colId', async (req, res) => {
   try {
-    const campos = ['clave', 'etiqueta', 'tipo', 'opciones', 'referencia', 'maxLength', 'defaultValue', 'display', 'requerido', 'orden', 'activo'];
+    const campos = ['clave', 'etiqueta', 'tipo', 'opciones', 'referencia', 'filtroReferencia', 'maxLength', 'defaultValue', 'display', 'requerido', 'orden', 'activo'];
     const data = {};
     campos.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
     const col = await prisma.columnaCustom.update({ where: { id: req.params.colId }, data });
@@ -194,6 +194,62 @@ router.get('/:id/preview', async (req, res) => {
       modulo: tabla.modulo,
       definicion: { pasos: [{ titulo: tabla.label, tipo: 'campos', layout }], campos, clientScripts: tabla.configForm?.clientScripts || [], uiActions: tabla.configForm?.uiActions || [] },
     });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/tablas/:id/referencias/:colId?buscar= — opciones para campos reference
+router.get('/:id/referencias/:colId', async (req, res) => {
+  try {
+    const col = await prisma.columnaCustom.findUnique({ where: { id: req.params.colId } });
+    if (!col || col.tablaId !== req.params.id) return res.status(404).json({ error: 'Columna no encontrada' });
+    if (col.tipo !== 'reference' || !col.referencia) return res.status(400).json({ error: 'La columna no es reference' });
+
+    const buscar = String(req.query.buscar || '');
+    const filtro = col.filtroReferencia || null;
+    const aplicaFiltro = (datos) => {
+      if (!filtro) return datos;
+      const lista = Array.isArray(filtro) ? filtro : [filtro];
+      return datos.filter((row) => lista.every((f) => {
+        const v = row[f.campo];
+        switch (f.op) {
+          case '!=': return v !== f.valor;
+          case 'contiene': return String(v ?? '').toLowerCase().includes(String(f.valor).toLowerCase());
+          case 'vacio': return v === null || v === undefined || v === '';
+          case 'no_vacio': return v !== null && v !== undefined && v !== '';
+          default: return v === f.valor;
+        }
+      }));
+    };
+
+    let opciones = [];
+    // Tabla custom por clave
+    const refCustom = await prisma.tablaCustom.findFirst({ where: { clave: col.referencia } });
+    if (refCustom) {
+      if (refCustom.storage === 'materiales_registros') {
+        const rows = await prisma.materialesRegistro.findMany({
+          where: buscar ? { OR: [{ nombre: { contains: buscar, mode: 'insensitive' } }, { noMateria: { contains: buscar } }, { eanPi: { contains: buscar } }] } : {},
+          take: 50, orderBy: { noMateria: 'asc' },
+        });
+        opciones = rows.map((r) => ({ id: r.sysId, label: `${r.noMateria} — ${r.nombre}`, estatus: r.estatus }));
+      } else {
+        const rows = await prisma.customRegistro.findMany({ where: { tablaId: refCustom.id, eliminado: false }, take: 500 });
+        const labelCol = refCustom.columnas?.find?.(() => true); // n/a
+        opciones = aplicaFiltro(rows.map((r) => ({ id: r.id, ...r.datos })))
+          .filter((r) => !buscar || JSON.stringify(r.datos || r).toLowerCase().includes(buscar.toLowerCase()))
+          .slice(0, 50)
+          .map((r) => ({ id: r.id, label: r.nombre || r.label || r.id.slice(0, 8) }));
+      }
+    } else {
+      // Legacy: modelo prisma por nombre técnico
+      const LEGACY = { solicitud: 'solicitud', usuario: 'usuario', grupo_aprobacion: 'grupoAprobacion', ubicacion: 'ubicacion', dominio: 'dominio' };
+      const modelo = LEGACY[col.referencia];
+      if (!modelo || !prisma[modelo]) return res.status(400).json({ error: `Referencia desconocida: ${col.referencia}` });
+      const rows = await prisma[modelo].findMany({ take: 50 });
+      opciones = aplicaFiltro(rows).map((r) => ({ id: r.id, label: r.nombre || r.folio || r.label || r.email || r.id.slice(0, 8), raw: { folio: r.folio, email: r.email } }));
+    }
+    res.json(opciones);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

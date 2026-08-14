@@ -88,6 +88,7 @@ function glideRecord(tabla) {
   const condiciones = [];
   let resultado = [];
   let idx = -1;
+  let tablaCustomActual = null; // para resolveRef
 
   const aplicarCond = (datos) => datos.filter((row) => condiciones.every(([campo, op, valor]) => {
     const v = row[campo];
@@ -122,6 +123,7 @@ function glideRecord(tabla) {
         // Tabla dinámica por clave o id
         const t = await prisma.tablaCustom.findFirst({ where: { OR: [{ clave: tabla }, { id: tabla }] } });
         if (!t) throw new Error(`Tabla no encontrada: ${tabla}`);
+        tablaCustomActual = t;
         const rows = await prisma.customRegistro.findMany({ where: { tablaId: t.id, eliminado: false }, take: 10000 });
         datos = rows.map((r) => ({ sys_id: r.id, ...r.datos }));
       }
@@ -150,6 +152,35 @@ function glideRecord(tabla) {
     getValue: (campo) => resultado[idx]?.[campo],
     rowCount: () => resultado.length,
     rows: () => resultado,
+    // Join estilo dot-walk: resuelve el registro referenciado por un campo reference del registro actual
+    resolveRef: async (campo) => {
+      const actual = resultado[idx];
+      if (!actual) return null;
+      const valorRef = actual[campo];
+      if (!valorRef) return null;
+      // De dónde referencia este campo
+      let refTabla = null;
+      if (tablaCustomActual) {
+        const col = await prisma.columnaCustom.findFirst({ where: { tablaId: tablaCustomActual.id, clave: campo } });
+        refTabla = col?.referencia || null;
+      }
+      if (refTabla) {
+        const t = await prisma.tablaCustom.findFirst({ where: { OR: [{ clave: refTabla }, { id: refTabla }] } });
+        if (t?.storage === 'materiales_registros') return await prisma.materialesRegistro.findUnique({ where: { sysId: String(valorRef) } });
+        if (t) {
+          const r = await prisma.customRegistro.findUnique({ where: { id: String(valorRef) } });
+          return r ? { sys_id: r.id, ...r.datos } : null;
+        }
+        // legacy
+        const LEGACY = { solicitud: 'solicitud', usuario: 'usuario', grupo_aprobacion: 'grupoAprobacion', ubicacion: 'ubicacion', dominio: 'dominio' };
+        if (LEGACY[refTabla] && prisma[LEGACY[refTabla]]) {
+          return await prisma[LEGACY[refTabla]].findUnique({ where: { id: String(valorRef) } });
+        }
+      }
+      // Sin metadata: intentar como id de registro custom directo
+      const r = await prisma.customRegistro.findUnique({ where: { id: String(valorRef) } });
+      return r ? { sys_id: r.id, ...r.datos } : null;
+    },
   };
   return gr;
 }

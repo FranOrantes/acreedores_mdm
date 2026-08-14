@@ -216,12 +216,12 @@ router.get('/:id/registros', async (req, res) => {
         if (v === '' || v === undefined || String(v).startsWith('!')) continue; // excluir se procesa aparte
         const col = tabla.columnas.find((c) => c.clave === k);
         if (!col) continue;
-        where[k] = ['integer', 'float'].includes(col.tipo) ? Number(v) : { contains: String(v), mode: 'insensitive' };
+        where[k] = ['integer', 'float'].includes(col.tipo) ? Number(v) : (col.tipo === 'choice' ? String(v) : { contains: String(v), mode: 'insensitive' });
       }
       for (const [k, v] of Object.entries(filtros)) {
         if (String(v).startsWith('!')) {
           const col = tabla.columnas.find((c) => c.clave === k);
-          if (col) where[k] = ['integer', 'float'].includes(col.tipo) ? { not: Number(String(v).slice(1)) } : { not: { contains: String(v).slice(1), mode: 'insensitive' } };
+          if (col) where[k] = ['integer', 'float'].includes(col.tipo) ? { not: Number(String(v).slice(1)) } : (col.tipo === 'choice' ? { not: String(v).slice(1) } : { not: { contains: String(v).slice(1), mode: 'insensitive' } });
         }
       }
       const [data, total] = await Promise.all([
@@ -329,7 +329,7 @@ async function obtenerRegistrosParaExport(tabla, filtros) {
       const valor = excluir ? String(v).slice(1) : String(v);
       const col = tabla.columnas.find((c) => c.clave === k);
       if (!col) continue;
-      const cond = ['integer', 'float'].includes(col.tipo) ? Number(valor) : { contains: valor, mode: 'insensitive' };
+      const cond = ['integer', 'float'].includes(col.tipo) ? Number(valor) : (col.tipo === 'choice' ? valor : { contains: valor, mode: 'insensitive' });
       where[k] = excluir ? { not: cond } : cond;
     }
     const rows = await prisma.materialesRegistro.findMany({ where, take: 10000, orderBy: { noMateria: 'asc' } });

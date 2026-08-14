@@ -30,6 +30,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/tablas/menu?modulo= — tablas con acceso en menú para el sidebar
+router.get('/menu', async (req, res) => {
+  try {
+    const { modulo } = req.query;
+    const data = await prisma.tablaCustom.findMany({
+      where: { menuVisible: true, activa: true, ...(modulo ? { modulo: { in: [modulo, 'todos'] } } : {}) },
+      select: { id: true, clave: true, label: true, modulo: true, menuLabel: true, menuIcono: true, menuPadre: true, icono: true },
+      orderBy: { orden: 'asc' },
+    });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const data = await prisma.tablaCustom.findUnique({
@@ -83,20 +98,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// GET /api/tablas/menu?modulo= — tablas con acceso en menú para el sidebar
-router.get('/menu', async (req, res) => {
-  try {
-    const { modulo } = req.query;
-    const data = await prisma.tablaCustom.findMany({
-      where: { menuVisible: true, activa: true, ...(modulo ? { modulo: { in: [modulo, 'todos'] } } : {}) },
-      select: { id: true, clave: true, label: true, modulo: true, menuLabel: true, menuIcono: true, menuPadre: true, icono: true },
-      orderBy: { orden: 'asc' },
-    });
-    res.json(data);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
 
 // ── Columnas (dictionary entries) ──
 

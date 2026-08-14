@@ -11,10 +11,6 @@ const MODULO = 'materiales';
 // Registro de claves conocidas: default, tipo, grupo, descripción, env de bootstrap
 const DEFAULTS = [
   // Integraciones
-  { clave: 'integracion.rixie.url', tipo: 'url', grupo: 'Integraciones', descripcion: 'Endpoint de validación de imágenes (Concordia / REST Message "MDM Imagen Rixie")', env: 'RIXIE_VALIDATE_URL', default: 'https://concordia.nadro.dev/api/validate' },
-  { clave: 'integracion.rixie.api_key', tipo: 'secret', grupo: 'Integraciones', sensible: true, descripcion: 'Header X-API-Key para Concordia', env: 'RIXIE_API_KEY', default: '' },
-  { clave: 'integracion.rixie.position', tipo: 'string', grupo: 'Integraciones', descripcion: 'Valor de "position" enviado en el body de validación', default: 'frontal' },
-  { clave: 'integracion.rixie.timeout_ms', tipo: 'number', grupo: 'Integraciones', descripcion: 'Timeout de la llamada de validación de imagen (ms)', default: 30000 },
   // Validaciones Excel
   { clave: 'validacion.excel.ean_min_digitos', tipo: 'number', grupo: 'Validaciones', descripcion: 'EAN: dígitos mínimos (SN: 3)', default: 3 },
   { clave: 'validacion.excel.ean_max_digitos', tipo: 'number', grupo: 'Validaciones', descripcion: 'EAN: dígitos máximos (SN: 16)', default: 16 },

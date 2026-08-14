@@ -1,17 +1,15 @@
 const { Router } = require('express');
-const axios = require('axios');
 const prisma = require('../../lib/prisma');
-const config = require('./configService');
-const { callScriptInclude } = require('../../lib/scriptEngine');
+const { ejecutarGuardado } = require('../integraciones');
 
 const router = Router();
 
-// Réplica de la integración "MDM Imagen Rixie" de ServiceNow.
-// URL, API key, position y timeout: módulo Configuración.
-// Interpretación de la respuesta: Script Include "MDM_Rixie".interpretar.
+// Validación de imágenes vía integración "Rixie — Validar Imagen".
+// Toda la lógica (URL, X-API-Key, body, interpretación de respuesta) vive en el
+// módulo Integraciones → colección "Materiales" (editable sin tocar código).
+const INTEGRACION_RIXIE = 'Rixie — Validar Imagen';
 
 // POST /api/materiales/validar-imagen { adjuntoId }
-// Réplica de jj_MDM_Utils_Client.rixie_Imagen
 router.post('/validar-imagen', async (req, res) => {
   try {
     const { adjuntoId } = req.body;
@@ -23,32 +21,20 @@ router.post('/validar-imagen', async (req, res) => {
       return res.json({ resultado: 'Error', detalles: [`No se encontró el adjunto: ${adjuntoId}`] });
     }
 
-    let recordData;
     try {
-      const [url, apiKey, position, timeout] = await Promise.all([
-        config.get('integracion.rixie.url'),
-        config.get('integracion.rixie.api_key'),
-        config.get('integracion.rixie.position'),
-        config.get('integracion.rixie.timeout_ms'),
-      ]);
-      // validateStatus: como el RESTMessageV2 de SN, leemos el body aunque el status no sea 2xx
-      const { data } = await axios.post(
-        url,
-        { image: doc.contenidoBase64, mimetype: doc.mimeType, filename: doc.nombreArchivo, position: position || 'frontal' },
-        {
-          headers: { 'Content-Type': 'application/json', ...(apiKey ? { 'X-API-Key': apiKey } : {}) },
-          timeout: Number(timeout) || 30000,
-          validateStatus: () => true,
-        }
-      );
-      recordData = data;
+      const resp = await ejecutarGuardado(INTEGRACION_RIXIE, {
+        image: doc.contenidoBase64,
+        mimetype: doc.mimeType,
+        filename: doc.nombreArchivo,
+      });
+      // body ya viene transformado por el scriptRespuesta de la integración
+      const body = typeof resp.body === 'object' && resp.body !== null && 'resultado' in resp.body
+        ? resp.body
+        : { resultado: 'Error', detalles: ['Respuesta inesperada del servicio'] };
+      return res.json({ ...body, crudo: resp.body });
     } catch (err) {
       return res.json({ resultado: 'Error', detalles: [`Ocurrió un error al validar la imagen: ${err.message}`] });
     }
-
-    // Interpretación vía Script Include MDM_Rixie (editable sin tocar código)
-    const interpretacion = await callScriptInclude('MDM_Rixie', 'interpretar', recordData);
-    return res.json({ ...interpretacion, crudo: recordData });
   } catch (err) {
     console.error('[Materiales] Error validando imagen:', err);
     res.status(500).json({ error: 'Error al validar imagen' });

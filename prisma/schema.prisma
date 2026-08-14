@@ -973,7 +973,8 @@ model ColumnaCustom {
   etiqueta     String   // label visible
   tipo         String   @default("string") // string|text|integer|float|boolean|choice|date|datetime|reference|attachment
   opciones     Json?    // choices: ["a","b"]
-  referencia   String?  // tipo reference: tabla/entidad referenciada
+  referencia   String?  // tipo reference: tabla/entidad referenciada (clave custom o legacy)
+  filtroReferencia Json? // filtro sobre la tabla referenciada: { campo, op, valor } o [{...}]
   maxLength    Int?
   defaultValue String?
   display      Boolean  @default(false) // aparece en vista lista

@@ -121,17 +121,21 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
     ]);
     // Reglas de columnas dinámicas: las define el builder (campo carga_excel.excelColumnas);
     // si no hay, se usa el set default de ServiceNow (COLUMNAS)
-    const columnasActivas = formulario?.definicion?.campos?.carga_excel?.excelColumnas || COLUMNAS;
+    const campoExcel = formulario?.definicion?.campos?.carga_excel;
+    const columnasActivas = campoExcel?.excelColumnas || COLUMNAS;
+    // Hojas aceptadas + fila de inicio — configurables desde el builder (multi-hoja soportado)
+    const hojasAceptadas = campoExcel?.excelHojas || ['Info - Correcto', 'Materiales'];
+    const filaInicio = Number(campoExcel?.excelFilaInicio) || 5;
     const { esVacio, esNumero, esEntero, eanValido, esFecha8 } = MDM_Excel;
     const min = eanMin || 3;
     const max = eanMax || 16;
 
     const wb = XLSX.read(req.file.buffer, { type: 'buffer' });
-    // Buscar la hoja de datos tolerando variantes (espacios, guiones, acentos, mayúsculas).
-    // Si no existe "Info - Correcto", se usa la primera hoja con datos.
+    // Hoja de datos: cualquiera de las configuradas (tolerante a acentos/espacios/mayúsculas); si ninguna, la primera.
     const normaliza = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase();
-    const hojaDatos = wb.SheetNames.find((n) => normaliza(n) === 'infocorrecto')
-      || wb.SheetNames.find((n) => normaliza(n).startsWith('info'))
+    const aceptadasNorm = hojasAceptadas.map(normaliza);
+    const hojaDatos = wb.SheetNames.find((n) => aceptadasNorm.includes(normaliza(n)))
+      || wb.SheetNames.find((n) => aceptadasNorm.some((a) => normaliza(n).startsWith(a) || a.startsWith(normaliza(n))))
       || wb.SheetNames[0];
     const ws = wb.Sheets[hojaDatos];
     if (!ws) {
@@ -143,9 +147,9 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
       });
     }
 
-    // Datos desde la fila 5 (idx 4) — filas 1-4 son encabezados/tipos
-    const filas = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }).slice(4)
-      .map((row, i) => ({ row, linea: i + 5 }))
+    // Datos desde la fila configurada (default 5) — las anteriores son encabezados/tipos
+    const filas = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }).slice(filaInicio - 1)
+      .map((row, i) => ({ row, linea: i + filaInicio }))
       .filter(({ row }) => row.some((c) => !esVacio(c)));
 
     if (filas.length === 0) {

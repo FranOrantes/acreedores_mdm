@@ -15,6 +15,16 @@ const router = express.Router();
 
 const CLAVE_OK = /^[a-z][a-zA-Z0-9_]*$/; // snake_case o camelCase (mapeo de columnas físicas existentes)
 
+const jwt = require('jsonwebtoken');
+function usuarioSesion(req) {
+  try {
+    const token = req.cookies?.auth_token;
+    if (!token) return null;
+    const d = jwt.verify(token, process.env.JWT_SECRET);
+    return { id: d.userId, email: d.email, nombre: d.nombre };
+  } catch { return null; }
+}
+
 // ── Tablas ──
 
 // GET /api/tablas?modulo=
@@ -287,8 +297,9 @@ router.post('/:id/registros', async (req, res) => {
         return res.status(400).json({ error: `${col.etiqueta} es requerido` });
       }
     }
-    const data = await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
-    logSistema('tabla_dinamica', `Registro creado en ${tabla.label}`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
+    const usr = usuarioSesion(req);
+    const data = await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos, creadoPor: usr?.id || 'sistema', actualizadoPor: usr?.id || 'sistema' } });
+    logSistema('tabla_dinamica', `Registro creado en ${tabla.label}`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, usuarioId: usr?.id, usuarioEmail: usr?.email, usuarioNombre: usr?.nombre, ...reqInfo(req) });
     res.status(201).json({ id: data.id, ...data.datos });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -310,9 +321,11 @@ router.put('/:id/registros/:regId', async (req, res) => {
       }
     }
     const datos = { ...reg.datos, ...entrantes };
-    const data = await prisma.customRegistro.update({ where: { id: reg.id }, data: { datos } });
+    const data = await prisma.customRegistro.update({ where: { id: reg.id }, data: { datos, actualizadoPor: usr?.id || 'sistema' } });
+    const usr = usuarioSesion(req);
     if (cambios.length) {
       logSistema('auditoria', `Edición de registro en ${tabla?.label || req.params.id}`, {
+        usuarioId: usr?.id, usuarioEmail: usr?.email, usuarioNombre: usr?.nombre,
         detalle: `${cambios.length} campo(s) modificados`,
         metadata: { cambios, registroId: reg.id },
         entidadTipo: 'tabla', entidadId: req.params.id,
@@ -333,7 +346,8 @@ router.delete('/:id/registros/:regId', async (req, res) => {
       where: { id: req.params.regId },
       data: { eliminado: true, eliminadoEn: new Date() },
     });
-    logSistema('tabla_dinamica', `Registro eliminado (lógico)`, { entidadTipo: 'tabla', entidadId: req.params.id, modulo: 'todos', ...reqInfo(req) });
+    const usrDel = usuarioSesion(req);
+    logSistema('tabla_dinamica', `Registro eliminado (lógico)`, { entidadTipo: 'tabla', entidadId: req.params.id, modulo: 'todos', usuarioId: usrDel?.id, usuarioEmail: usrDel?.email, usuarioNombre: usrDel?.nombre, ...reqInfo(req) });
     res.json({ ok: true, eliminado: true });
   } catch (e) {
     res.status(400).json({ error: e.message });

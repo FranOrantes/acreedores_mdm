@@ -153,10 +153,12 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
     }
 
     const errores = [];
+    const lineas = []; // desglose por línea (estilo SN: cada fila con sus errores)
     const eansVistos = { PI: new Map(), EMP: new Map(), SUB: new Map() };
     const registros = [];
 
     for (const { row, linea } of filas) {
+      const erroresAntes = errores.length;
       const datos = {};
       for (const spec of columnasActivas) {
         const valor = norm(row[spec.col]);
@@ -223,6 +225,7 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
         }
       }
 
+      lineas.push({ linea, errores: errores.slice(erroresAntes), nombre: datos.nombre || null });
       registros.push({
         vs_nombre_completo_del_material: datos.nombre,
         vs_unidad_del_producto_id_pi: datos.pi_ean,
@@ -241,6 +244,7 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
         ? `Archivo valido. ${registros.length} material(es) listos para capturar archivos.`
         : errores.join('\n'),
       registros,
+      lineas,
       noRegistros: registros.length,
     });
   } catch (err) {

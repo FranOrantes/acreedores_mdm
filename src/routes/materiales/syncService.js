@@ -36,7 +36,7 @@ function mapear(r) {
     eanPi: u(r.u_mt_pi_ean) || null,
     razonSocial: u(r.u_lab_razon_social) || null,
     sysUpdatedOn: new Date(u(r.sys_updated_on)),
-    raw: r,
+    raw: aplanar(r), // plano: clave → display value
   };
 }
 
@@ -45,12 +45,23 @@ async function extraerPagina(cred, query, offset) {
     sysparm_query: query + '^ORDERBYsys_id',
     sysparm_limit: String(cred.pageSize),
     sysparm_offset: String(offset),
+    sysparm_display_value: 'all', // value + display_value por campo (referencias legibles)
   });
   const resp = await fetch(`${cred.baseUrl}/api/now/table/u_mdm_registros?${params}`, {
     headers: { Accept: 'application/json', Authorization: cred.auth },
   });
   if (!resp.ok) throw new Error(`SN HTTP ${resp.status}: ${(await resp.text()).slice(0, 200)}`);
   return (await resp.json()).result || [];
+}
+
+// Aplana el registro SN: raw[clave] = display_value || value (texto legible para filtros/lista)
+function aplanar(r) {
+  const plano = {};
+  for (const [k, v] of Object.entries(r)) {
+    if (v && typeof v === 'object' && !Array.isArray(v)) plano[k] = v.display_value ?? v.value ?? '';
+    else plano[k] = v ?? '';
+  }
+  return plano;
 }
 
 async function runSync(tipo) {

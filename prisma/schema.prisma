@@ -842,3 +842,35 @@ model BusinessRule {
   @@index([entidad, evento])
   @@index([modulo])
 }
+
+// --- Administrador de Integraciones (estilo Postman) ---
+
+model IntegracionColeccion {
+  id            String   @id @default(uuid())
+  nombre        String
+  descripcion   String?
+  variables     Json     @default("{}")  // {"baseUrl":"https://...","token":"xxx"}
+  orden         Int      @default(0)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+  requests      IntegracionRequest[]
+}
+
+model IntegracionRequest {
+  id            String   @id @default(uuid())
+  coleccionId   String
+  coleccion     IntegracionColeccion @relation(fields: [coleccionId], references: [id], onDelete: Cascade)
+  nombre        String
+  metodo        String   @default("GET")   // GET | POST | PUT | PATCH | DELETE
+  url           String   @default("")
+  headers       Json     @default("[]")    // [{key,value,activo}]
+  body          String?                    // raw body (JSON string, etc.)
+  bodyTipo      String   @default("json")  // json | form | raw | none
+  authTipo      String   @default("none")  // none | bearer | basic
+  authConfig    Json?                      // {"token":"..."} o {"user":"...","pass":"..."}
+  orden         Int      @default(0)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([coleccionId])
+}

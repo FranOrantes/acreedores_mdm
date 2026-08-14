@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden', 'storage'];
+    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden', 'storage', 'menuVisible', 'menuLabel', 'menuIcono', 'menuPadre'];
     const data = {};
     campos.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
     const tabla = await prisma.tablaCustom.update({ where: { id: req.params.id }, data });

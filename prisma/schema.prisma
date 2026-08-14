@@ -849,6 +849,7 @@ model IntegracionColeccion {
   id            String   @id @default(uuid())
   nombre        String
   descripcion   String?
+  modulo        String   @default("todos") // clasificación: "materiales" | "acreedores" | ... | "todos"
   variables     Json     @default("{}")  // {"baseUrl":"https://...","token":"xxx"}
   orden         Int      @default(0)
   creadoEn      DateTime @default(now())
@@ -868,6 +869,7 @@ model IntegracionRequest {
   bodyTipo      String   @default("json")  // json | form | raw | none
   authTipo      String   @default("none")  // none | bearer | basic
   authConfig    Json?                      // {"token":"..."} o {"user":"...","pass":"..."}
+  scriptRespuesta String?  @db.Text        // JS post-respuesta (contexto: status, body, headers, callScriptInclude) → return valor transformado
   orden         Int      @default(0)
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt

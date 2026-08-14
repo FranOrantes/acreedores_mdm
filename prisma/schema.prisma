@@ -897,3 +897,39 @@ model Formulario {
   @@unique([clave, modulo])
   @@index([modulo])
 }
+
+// --- Catálogo de materiales sincronizado desde ServiceNow (u_mdm_registros) ---
+model MaterialesRegistro {
+  sysId          String   @id // sys_id de ServiceNow
+  noMateria      String?  // u_mt_no_materia (número de material)
+  nombre         String?  // u_mt_nombre
+  estatus        String?  // u_mt_estatus (Activo/Inactivo)
+  tipoSolicitud  String?  // u_mt_tipo_de_solicitud
+  eanPi          String?  // u_mt_pi_ean
+  razonSocial    String?  // u_lab_razon_social
+  sysUpdatedOn   DateTime // sys_updated_on (para delta sync)
+  raw            Json     // registro completo (293 campos)
+
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+
+  @@map("materiales_registros")
+  @@index([noMateria])
+  @@index([eanPi])
+  @@index([sysUpdatedOn])
+  @@index([estatus])
+}
+
+// Bitácora de corridas de sincronización
+model MaterialesSyncLog {
+  id         String    @id @default(uuid())
+  tipo       String    // "full" | "delta"
+  estado     String    @default("corriendo") // corriendo | ok | error
+  registros  Int       @default(0)
+  error      String?   @db.Text
+  inicio     DateTime  @default(now())
+  fin        DateTime?
+
+  @@map("materiales_sync_log")
+  @@index([inicio])
+}

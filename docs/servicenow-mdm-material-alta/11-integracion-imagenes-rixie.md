@@ -59,3 +59,16 @@ Verificado en vivo (2026-08-13): la API valida **7 checks** (Formato, Extensión
 
 - Backend: `POST /api/materiales/validar-imagen` (`src/routes/materiales/validarImagen.js`) — recibe el id del adjunto (temporal o definitivo), lo reenvía a Concordia con el mismo payload y devuelve `{ resultado, detalles }`.
 - Frontend: `AdjuntoInput` valida automáticamente cada imagen (PI/EMP/SUB) al subirla y muestra ✓ o los requisitos fallidos.
+
+## Reglas de negocio del portal (scriptRespuesta de la integración, 2026-08-14)
+
+Sobre la respuesta técnica de Concordia, el portal aplica (editables en Integraciones → Rixie → scriptRespuesta):
+
+| Regla | Detalle |
+|---|---|
+| **Fondo** | Concordia exige 90% bordes blancos; el negocio acepta **≥ 80%** (sombras/color con fondo mayormente blanco OK) |
+| **Formato** | Solo **JPG/JPEG** (PNG y demás → Error aunque Concordia los acepte) |
+| **Tamaño** | Máx **256 KB** |
+| **Dimensiones** | Deben ser **cuadradas** (ancho = alto) |
+
+Verificado con el pack de pruebas (Excel Alta - Imagenes.rar): **14/14 casos** coinciden con lo esperado (v01-v13).

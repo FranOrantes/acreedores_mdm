@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
       select: { id: true, clave: true, modulo: true, nombre: true, descripcion: true, icono: true, tipo: true, orden: true, activo: true, actualizadoEn: true },
       orderBy: [{ modulo: 'asc' }, { orden: 'asc' }],
     });
-    res.json(data);
+    res.json(data.map((f) => ({ sys_id: f.id, ...f }))); // sys_id = id interno de la plataforma
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
   try {
     const data = await prisma.formulario.findUnique({ where: { id: req.params.id } });
     if (!data) return res.status(404).json({ error: 'No encontrado' });
-    res.json(data);
+    res.json({ sys_id: data.id, ...data });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -43,7 +43,7 @@ router.get('/clave/:clave', async (req, res) => {
       orderBy: { modulo: 'desc' }, // el específico del módulo gana sobre 'todos'
     });
     if (!data) return res.status(404).json({ error: 'No encontrado' });
-    res.json(data);
+    res.json({ sys_id: data.id, ...data });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

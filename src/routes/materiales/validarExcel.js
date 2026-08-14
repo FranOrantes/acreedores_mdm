@@ -3,7 +3,7 @@ const multer = require('multer');
 const XLSX = require('xlsx');
 const config = require('./configService');
 const prisma = require('../../lib/prisma');
-const { cargarInclude } = require('../../lib/scriptEngine');
+const { cargarInclude, runScript, callScriptInclude } = require('../../lib/scriptEngine');
 const catalogosSN = require('./data/catalogosSN.json');
 const jerarquia = require('./data/jerarquia.json');
 
@@ -189,6 +189,25 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
         }
         if (spec.ref && !existeOpcion(spec.ref, valor)) {
           errores.push(`${celda} La opcion NO fue encontrado en el listado.`);
+        }
+
+        // Script de validación por columna (estilo SN: validarUnicoEAN, MKT_valida_existencia…)
+        // return string = mensaje de error · return false = "Valor invalido" · true/undefined = OK
+        if (spec.script) {
+          try {
+            const { resultado } = await runScript(spec.script, {
+              valor, fila: row, datos, linea, celda,
+              catalogos: catalogosSN,
+              jerarquia,
+              prisma,
+              fetch,
+              callScriptInclude,
+            });
+            if (typeof resultado === 'string' && resultado) errores.push(`${celda} ${resultado}`);
+            else if (resultado === false) errores.push(`${celda} Valor invalido (script).`);
+          } catch (err) {
+            errores.push(`${celda} Error en script de validación: ${err.message}`);
+          }
         }
       }
 

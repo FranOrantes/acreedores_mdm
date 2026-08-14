@@ -62,7 +62,7 @@ router.get('/all', async (req, res) => {
 // POST /api/reglas-formulario — crear regla
 router.post('/', async (req, res) => {
   try {
-    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden } = req.body;
+    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden, script } = req.body;
     if (!campo || !condiciones) {
       return res.status(400).json({ error: 'campo y condiciones son requeridos' });
     }
@@ -78,6 +78,7 @@ router.post('/', async (req, res) => {
         formulario: formulario || 'alta',
         modulo: modulo || 'acreedores',
         orden: orden || 0,
+        script: script || null,
         ...(req.dominioId && { dominioId: req.dominioId }),
       },
     });
@@ -91,7 +92,7 @@ router.post('/', async (req, res) => {
 // PATCH /api/reglas-formulario/:id — actualizar regla
 router.patch('/:id', async (req, res) => {
   try {
-    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden, activo } = req.body;
+    const { campo, condiciones, logica, accionVisible, accionObligatorio, accionReadOnly, reverseIfFalse, formulario, modulo, orden, activo, script } = req.body;
     const updateData = {};
     if (campo !== undefined) updateData.campo = campo;
     if (condiciones !== undefined) updateData.condiciones = condiciones;
@@ -104,6 +105,7 @@ router.patch('/:id', async (req, res) => {
     if (modulo !== undefined) updateData.modulo = modulo;
     if (orden !== undefined) updateData.orden = orden;
     if (activo !== undefined) updateData.activo = activo;
+    if (script !== undefined) updateData.script = script;
 
     const data = await prisma.reglaFormularioCampo.update({
       where: { id: req.params.id },

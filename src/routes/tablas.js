@@ -93,7 +93,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden', 'storage', 'menuVisible', 'menuLabel', 'menuIcono', 'menuPadre'];
+    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden', 'storage', 'menuVisible', 'menuLabel', 'menuIcono', 'menuPadre', 'configForm'];
     const data = {};
     campos.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
     const tabla = await prisma.tablaCustom.update({ where: { id: req.params.id }, data });
@@ -192,7 +192,7 @@ router.get('/:id/preview', async (req, res) => {
       nombre: `Preview: ${tabla.label}`,
       tipo: 'simple',
       modulo: tabla.modulo,
-      definicion: { pasos: [{ titulo: tabla.label, tipo: 'campos', layout }], campos, clientScripts: [], uiActions: [] },
+      definicion: { pasos: [{ titulo: tabla.label, tipo: 'campos', layout }], campos, clientScripts: tabla.configForm?.clientScripts || [], uiActions: tabla.configForm?.uiActions || [] },
     });
   } catch (e) {
     res.status(500).json({ error: e.message });

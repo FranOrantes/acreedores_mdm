@@ -94,33 +94,40 @@ async function runSync(tipo) {
       if (rows.length === 0) break;
       corriendo.pagina = offset / cred.pageSize + 1;
 
-      // Upsert en lote (1 query por página — ON CONFLICT)
-      const mapeados = rows.map(mapear);
-      await prisma.$executeRaw`
-        INSERT INTO "materiales_registros" ("sysId", "noMateria", "nombre", "estatus", "tipoSolicitud", "eanPi", "razonSocial", "sysUpdatedOn", "raw", "actualizadoEn")
-        SELECT * FROM UNNEST(
-          ${mapeados.map((m) => m.sysId)}::text[],
-          ${mapeados.map((m) => m.noMateria)}::text[],
-          ${mapeados.map((m) => m.nombre)}::text[],
-          ${mapeados.map((m) => m.estatus)}::text[],
-          ${mapeados.map((m) => m.tipoSolicitud)}::text[],
-          ${mapeados.map((m) => m.eanPi)}::text[],
-          ${mapeados.map((m) => m.razonSocial)}::text[],
-          ${mapeados.map((m) => m.sysUpdatedOn)}::timestamp[],
-          ${mapeados.map((m) => JSON.stringify(m.raw))}::jsonb[],
-          ${mapeados.map(() => new Date())}::timestamp[]
-        )
-        ON CONFLICT ("sysId") DO UPDATE SET
-          "noMateria" = EXCLUDED."noMateria",
-          "nombre" = EXCLUDED."nombre",
-          "estatus" = EXCLUDED."estatus",
-          "tipoSolicitud" = EXCLUDED."tipoSolicitud",
-          "eanPi" = EXCLUDED."eanPi",
-          "razonSocial" = EXCLUDED."razonSocial",
-          "sysUpdatedOn" = EXCLUDED."sysUpdatedOn",
-          "raw" = EXCLUDED."raw",
-          "actualizadoEn" = EXCLUDED."actualizadoEn"
-      `
+      // Upsert en lote (1 query por página — jsonb_populate_recordset evita el bug binario de UNNEST+jsonb en Prisma)
+      const ahora = new Date().toISOString();
+      const lote = rows.map((r) => {
+        const m = mapear(r);
+        return {
+          sysId: m.sysId,
+          noMateria: m.noMateria,
+          nombre: m.nombre,
+          estatus: m.estatus,
+          tipoSolicitud: m.tipoSolicitud,
+          eanPi: m.eanPi,
+          razonSocial: m.razonSocial,
+          sysUpdatedOn: m.sysUpdatedOn instanceof Date && !isNaN(m.sysUpdatedOn) ? m.sysUpdatedOn.toISOString() : ahora,
+          raw: m.raw,
+          creadoEn: ahora,
+          actualizadoEn: ahora,
+        };
+      }).filter((m) => m.sysId);
+      if (lote.length) {
+        await prisma.$executeRaw`
+          INSERT INTO "materiales_registros" ("sysId", "noMateria", "nombre", "estatus", "tipoSolicitud", "eanPi", "razonSocial", "sysUpdatedOn", "raw", "creadoEn", "actualizadoEn")
+          SELECT * FROM jsonb_populate_recordset(null::"materiales_registros", ${JSON.stringify(lote)}::jsonb)
+          ON CONFLICT ("sysId") DO UPDATE SET
+            "noMateria" = EXCLUDED."noMateria",
+            "nombre" = EXCLUDED."nombre",
+            "estatus" = EXCLUDED."estatus",
+            "tipoSolicitud" = EXCLUDED."tipoSolicitud",
+            "eanPi" = EXCLUDED."eanPi",
+            "razonSocial" = EXCLUDED."razonSocial",
+            "sysUpdatedOn" = EXCLUDED."sysUpdatedOn",
+            "raw" = EXCLUDED."raw",
+            "actualizadoEn" = EXCLUDED."actualizadoEn"
+        `;
+      }
       total += rows.length;
       await prisma.materialesSyncLog.update({ where: { id: log.id }, data: { registros: total } });
       if (rows.length < cred.pageSize) break;

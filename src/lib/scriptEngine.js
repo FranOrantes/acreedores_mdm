@@ -109,8 +109,11 @@ function glideRecord(tabla) {
     query: async () => {
       let datos = [];
       if (tabla === 'materiales_registros') {
-        const rows = await prisma.materialesRegistro.findMany({ take: 50000 });
-        datos = rows.map((r) => ({ sys_id: r.sysId, ...r.raw ? {} : {}, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== 'raw')) }));
+        const rows = await prisma.materialesRegistro.findMany({
+          take: 50000,
+          select: { sysId: true, noMateria: true, nombre: true, estatus: true, tipoSolicitud: true, eanPi: true, razonSocial: true, sysUpdatedOn: true },
+        });
+        datos = rows.map((r) => ({ sys_id: r.sysId, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== 'sysId')) }));
       } else if (LEGACY_MAP[tabla] && prisma[LEGACY_MAP[tabla]]) {
         const rows = await prisma[LEGACY_MAP[tabla]].findMany({ take: 50000 });
         datos = rows.map((r) => ({ sys_id: r.id, ...r }));

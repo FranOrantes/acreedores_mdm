@@ -167,7 +167,7 @@ router.get('/:id/preview', async (req, res) => {
     const TIPO_A_CAMPO = {
       string: 'texto', text: 'textarea', integer: 'numerico', float: 'flotante',
       boolean: 'booleano', choice: 'choices', date: 'fecha', datetime: 'fecha',
-      attachment: 'attachment', reference: 'texto',
+      attachment: 'attachment', reference: 'reference',
     };
     const campos = {};
     const claves = [];
@@ -179,6 +179,7 @@ router.get('/:id/preview', async (req, res) => {
         requerido: col.requerido,
         opciones: Array.isArray(col.opciones) ? col.opciones.join(',') : '',
         placeholder: col.defaultValue || '',
+        columnaId: col.id, // para campos reference (dropdown con búsqueda)
       };
       claves.push(col.clave);
     }

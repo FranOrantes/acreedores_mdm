@@ -1,5 +1,9 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
+const XLSX = require('xlsx');
+const PDFDocument = require('pdfkit');
+const { XMLParser, XMLBuilder } = require('fast-xml-parser');
+const { logSistema, reqInfo } = require('../lib/logger');
 
 const router = express.Router();
 
@@ -63,10 +67,14 @@ router.post('/', async (req, res) => {
     const { clave, label, modulo, icono, descripcion, autoNumber, permisos } = req.body;
     if (!clave || !label) return res.status(400).json({ error: 'clave y label son requeridos' });
     if (!CLAVE_OK.test(clave)) return res.status(400).json({ error: 'clave debe ser snake_case (a-z, 0-9, _)' });
+    // Auto-roles estilo SN: <clave_tecnica>.leer / .escribir / .eliminar (solo deletes lógicos)
+    const rolesAuto = { leer: `${clave}.leer`, escribir: `${clave}.escribir`, eliminar: `${clave}.eliminar` };
+    const permisosFinal = { ...(permisos || {}), rolesAuto };
     const data = await prisma.tablaCustom.create({
-      data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos },
+      data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos: permisosFinal },
       include: { columnas: true },
     });
+    logSistema('tabla_dinamica', `Tabla creada: ${label} (${clave})`, { detalle: `Módulo: ${modulo || 'todos'} · Roles auto: ${rolesAuto.leer}, ${rolesAuto.escribir}, ${rolesAuto.eliminar}`, ...reqInfo(req) });
     res.status(201).json(data);
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -196,34 +204,53 @@ router.get('/:id/registros', async (req, res) => {
     const limit = Math.min(Number(req.query.limit) || 50, 200);
     let filtros = {};
     try { filtros = JSON.parse(req.query.filtros || '{}'); } catch { filtros = {}; }
+    // ordenar=clave:asc|desc · filtros con operador "!valor" = excluir (filter out)
+    const ordenar = String(req.query.ordenar || '');
+    const [ordCampo, ordDir] = ordenar.split(':');
+    const ordenValido = tabla.columnas.some((c) => c.clave === ordCampo) ? { [ordCampo]: ordDir === 'desc' ? 'desc' : 'asc' } : null;
 
     // Tabla física existente (materiales_registros)
     if (tabla.storage === 'materiales_registros') {
       const where = {};
       for (const [k, v] of Object.entries(filtros)) {
-        if (v === '' || v === undefined) continue;
+        if (v === '' || v === undefined || String(v).startsWith('!')) continue; // excluir se procesa aparte
         const col = tabla.columnas.find((c) => c.clave === k);
         if (!col) continue;
         where[k] = ['integer', 'float'].includes(col.tipo) ? Number(v) : { contains: String(v), mode: 'insensitive' };
       }
+      for (const [k, v] of Object.entries(filtros)) {
+        if (String(v).startsWith('!')) {
+          const col = tabla.columnas.find((c) => c.clave === k);
+          if (col) where[k] = ['integer', 'float'].includes(col.tipo) ? { not: Number(String(v).slice(1)) } : { not: { contains: String(v).slice(1), mode: 'insensitive' } };
+        }
+      }
       const [data, total] = await Promise.all([
-        prisma.materialesRegistro.findMany({ where, orderBy: { noMateria: 'asc' }, skip: (page - 1) * limit, take: limit }),
+        prisma.materialesRegistro.findMany({ where, orderBy: ordenValido || { noMateria: 'asc' }, skip: (page - 1) * limit, take: limit }),
         prisma.materialesRegistro.count({ where }),
       ]);
       return res.json({ data: data.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? null])) })), total, page, limit });
     }
 
-    // Storage JSON: filtrar con JSONB
-    const where = { tablaId: tabla.id };
+    // Storage JSON: filtrar con JSONB (sin eliminados; "!valor" = excluir)
+    const where = { tablaId: tabla.id, eliminado: false };
     for (const [k, v] of Object.entries(filtros)) {
       if (v === '' || v === undefined) continue;
-      where.datos = { path: [k], string_contains: String(v) };
+      if (String(v).startsWith('!')) where.AND = [...(where.AND || []), { NOT: { datos: { path: [k], string_contains: String(v).slice(1) } } }];
+      else where.AND = [...(where.AND || []), { datos: { path: [k], string_contains: String(v) } }];
     }
     const [data, total] = await Promise.all([
-      prisma.customRegistro.findMany({ where, orderBy: { creadoEn: 'desc' }, skip: (page - 1) * limit, take: limit }),
+      prisma.customRegistro.findMany({ where, orderBy: ordenValido ? { datos: { path: [ordCampo], sort: ordDir === 'desc' ? 'desc' : 'asc' } } : { creadoEn: 'desc' }, skip: (page - 1) * limit, take: limit }),
       prisma.customRegistro.count({ where }),
     ]);
-    res.json({ data: data.map((r) => ({ id: r.id, ...r.datos })), total, page, limit });
+    let lista = data.map((r) => ({ id: r.id, ...r.datos }));
+    if (ordenValido) {
+      lista.sort((a, b) => {
+        const va = a[ordCampo] ?? ''; const vb = b[ordCampo] ?? '';
+        const cmp = String(va).localeCompare(String(vb), 'es', { numeric: true });
+        return ordDir === 'desc' ? -cmp : cmp;
+      });
+    }
+    res.json({ data: lista, total, page, limit });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -248,6 +275,7 @@ router.post('/:id/registros', async (req, res) => {
       }
     }
     const data = await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
+    logSistema('tabla_dinamica', `Registro creado en ${tabla.label}`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
     res.status(201).json({ id: data.id, ...data.datos });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -269,8 +297,171 @@ router.put('/:id/registros/:regId', async (req, res) => {
 
 router.delete('/:id/registros/:regId', async (req, res) => {
   try {
-    await prisma.customRegistro.delete({ where: { id: req.params.regId } });
-    res.json({ ok: true });
+    // Delete lógico (único tipo de delete del sistema)
+    await prisma.customRegistro.update({
+      where: { id: req.params.regId },
+      data: { eliminado: true, eliminadoEn: new Date() },
+    });
+    logSistema('tabla_dinamica', `Registro eliminado (lógico) en tabla ${req.params.id}`, { entidadTipo: 'tabla', entidadId: req.params.id, ...reqInfo(req) });
+    res.json({ ok: true, eliminado: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+// ── Exportación / Importación ──
+
+function aFilasPlano(tabla, registros) {
+  const cols = tabla.columnas.filter((c) => c.activo);
+  return {
+    headers: cols.map((c) => c.etiqueta),
+    claves: cols.map((c) => c.clave),
+    filas: registros.map((r) => cols.map((c) => r[c.clave] ?? '')),
+  };
+}
+
+async function obtenerRegistrosParaExport(tabla, filtros) {
+  if (tabla.storage === 'materiales_registros') {
+    const where = {};
+    for (const [k, v] of Object.entries(filtros)) {
+      if (!v) continue;
+      const excluir = String(v).startsWith('!');
+      const valor = excluir ? String(v).slice(1) : String(v);
+      const col = tabla.columnas.find((c) => c.clave === k);
+      if (!col) continue;
+      const cond = ['integer', 'float'].includes(col.tipo) ? Number(valor) : { contains: valor, mode: 'insensitive' };
+      where[k] = excluir ? { not: cond } : cond;
+    }
+    const rows = await prisma.materialesRegistro.findMany({ where, take: 10000, orderBy: { noMateria: 'asc' } });
+    return rows.map((r) => ({ id: r.sysId, ...Object.fromEntries(tabla.columnas.map((c) => [c.clave, r[c.clave] ?? null])) }));
+  }
+  const rows = await prisma.customRegistro.findMany({ where: { tablaId: tabla.id, eliminado: false }, take: 10000 });
+  return rows.map((r) => ({ id: r.id, ...r.datos }));
+}
+
+// GET /api/tablas/:id/registros/exportar?formato=csv|xlsx|xml|json|pdf&filtros={}
+router.get('/:id/registros/exportar', async (req, res) => {
+  try {
+    const tabla = await prisma.tablaCustom.findUnique({ where: { id: req.params.id }, include: { columnas: { where: { activo: true }, orderBy: { orden: 'asc' } } } });
+    if (!tabla) return res.status(404).json({ error: 'No encontrada' });
+    let filtros = {};
+    try { filtros = JSON.parse(req.query.filtros || '{}'); } catch { filtros = {}; }
+    const registros = await obtenerRegistrosParaExport(tabla, filtros);
+    const { headers, claves, filas } = aFilasPlano(tabla, registros);
+    const formato = req.query.formato || 'csv';
+    const nombre = `${tabla.clave}_${new Date().toISOString().slice(0, 10)}`;
+
+    logSistema('tabla_dinamica', `Exportación ${formato} de ${tabla.label} (${registros.length} registros)`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
+
+    if (formato === 'json') {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', `attachment; filename="${nombre}.json"`);
+      return res.send(JSON.stringify(registros.map((r) => Object.fromEntries(claves.map((c) => [c, r[c]]))), null, 2));
+    }
+    if (formato === 'xlsx') {
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...filas]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, tabla.clave.slice(0, 28));
+      const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${nombre}.xlsx"`);
+      return res.send(buf);
+    }
+    if (formato === 'xml') {
+      const builder = new XMLBuilder({ ignoreAttributes: false, format: true });
+      const xml = builder.build({ tabla: { nombre: tabla.label, registro: registros.map((r) => Object.fromEntries(claves.map((c) => [c, r[c]]))) } });
+      res.setHeader('Content-Type', 'application/xml');
+      res.setHeader('Content-Disposition', `attachment; filename="${nombre}.xml"`);
+      return res.send(`<?xml version="1.0" encoding="UTF-8"?>\n${xml}`);
+    }
+    if (formato === 'pdf') {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${nombre}.pdf"`);
+      const doc = new PDFDocument({ margin: 30, size: 'A4', layout: 'landscape' });
+      doc.pipe(res);
+      doc.fontSize(14).text(tabla.label, { underline: true });
+      doc.moveDown(0.5).fontSize(8).text(`Exportado: ${new Date().toLocaleString('es-MX')} · ${registros.length} registros`);
+      doc.moveDown();
+      const colWidth = (doc.page.width - 60) / headers.length;
+      doc.font('Helvetica-Bold');
+      headers.forEach((h, i) => doc.text(String(h).slice(0, 20), 30 + i * colWidth, doc.y, { width: colWidth, continued: i < headers.length - 1 }));
+      doc.moveDown().font('Helvetica');
+      for (const fila of filas) {
+        fila.forEach((celda, i) => doc.text(String(celda).slice(0, 24), 30 + i * colWidth, doc.y, { width: colWidth, continued: i < fila.length - 1 }));
+        doc.moveDown(0.3);
+        if (doc.y > doc.page.height - 50) doc.addPage();
+      }
+      doc.end();
+      return;
+    }
+    // csv (default)
+    const esc = (v) => `"${String(v ?? '').replaceAll('"', '""')}"`;
+    const csv = '\ufeff' + [headers.map(esc).join(','), ...filas.map((f) => f.map(esc).join(','))].join('\n');
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${nombre}.csv"`);
+    return res.send(csv);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/tablas/:id/registros/:regId/exportar?formato=csv|json — un registro
+router.get('/:id/registros/:regId/exportar', async (req, res) => {
+  try {
+    const tabla = await prisma.tablaCustom.findUnique({ where: { id: req.params.id }, include: { columnas: { where: { activo: true }, orderBy: { orden: 'asc' } } } });
+    if (!tabla) return res.status(404).json({ error: 'No encontrada' });
+    const registros = await obtenerRegistrosParaExport(tabla, {});
+    const reg = registros.find((r) => r.id === req.params.regId);
+    if (!reg) return res.status(404).json({ error: 'Registro no encontrado' });
+    const { headers, claves } = aFilasPlano(tabla, []);
+    const formato = req.query.formato || 'json';
+    const nombre = `${tabla.clave}_${req.params.regId.slice(0, 8)}`;
+    if (formato === 'csv') {
+      const esc = (v) => `"${String(v ?? '').replaceAll('"', '""')}"`;
+      const csv = '\ufeff' + headers.map(esc).join(',') + '\n' + claves.map((c) => esc(reg[c])).join(',');
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="${nombre}.csv"`);
+      return res.send(csv);
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${nombre}.json"`);
+    res.send(JSON.stringify(Object.fromEntries(claves.map((c) => [c, reg[c]])), null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/tablas/:id/registros/importar — importación masiva (json o xml, de los extraídos)
+// Body raw: JSON array o XML <tabla><registro>…</registro></tabla> (content-type text/xml o application/json)
+router.post('/:id/registros/importar', express.text({ type: ['text/xml', 'application/xml', 'application/json', 'text/plain'], limit: '50mb' }), async (req, res) => {
+  try {
+    const tabla = await prisma.tablaCustom.findUnique({ where: { id: req.params.id }, include: { columnas: { where: { activo: true } } } });
+    if (!tabla) return res.status(404).json({ error: 'No encontrada' });
+    if (tabla.storage !== 'json') return res.status(400).json({ error: 'Tabla de solo lectura (storage físico)' });
+
+    let registros = [];
+    const contentType = req.headers['content-type'] || '';
+    if (contentType.includes('xml')) {
+      const parsed = new XMLParser().parse(req.body);
+      const regs = parsed?.tabla?.registro;
+      registros = Array.isArray(regs) ? regs : regs ? [regs] : [];
+    } else {
+      const parsed = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      registros = Array.isArray(parsed) ? parsed : [parsed];
+    }
+
+    const clavesValidas = new Set(tabla.columnas.map((c) => c.clave));
+    let insertados = 0;
+    const errores = [];
+    for (const [i, reg] of registros.entries()) {
+      const datos = Object.fromEntries(Object.entries(reg).filter(([k]) => clavesValidas.has(k)));
+      const falta = tabla.columnas.find((c) => c.requerido && (datos[c.clave] === undefined || datos[c.clave] === ''));
+      if (falta) { errores.push(`Registro ${i + 1}: falta ${falta.etiqueta}`); continue; }
+      await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
+      insertados++;
+    }
+    logSistema('tabla_dinamica', `Importación masiva en ${tabla.label}: ${insertados} registros`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
+    res.json({ ok: true, insertados, errores });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

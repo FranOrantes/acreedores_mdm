@@ -37,6 +37,8 @@ const scriptIncludesRouter = require('./routes/scriptIncludes');
 const businessRulesRouter = require('./routes/businessRules');
 const formulariosRouter = require('./routes/formularios');
 const tablasRouter = require('./routes/tablas');
+const preferenciasRouter = require('./routes/preferencias');
+const vistasRouter = require('./routes/vistas');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
 
@@ -100,6 +102,8 @@ app.use('/api/script-includes', scriptIncludesRouter);
 app.use('/api/business-rules', businessRulesRouter);
 app.use('/api/formularios', formulariosRouter);
 app.use('/api/tablas', tablasRouter);
+app.use('/api/preferencias', preferenciasRouter);
+app.use('/api/vistas', vistasRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

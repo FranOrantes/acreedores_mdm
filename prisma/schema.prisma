@@ -988,9 +988,40 @@ model CustomRegistro {
   id         String   @id @default(uuid())
   tablaId    String
   datos      Json     // { claveColumna: valor }
+  eliminado  Boolean  @default(false) // delete lógico (único tipo de delete)
+  eliminadoEn DateTime?
   creadoEn   DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
   @@index([tablaId])
   @@map("custom_registros")
+}
+
+// --- Preferencias de usuario (paginación, columnas, vistas — por usuario, en BD) ---
+model PreferenciaUsuario {
+  id        String   @id @default(uuid())
+  usuarioId String   // usuario.id o username
+  clave     String   // "paginacion.default" | "tabla.<id>.columnas" | "tabla.<id>.vista"
+  valor     Json
+  creadoEn  DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([usuarioId, clave])
+  @@map("preferencias_usuario")
+}
+
+// --- Vistas de formulario por tabla custom (estilo SN form views) ---
+model VistaFormulario {
+  id        String   @id @default(uuid())
+  tablaId   String?
+  formularioClave String? // o por clave de formulario del builder
+  nombre    String   // ej. "Default", "Compacta", "Auditoría"
+  layout    Json     // { filas: [ { columnas, campos: [claves] } ] }
+  esDefault Boolean  @default(false)
+  roles     Json     @default("[]") // roles que pueden usarla (vacío = todos)
+  creadoEn  DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([tablaId])
+  @@map("vistas_formulario")
 }

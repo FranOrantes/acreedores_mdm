@@ -2,11 +2,13 @@ const { Router } = require('express');
 const axios = require('axios');
 const prisma = require('../../lib/prisma');
 const config = require('./configService');
+const { callScriptInclude } = require('../../lib/scriptEngine');
 
 const router = Router();
 
 // Réplica de la integración "MDM Imagen Rixie" de ServiceNow.
-// URL, API key, position y timeout son parametrizables (módulo Configuración).
+// URL, API key, position y timeout: módulo Configuración.
+// Interpretación de la respuesta: Script Include "MDM_Rixie".interpretar.
 
 // POST /api/materiales/validar-imagen { adjuntoId }
 // Réplica de jj_MDM_Utils_Client.rixie_Imagen
@@ -44,18 +46,9 @@ router.post('/validar-imagen', async (req, res) => {
       return res.json({ resultado: 'Error', detalles: [`Ocurrió un error al validar la imagen: ${err.message}`] });
     }
 
-    // Misma lógica que SN: si el mensaje no es el de rechazo → Correcto
-    if (recordData.message !== 'La imagen no cumple con todos los requisitos técnicos.') {
-      return res.json({ resultado: 'Correcto', detalles: [], crudo: recordData });
-    }
-
-    const detalles = [];
-    const vd = recordData.validation_details?.[0] || {};
-    for (const check of Object.keys(vd)) {
-      const [ok, motivo] = String(vd[check] || '').split(' / ');
-      if (ok === 'false') detalles.push(`${check}: ${motivo}`);
-    }
-    return res.json({ resultado: 'Error', detalles, crudo: recordData });
+    // Interpretación vía Script Include MDM_Rixie (editable sin tocar código)
+    const interpretacion = await callScriptInclude('MDM_Rixie', 'interpretar', recordData);
+    return res.json({ ...interpretacion, crudo: recordData });
   } catch (err) {
     console.error('[Materiales] Error validando imagen:', err);
     res.status(500).json({ error: 'Error al validar imagen' });

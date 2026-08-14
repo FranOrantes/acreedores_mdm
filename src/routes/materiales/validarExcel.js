@@ -2,6 +2,7 @@ const { Router } = require('express');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const config = require('./configService');
+const { cargarInclude } = require('../../lib/scriptEngine');
 const catalogosSN = require('./data/catalogosSN.json');
 const jerarquia = require('./data/jerarquia.json');
 
@@ -18,9 +19,8 @@ const upload = multer({
 // ─────────────────────────────────────────────────────────────────────────────
 
 const norm = (s) => String(s ?? '').trim();
-const esVacio = (v) => norm(v) === '';
-const esNumero = (v) => !esVacio(v) && !Number.isNaN(Number(v));
-const esEntero = (v) => esNumero(v) && Number.isInteger(Number(v));
+// Los validadores base (esVacio/esNumero/esEntero/eanValido/esFecha8) viven en el
+// Script Include "MDM_Excel" (módulo Script Includes) — se cargan en cada request.
 
 // buscarMDMoption: la opción existe si labe = valor OR labe termina con el valor
 function existeOpcion(claveCatalogo, valor) {
@@ -112,11 +112,14 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
       });
     }
 
-    const [eanMin, eanMax] = await Promise.all([
+    const [eanMin, eanMax, MDM_Excel] = await Promise.all([
       config.get('validacion.excel.ean_min_digitos'),
       config.get('validacion.excel.ean_max_digitos'),
+      cargarInclude('MDM_Excel'), // validadores desde Script Include
     ]);
-    const reEan = new RegExp(`^\\d{${eanMin || 3},${eanMax || 16}}$`);
+    const { esVacio, esNumero, esEntero, eanValido, esFecha8 } = MDM_Excel;
+    const min = eanMin || 3;
+    const max = eanMax || 16;
 
     const wb = XLSX.read(req.file.buffer, { type: 'buffer' });
     // Buscar la hoja de datos tolerando variantes (espacios, guiones, acentos, mayúsculas).
@@ -169,10 +172,10 @@ router.post('/validar-excel', upload.single('archivo'), async (req, res) => {
         }
         if (spec.tipo === 'numero' && !esNumero(valor)) errores.push(`${celda} Debe se numero.`);
         if (spec.tipo === 'entero' && !esEntero(valor)) errores.push(`${celda} Debe se un numero entero.`);
-        if (spec.tipo === 'digitos8' && !/^\d{8}$/.test(valor)) errores.push(`${celda} Debe ser numero entero de 8 digitos (AñoMesDia).`);
+        if (spec.tipo === 'digitos8' && !esFecha8(valor)) errores.push(`${celda} Debe ser numero entero de 8 digitos (AñoMesDia).`);
         if (spec.tipo === 'ean') {
-          if (!reEan.test(valor)) {
-            errores.push(`${celda} EAN invalido (entero de ${eanMin || 3} a ${eanMax || 16} digitos).`);
+          if (!eanValido({ valor, min, max })) {
+            errores.push(`${celda} EAN invalido (entero de ${min} a ${max} digitos).`);
           } else {
             const vistos = eansVistos[spec.unico];
             if (vistos.has(valor)) errores.push(`${celda} EAN duplicado (ya usado en la linea ${vistos.get(valor)}).`);

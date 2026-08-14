@@ -25,6 +25,14 @@ const DEFAULTS = [
   { clave: 'flujo.etapa_inicial', tipo: 'string', grupo: 'Flujo', descripcion: 'Etapa inicial del flujo de aprobación', default: '01 - Comprador' },
   { clave: 'matriz.aprobadores', tipo: 'json', grupo: 'Flujo', descripcion: 'Matriz de aprobadores (comprador/negociador/DGA) — réplica u_matriz_area_aprobadores', default: [] },
   { clave: 'layout.archivo', tipo: 'json', grupo: 'Validaciones', descripcion: 'Layout Excel vigente del alta (se sube desde el builder; vacío = empaquetado V20)', default: null },
+  // Integración ServiceNow (sync del catálogo u_mdm_registros)
+  { clave: 'integracion.servicenow.base_url', tipo: 'url', grupo: 'Integraciones', descripcion: 'Instancia ServiceNow PROD para sync de materiales', default: 'https://nadrocomercialprod.service-now.com' },
+  { clave: 'integracion.servicenow.user', tipo: 'string', grupo: 'Integraciones', descripcion: 'Usuario ServiceNow (solo lectura)', env: 'PROD_SERVICENOW_USER', default: '' },
+  { clave: 'integracion.servicenow.password', tipo: 'secret', grupo: 'Integraciones', sensible: true, descripcion: 'Password ServiceNow (solo lectura)', env: 'PROD_SERVICENOW_PASSWORD', default: '' },
+  // Sync
+  { clave: 'sync.page_size', tipo: 'number', grupo: 'Integraciones', descripcion: 'Registros por página al extraer de ServiceNow', default: 500 },
+  { clave: 'sync.full_cron', tipo: 'string', grupo: 'Integraciones', descripcion: 'Cron del upsert completo (default: 11pm diario)', default: '0 23 * * *' },
+  { clave: 'sync.delta_cron', tipo: 'string', grupo: 'Integraciones', descripcion: 'Cron del sync incremental por sys_updated_on (default: cada hora)', default: '0 * * * *' },
 ];
 
 const cache = new Map(); // clave -> valor resuelto

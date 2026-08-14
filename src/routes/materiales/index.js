@@ -6,6 +6,7 @@ const validarImagenRouter = require('./validarImagen');
 const solicitudesRouter = require('./solicitudes');
 const configuracionRouter = require('./configuracion');
 const matrizRouter = require('./matrizAprobadores');
+const syncRouter = require('./sync');
 const configService = require('./configService');
 
 // Sembrar configuración default del módulo (idempotente, bootstrap desde env)
@@ -24,5 +25,6 @@ router.use('/', validarImagenRouter);
 router.use('/', solicitudesRouter);
 router.use('/', configuracionRouter);
 router.use('/', matrizRouter);
+router.use('/', syncRouter);
 
 module.exports = router;

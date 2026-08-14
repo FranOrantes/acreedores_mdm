@@ -216,4 +216,4 @@ async function ejecutarBusinessRules({ entidad, evento, datos, modulo, dominioId
   return { datos, logs, ejecutadas };
 }
 
-module.exports = { runScript, callScriptInclude, cargarInclude, invalidarInclude, ejecutarBusinessRules, evaluarCondiciones };
+module.exports = { runScript, callScriptInclude, cargarInclude, invalidarInclude, ejecutarBusinessRules, evaluarCondiciones, glideRecord };

@@ -85,3 +85,25 @@ fetch('/api/...'); session; // sessionKey del form
 - Nada hardcodeado: URLs/keys/params → Configuración o Integraciones
 - Deletes: solo lógicos
 - Nada de passwords/keys en código ni en git
+
+## Configuración por campo (click derecho en el label — todo el sistema)
+
+En cualquier formulario renderizado por el FormRenderer (builder de formularios, formulario de registro de tabla, wizard de materiales):
+**click derecho sobre el label del campo → "Show config"** con tres toggles:
+
+- **Read-only** → Regla de Formulario `accionReadOnly: readonly`
+- **Mandatory** → Regla `accionObligatorio: requerir`
+- **Hide** → Regla `accionVisible: ocultar`
+
+Se guardan como `ReglaFormularioCampo` (sin condiciones = siempre), con `formulario` = clave del formulario o `tabla_<clave>` para forms de tablas custom. Las edita también el admin en `/reglas-formulario`. El hook `useReglasFormulario` expone `recargar()` para refrescar tras guardar.
+
+## Menús contextuales de la vista lista (tablas)
+
+- **Click derecho en header de columna**: ordenar, ocultar columna, excluir/mostrar, ⚙ Configuración de la tabla, Layout (drag&drop), Vistas, UI Actions/Client Scripts, Business Rules, UI Policies (deep-links a `/admin/tablas?abrir=<id>&tab=<tab>`)
+- **Click derecho en celda**: "Excluir: <valor>" / "Mostrar solo: <valor>" (filter out / show match estilo SN)
+- Filtros con debounce (400ms) — no llama API por tecla
+- Lista de `materiales_registros`: SQL proyectado (solo columnas activas, `raw->>'clave'`), ILIKE para texto, exacto para choice, NOT para excluir
+
+## Performance
+- La tabla física proyecta solo columnas activas (no trae el raw completo de 293 campos)
+- Paginación por usuario en `preferencias_usuario` (25/50/100/200)

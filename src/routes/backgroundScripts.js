@@ -26,6 +26,7 @@ router.post('/ejecutar', async (req, res) => {
   if (!script) return res.status(400).json({ error: 'script requerido' });
 
   const inicio = Date.now();
+  const logsCaptura = [];
   try {
     const { resultado, logs } = await runScript(script, {
       prisma,
@@ -33,9 +34,11 @@ router.post('/ejecutar', async (req, res) => {
       callScriptInclude,
       glideRecord: require('../lib/scriptEngine').glideRecord,
       incluir: cargarInclude,
-      gs: construirGs(ctx, null),
+      gs: construirGs(ctx, logsCaptura),
+      logsCaptura,
       datos: req.body.datos || {},
     });
+    // logs del sandbox (console/gs.log escriben en el mismo array)
     const ms = Date.now() - inicio;
     logSistema('script', 'Background script ejecutado', {
       detalle: `${script.length} chars · ${ms}ms`,
@@ -43,7 +46,7 @@ router.post('/ejecutar', async (req, res) => {
       metadata: { script: script.slice(0, 2000), resultado: JSON.stringify(resultado)?.slice(0, 2000), logs: logs.slice(0, 100) },
       ...reqInfo(req),
     });
-    res.json({ ok: true, resultado, logs, ms });
+    res.json({ ok: true, resultado, logs: logsCaptura, ms });
   } catch (e) {
     logSistema('script', 'Background script falló', {
       detalle: e.message, nivel: 'error',

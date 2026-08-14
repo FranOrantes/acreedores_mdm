@@ -40,6 +40,7 @@ const tablasRouter = require('./routes/tablas');
 const preferenciasRouter = require('./routes/preferencias');
 const vistasRouter = require('./routes/vistas');
 const logsIARouter = require('./routes/logsIA');
+const backgroundScriptsRouter = require('./routes/backgroundScripts');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
 
@@ -106,6 +107,7 @@ app.use('/api/tablas', tablasRouter);
 app.use('/api/preferencias', preferenciasRouter);
 app.use('/api/vistas', vistasRouter);
 app.use('/api/logs', logsIARouter);
+app.use('/api/scripts', backgroundScriptsRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

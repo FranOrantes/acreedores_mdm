@@ -1,5 +1,6 @@
 const vm = require('vm');
 const prisma = require('./prisma');
+const { construirGs } = require('./sesion');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ScriptEngine — ejecución sandboxed de Script Includes y Business Rules
@@ -10,7 +11,7 @@ const cacheIncludes = new Map(); // nombre -> { api, ts }
 const CACHE_TTL_MS = 60 * 1000; // recargar includes cada 60s (o invalidar al guardar)
 
 function crearSandbox(extras = {}) {
-  const logs = [];
+  const logs = extras.logsCaptura || [];
   const sandbox = {
     module: { exports: {} },
     exports: {},
@@ -182,7 +183,7 @@ function evaluarCondiciones(condicionesStr, logica, datos) {
 
 // Ejecuta las Business Rules de una entidad+evento contra los datos
 // Retorna { datos (posiblemente mutados), logs, ejecutadas }
-async function ejecutarBusinessRules({ entidad, evento, datos, modulo, dominioId }) {
+async function ejecutarBusinessRules({ entidad, evento, datos, modulo, dominioId, sesion }) {
   const reglas = await prisma.businessRule.findMany({
     where: {
       entidad, evento, activo: true,
@@ -202,6 +203,9 @@ async function ejecutarBusinessRules({ entidad, evento, datos, modulo, dominioId
       datos,
       prisma,
       callScriptInclude,
+      glideRecord,
+      incluir: cargarInclude,
+      gs: construirGs(sesion, logs),
       regla: { nombre: regla.nombre, entidad, evento },
     }).catch((err) => {
       logs.push(`[BusinessRule "${regla.nombre}"] Error: ${err.message}`);

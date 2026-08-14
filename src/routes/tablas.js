@@ -79,14 +79,14 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { clave, label, modulo, icono, descripcion, autoNumber, permisos } = req.body;
+    const { clave, label, modulo, icono, descripcion, autoNumber, permisos, storage, menuVisible, menuLabel, menuIcono, menuPadre } = req.body;
     if (!clave || !label) return res.status(400).json({ error: 'clave y label son requeridos' });
     if (!CLAVE_OK.test(clave)) return res.status(400).json({ error: 'clave debe ser snake_case (a-z, 0-9, _)' });
     // Auto-roles estilo SN: <clave_tecnica>.leer / .escribir / .eliminar (solo deletes lógicos)
     const rolesAuto = { leer: `${clave}.leer`, escribir: `${clave}.escribir`, eliminar: `${clave}.eliminar` };
     const permisosFinal = { ...(permisos || {}), rolesAuto };
     const data = await prisma.tablaCustom.create({
-      data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos: permisosFinal },
+      data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos: permisosFinal, storage, menuVisible, menuLabel, menuIcono, menuPadre },
       include: { columnas: true },
     });
     logSistema('tabla_dinamica', `Tabla creada: ${label} (${clave})`, { detalle: `Roles auto: ${rolesAuto.leer}, ${rolesAuto.escribir}, ${rolesAuto.eliminar}`, modulo: modulo || 'todos', ...reqInfo(req) });

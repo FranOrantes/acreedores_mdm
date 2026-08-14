@@ -82,6 +82,7 @@ const LEGACY_MAP = {
   solicitud: 'solicitud', usuario: 'usuario', aprobacion: 'aprobacion', grupo_aprobacion: 'grupoAprobacion',
   dominio: 'dominio', documento: 'documento', incidente: 'incidente', ubicacion: 'ubicacion',
   log_sistema: 'logSistema', formulario: 'formulario', tabla_custom: 'tablaCustom',
+  materiales_options: 'materialesOption', materiales_matriz: 'materialesMatrizAprobador',
 };
 
 function glideRecord(tabla) {

@@ -1,5 +1,6 @@
 const express = require('express');
 const prisma = require('../lib/prisma');
+const { asistenteIA } = require('../lib/iaAsistente');
 
 const router = express.Router();
 
@@ -97,8 +98,20 @@ router.post('/ai', async (req, res) => {
       sugerencias.push(`Los errores se concentran en: ${tipos}. Revisa primero el tipo más frecuente y su detalle.`);
     }
 
+    // Enriquecer con IA real (Concordia/Gemini); si falla, queda lo determinístico
+    let respuestaIA = null;
+    try {
+      const ctx = `Pregunta de auditoría: "${pregunta}"\nFiltros interpretados: ${JSON.stringify(where)}\nTotal eventos: ${total}\nPor nivel: ${JSON.stringify(Object.fromEntries(porNivel.map((n) => [n.nivel, n._count])))}\nTipos top: ${JSON.stringify(porTipo.slice(0, 5))}\nUsuarios top: ${JSON.stringify(porUsuario.slice(0, 5))}\nEvidencia reciente: ${JSON.stringify(muestra.slice(0, 10).map((l) => ({ cuando: l.creadoEn, nivel: l.nivel, tipo: l.tipo, accion: l.accion, detalle: l.detalle?.slice(0, 200), usuario: l.usuarioNombre, ip: l.ipAddress })))}`;
+      const r = await asistenteIA(`Analiza esta auditoría y responde la pregunta del usuario con hallazgos concretos y una recomendación accionable: "${pregunta}"`, {
+        systemInstruction: 'Eres el agente de auditoría del Portal MDM. Analizas logs del sistema. Responde en español: 1) Hallazgo, 2) Evidencia clave (quién/cuándo/dónde), 3) Recomendación accionable indicando el módulo exacto donde resolverla.',
+        contexto: ctx,
+      });
+      respuestaIA = typeof r === 'string' ? r : (r?.message || JSON.stringify(r));
+    } catch { /* fallback: solo determinístico */ }
+
     res.json({
       pregunta,
+      respuestaIA,
       interpretacion: where,
       total,
       resumen: {

@@ -35,6 +35,7 @@ const dashboardRouter = require('./routes/dashboard');
 const integracionesRouter = require('./routes/integraciones');
 const scriptIncludesRouter = require('./routes/scriptIncludes');
 const businessRulesRouter = require('./routes/businessRules');
+const formulariosRouter = require('./routes/formularios');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
 
@@ -96,6 +97,7 @@ app.use('/api/integraciones', integracionesRouter);
 app.use('/api/materiales', materialesRouter);
 app.use('/api/script-includes', scriptIncludesRouter);
 app.use('/api/business-rules', businessRulesRouter);
+app.use('/api/formularios', formulariosRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

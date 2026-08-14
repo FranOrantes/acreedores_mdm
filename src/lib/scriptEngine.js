@@ -109,10 +109,10 @@ function glideRecord(tabla) {
     query: async () => {
       let datos = [];
       if (tabla === 'materiales_registros') {
-        const rows = await prisma.materialesRegistro.findMany({ take: 10000 });
+        const rows = await prisma.materialesRegistro.findMany({ take: 50000 });
         datos = rows.map((r) => ({ sys_id: r.sysId, ...r.raw ? {} : {}, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== 'raw')) }));
       } else if (LEGACY_MAP[tabla] && prisma[LEGACY_MAP[tabla]]) {
-        const rows = await prisma[LEGACY_MAP[tabla]].findMany({ take: 10000 });
+        const rows = await prisma[LEGACY_MAP[tabla]].findMany({ take: 50000 });
         datos = rows.map((r) => ({ sys_id: r.id, ...r }));
       } else {
         // Tabla dinámica por clave o id

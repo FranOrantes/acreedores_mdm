@@ -876,3 +876,24 @@ model IntegracionRequest {
 
   @@index([coleccionId])
 }
+
+// --- Formularios dinámicos (builder tipo maintain item de ServiceNow) ---
+// La estructura del formulario vive como DATO (definicion JSON), no en código.
+model Formulario {
+  id            String   @id @default(uuid())
+  clave         String   // identificador: "mt_alta", "mt_modificacion", ...
+  modulo        String   @default("todos") // "materiales" | "acreedores" | ...
+  nombre        String
+  descripcion   String?
+  icono         String   @default("description")
+  tipo          String   @default("simple") // "simple" | "wizard"
+  orden         Int      @default(0)
+  activo        Boolean  @default(true)
+  definicion    Json     // { pasos: [ { titulo, tipo: 'campos'|'excel'|'registros_materiales'|'confirmacion', campos: [...] } ], config: {...} }
+  dominioId     String?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([clave, modulo])
+  @@index([modulo])
+}

@@ -41,6 +41,8 @@ const preferenciasRouter = require('./routes/preferencias');
 const vistasRouter = require('./routes/vistas');
 const logsIARouter = require('./routes/logsIA');
 const backgroundScriptsRouter = require('./routes/backgroundScripts');
+const apiTokensRouter = require('./routes/apiTokens');
+const { router: extRouter, adminRouter: scriptedApisAdmin } = require('./routes/scriptedApis');
 // [SSO DESACTIVADO TEMPORALMENTE] const { requireAuth } = require('./middleware/auth');
 const { domainScope } = require('./middleware/domainScope');
 
@@ -108,6 +110,9 @@ app.use('/api/preferencias', preferenciasRouter);
 app.use('/api/vistas', vistasRouter);
 app.use('/api/logs', logsIARouter);
 app.use('/api/scripts', backgroundScriptsRouter);
+app.use('/api/ext', extRouter); // Scripted REST APIs públicas (con X-App-Token)
+app.use('/api/apis', scriptedApisAdmin); // admin CRUD
+app.use('/api/tokens', apiTokensRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);

@@ -89,3 +89,15 @@ Definido en `jj_MDM_Utils_Client.createExcelFile()` (el sistema también genera 
 - `scripts/script_includes/jj_MDM_Utils_Client_083c82d0.js` (431 KB — GlideAjax principal)
 - `scripts/script_includes/MDM_ExcelToJsonParser_70132449.js` (parser servidor)
 - `scripts/cs_onChange_-_Excel_Archivo_045b4290.js` (cliente)
+
+## Nota 2026-08-13 — Layout oficial PROD V20
+
+El layout vigente en producción es `Layout Alta - 2026-07-23 V20 .xlsx` (adjunto SN `9cd82109...`, enlazado desde la variable `layout_ultimo`). **Mismas 83 columnas que el KEY**, pero la hoja de datos se llama **"Materiales"** (no "Info - Correcto"). El validador acepta ambas (búsqueda tolerante + fallback a la primera hoja). El portal sirve la V20 en `GET /api/materiales/layout`.
+
+## Clon del maintain item en el portal (Formulario `mt_alta`)
+
+- 8 variables del item con tipos/órdenes exactos → campos del builder (`layout_ultimo`, `carga_excel` [attachment], `excel_id_random`→session, `excel_resultado`, `excel_no_de_registros`, `excel_informacion`, `archivos_resultado`, `archivos_informacion`)
+- Variable set MRVS "Listado de registros" → campo `registros` tipo `registros_materiales` (mrvs config en la definición)
+- 3 Catalog Client Scripts → `clientScripts` de la definición: `onChange - Excel Archivo` (onChange/carga_excel), `CheckBrowser` (onLoad), `onSubmit - Validacion` (onSubmit, con `return false` para bloquear)
+- UI Policy "ReadOnly" → Reglas de Formulario (10 reglas `requerir`, módulo materiales)
+- Integración Rixie (imágenes) → módulo Integraciones, colección Materiales

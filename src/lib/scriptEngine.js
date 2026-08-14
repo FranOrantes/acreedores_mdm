@@ -26,6 +26,7 @@ function crearSandbox(extras = {}) {
     JSON, Math, Date, Array, Object, String, Number, Boolean, RegExp, Map, Set, Promise,
     parseInt, parseFloat, isNaN, isFinite, encodeURIComponent, decodeURIComponent,
     Buffer,
+    fetch, // para integraciones HTTP desde Script Includes / Business Rules
     ...extras,
   };
   return sandbox;

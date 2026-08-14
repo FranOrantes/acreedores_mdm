@@ -9,7 +9,7 @@ const router = express.Router();
 // Storage "json" → custom_registros (JSONB). Storage "materiales_registros" → tabla física.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CLAVE_OK = /^[a-z][a-z0-9_]*$/;
+const CLAVE_OK = /^[a-z][a-zA-Z0-9_]*$/; // snake_case o camelCase (mapeo de columnas físicas existentes)
 
 // ── Tablas ──
 
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden'];
+    const campos = ['clave', 'label', 'modulo', 'icono', 'descripcion', 'activa', 'autoNumber', 'permisos', 'orden', 'storage'];
     const data = {};
     campos.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
     const tabla = await prisma.tablaCustom.update({ where: { id: req.params.id }, data });

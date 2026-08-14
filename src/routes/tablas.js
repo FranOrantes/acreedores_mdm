@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
       data: { clave, label, modulo: modulo || 'todos', icono, descripcion, autoNumber, permisos: permisosFinal },
       include: { columnas: true },
     });
-    logSistema('tabla_dinamica', `Tabla creada: ${label} (${clave})`, { detalle: `Módulo: ${modulo || 'todos'} · Roles auto: ${rolesAuto.leer}, ${rolesAuto.escribir}, ${rolesAuto.eliminar}`, ...reqInfo(req) });
+    logSistema('tabla_dinamica', `Tabla creada: ${label} (${clave})`, { detalle: `Roles auto: ${rolesAuto.leer}, ${rolesAuto.escribir}, ${rolesAuto.eliminar}`, modulo: modulo || 'todos', ...reqInfo(req) });
     res.status(201).json(data);
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -278,7 +278,7 @@ router.post('/:id/registros', async (req, res) => {
       }
     }
     const data = await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
-    logSistema('tabla_dinamica', `Registro creado en ${tabla.label}`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
+    logSistema('tabla_dinamica', `Registro creado en ${tabla.label}`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
     res.status(201).json({ id: data.id, ...data.datos });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -323,7 +323,7 @@ router.delete('/:id/registros/:regId', async (req, res) => {
       where: { id: req.params.regId },
       data: { eliminado: true, eliminadoEn: new Date() },
     });
-    logSistema('tabla_dinamica', `Registro eliminado (lógico) en tabla ${req.params.id}`, { entidadTipo: 'tabla', entidadId: req.params.id, ...reqInfo(req) });
+    logSistema('tabla_dinamica', `Registro eliminado (lógico)`, { entidadTipo: 'tabla', entidadId: req.params.id, modulo: 'todos', ...reqInfo(req) });
     res.json({ ok: true, eliminado: true });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -373,7 +373,7 @@ router.get('/:id/registros/exportar', async (req, res) => {
     const formato = req.query.formato || 'csv';
     const nombre = `${tabla.clave}_${new Date().toISOString().slice(0, 10)}`;
 
-    logSistema('tabla_dinamica', `Exportación ${formato} de ${tabla.label} (${registros.length} registros)`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
+    logSistema('tabla_dinamica', `Exportación ${formato} de ${tabla.label} (${registros.length} registros)`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
 
     if (formato === 'json') {
       res.setHeader('Content-Type', 'application/json');
@@ -482,7 +482,7 @@ router.post('/:id/registros/importar', express.text({ type: ['text/xml', 'applic
       await prisma.customRegistro.create({ data: { tablaId: tabla.id, datos } });
       insertados++;
     }
-    logSistema('tabla_dinamica', `Importación masiva en ${tabla.label}: ${insertados} registros`, { entidadTipo: 'tabla', entidadId: tabla.id, ...reqInfo(req) });
+    logSistema('tabla_dinamica', `Importación masiva en ${tabla.label}: ${insertados} registros`, { entidadTipo: 'tabla', entidadId: tabla.id, modulo: tabla.modulo, ...reqInfo(req) });
     res.json({ ok: true, insertados, errores });
   } catch (e) {
     res.status(400).json({ error: e.message });

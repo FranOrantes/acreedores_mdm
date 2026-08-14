@@ -53,8 +53,8 @@ adminRouter.delete('/:id', async (req, res) => {
 });
 
 // Ejecutor dinámico: /api/ext/<path>
-router.all('/{*path}', async (req, res) => {
-  const ruta = (req.params.path || []).join('/');
+router.all('/*', async (req, res) => {
+  const ruta = (req.params[0] || '');
   const api = await prisma.scriptedApi.findFirst({ where: { path: ruta, metodo: req.method, activo: true } });
   if (!api) return res.status(404).json({ error: `API no encontrada: ${req.method} /api/ext/${ruta}` });
 

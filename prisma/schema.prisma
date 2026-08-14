@@ -1060,3 +1060,35 @@ model ScriptedApi {
 
   @@unique([metodo, path])
 }
+
+// --- Catálogo de opciones sincronizado desde ServiceNow (u_mdm_options) ---
+model MaterialesOption {
+  sysId        String   @id
+  clave        String   // u_key (ej. mdm_mt_marca_del_producto)
+  valor        String?  // u_value
+  etiqueta     String?  // u_labe
+  sysUpdatedOn DateTime
+  raw          Json
+  creadoEn     DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@map("materiales_options")
+  @@index([clave])
+  @@index([sysUpdatedOn])
+}
+
+// --- Matriz de aprobadores sincronizada desde ServiceNow (u_matriz_area_aprobadores, MDM) ---
+model MaterialesMatrizAprobador {
+  sysId        String   @id
+  comprador    String?
+  negociador   String?
+  dga          String?
+  proyecto     String?
+  sysUpdatedOn DateTime
+  raw          Json
+  creadoEn     DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@map("materiales_matriz_aprobadores")
+  @@index([comprador])
+}
